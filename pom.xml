@@ -1,0 +1,49 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.huaweicloud.dis</groupId>
+	<artifactId>huaweicloud-sdk-java-dis-pom</artifactId>
+	<version>1.3.0</version>
+	<packaging>pom</packaging>
+
+	<name>huaweicloud-sdk-java-dis</name>
+	<url>https://www.huaweicloud.com/product/dis.html</url>
+	<description>Huawei Cloud Data Ingestion Service Java SDK</description>
+
+	<licenses>
+		<license>
+			<name>Apache 2.0 License</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<!-- Modules -->
+	<modules>
+		<module>huaweicloud-sdk-java-dis</module>
+		<module>huaweicloud-sdk-java-dis-iface</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.9.1</version>
+					<configuration>
+						<excludePackageNames>*.transform</excludePackageNames>
+						<minmemory>128m</minmemory>
+						<maxmemory>1024m</maxmemory>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+</project>
