@@ -20,26 +20,53 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by s00348548 on 2018/1/10.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SchemaField
 {
+    /**
+     * <p>
+     * Name of the HBase column family to which data will be dumped.
+     * </p>
+     */
     @JsonProperty("column_family_name")
     private String columnFamilyName;
     
+    /**
+     * <p>
+     * Name of the HBase column to which data will be dumped.
+     * </p>
+     */
     @JsonProperty("column_name")
     private String qualifierName;
     
+    /**
+     * <p>
+     * The name of the schema field.
+     * </p>
+     */
     @JsonProperty("name")
     private String name;
     
+    /**
+     * <p>
+     * The format of the schema field.
+     * </p>
+     */
     private String format;
     
+    /**
+     * <p>
+     * The value of the schema field.
+     * </p>
+     */
     private String value;
     
+    /**
+     * <p>
+     * The type of the schema field.
+     * </p>
+     */
     private String type;
     
     public String getValue()

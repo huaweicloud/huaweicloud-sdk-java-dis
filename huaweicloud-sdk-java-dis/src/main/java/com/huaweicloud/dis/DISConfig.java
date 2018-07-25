@@ -23,8 +23,8 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloud.sdk.auth.credentials.BasicCredentials;
-import com.cloud.sdk.auth.credentials.Credentials;
+import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
+import com.huaweicloud.dis.core.auth.credentials.Credentials;
 import com.huaweicloud.dis.core.ClientParams;
 
 public class DISConfig extends Properties implements ClientParams
@@ -44,6 +44,7 @@ public class DISConfig extends Properties implements ClientParams
     private static final int DEFAULT_VALUE_MAX_TOTAL = 500;
     private static final boolean DEFAULT_VALUE_IS_DEFAULT_TRUSTED_JKS_ENABLED = false;
     private static final boolean DEFAULT_VALUE_IS_DEFAULT_DATA_ENCRYPT_ENABLED = false;
+    private static final boolean DEFAULT_VALUE_DATA_COMPRESS_ENABLED = false;
     
     private static final BodySerializeType DEFAULT_VALUE_BODY_SERIALIZE_TYPE = BodySerializeType.json;
     
@@ -64,6 +65,8 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_IS_DEFAULT_TRUSTED_JKS_ENABLED = "IS_DEFAULT_TRUSTED_JKS_ENABLED";
 
     public static final String PROPERTY_IS_DEFAULT_DATA_ENCRYPT_ENABLED = "data.encrypt.enabled";
+    
+    public static final String PROPERTY_DATA_COMPRESS_ENABLED = "data.compress.enabled";
 
     public static final String PROPERTY_BODY_SERIALIZE_TYPE = "body.serialize.type";
     
@@ -90,6 +93,8 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_PRODUCER_BATCH_COUNT = "batch.count";
     
     public static final String PROPERTY_BACK_OFF_MAX_INTERVAL_MS = "backoff.max.interval.ms";
+
+    public static final String PROPERTY_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION = "max.in.flight.requests.per.connection";
     
     private Credentials credentials;
     
@@ -111,6 +116,11 @@ public class DISConfig extends Properties implements ClientParams
     public boolean getIsDefaultDataEncryptEnabled()
     {
         return getBoolean(PROPERTY_IS_DEFAULT_DATA_ENCRYPT_ENABLED, DEFAULT_VALUE_IS_DEFAULT_DATA_ENCRYPT_ENABLED);
+    }
+    
+    public boolean isDataCompressEnabled()
+    {
+        return getBoolean(PROPERTY_DATA_COMPRESS_ENABLED, DEFAULT_VALUE_DATA_COMPRESS_ENABLED);
     }
     
     public BodySerializeType getBodySerializeType(){
@@ -277,6 +287,16 @@ public class DISConfig extends Properties implements ClientParams
     {
         return Long.valueOf(get(PROPERTY_BACK_OFF_MAX_INTERVAL_MS, String.valueOf(30 * 1000)));
     }
+
+    public int getMaxInFlightRequestsPerConnection()
+    {
+        int maxConnection = getInt(PROPERTY_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 100);
+        if (maxConnection <= 0)
+        {
+            return 100;
+        }
+        return maxConnection;
+    }
     
     public String getEndpoint()
     {
@@ -287,7 +307,7 @@ public class DISConfig extends Properties implements ClientParams
         
         //根据区域，域名，端口拼接
         String endpointFormat = "https://dis.%s.%s:%s";
-        return String.format(endpointFormat, getRegion(), "myhwclouds.com", "20004");
+        return String.format(endpointFormat, getRegion(), "myhuaweicloud.com", "20004");
     }
     
     public String getManagerEndpoint(){
@@ -311,7 +331,7 @@ public class DISConfig extends Properties implements ClientParams
             if (null != classLoader)
             {
                 inputStream = classLoader.getResourceAsStream(fileName);
-                LOG.info("get from classLoader");
+                LOG.debug("get from classLoader");
                 if(inputStream == null){
                     throw new IOException("config file "+fileName+" not exist.");
                 }
@@ -320,28 +340,28 @@ public class DISConfig extends Properties implements ClientParams
             if (null == inputStream && this.getClass() != null)
             {
                 inputStream = this.getClass().getResourceAsStream(fileName);
-                LOG.info("get from class");
+                LOG.debug("get from class");
             }
             
             if (null == inputStream && fileName.startsWith("/") && null != classLoader){
                 inputStream = classLoader.getResourceAsStream("." + fileName);
-                LOG.info("get from ./");
+                LOG.debug("get from ./");
             }
             
             if (null == inputStream && fileName.startsWith("/") && null != classLoader){
                 inputStream = classLoader.getResourceAsStream(fileName.substring(1));
-                LOG.info("get from no /");
+                LOG.debug("get from no /");
             }
             
             if (null == inputStream)
             {
                 ClassLoader.getSystemResourceAsStream(fileName);
-                LOG.info("get from ClassLoader");
+                LOG.debug("get from ClassLoader");
             }
             
             if (null == inputStream)
             {
-                LOG.info("getResourceAsStream() returns null.");
+                LOG.debug("getResourceAsStream() returns null.");
                 return;
             }
             
@@ -476,6 +496,10 @@ public class DISConfig extends Properties implements ClientParams
     
     public DISConfig setDefaultClientCertAuthEnabled(boolean defaultClientCertAuthEnabled){
         return set(PROPERTY_IS_DEFAULT_TRUSTED_JKS_ENABLED, String.valueOf(defaultClientCertAuthEnabled));
+    }
+    
+    public DISConfig setDataCompressEnabled(boolean dataCompressEnabled){
+        return set(PROPERTY_DATA_COMPRESS_ENABLED, String.valueOf(dataCompressEnabled));
     }
     
     public DISConfig setBodySerializeType(BodySerializeType bodySerializeType){

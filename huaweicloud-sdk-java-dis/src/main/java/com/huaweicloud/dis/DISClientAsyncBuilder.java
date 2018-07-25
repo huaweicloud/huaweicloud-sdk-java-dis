@@ -19,7 +19,7 @@ package com.huaweicloud.dis;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.cloud.sdk.util.StringUtils;
+import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.core.AsyncClientParams;
 import com.huaweicloud.dis.core.builder.AsyncClientBuilder;
 import com.huaweicloud.dis.core.builder.ExecutorFactory;

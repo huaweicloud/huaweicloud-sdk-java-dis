@@ -19,13 +19,10 @@ package com.huaweicloud.dis.iface.app;
 import com.huaweicloud.dis.iface.app.response.AppEntry;
 
 /**
- * Created by z00382129 on 2017/11/7.
+ * IAppService为开放到SDK的接口, IAppIdService为内部扩展接口不对SDK暴露
  */
-public interface IAppIdService {
-
-    void createAppId(String appId);
-
-    void deleteAppId(String appId);
+public interface IAppIdService extends IAppService
+{
     
     /**
      * <p>

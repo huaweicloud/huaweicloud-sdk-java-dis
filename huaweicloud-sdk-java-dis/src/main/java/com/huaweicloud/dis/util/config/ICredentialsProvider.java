@@ -16,15 +16,15 @@
 
 package com.huaweicloud.dis.util.config;
 
-import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.DISCredentials;
 
-public interface IConfigProvider
+public interface ICredentialsProvider
 {
     /**
-     * 配置更新接口
+     * 认证信息更新接口
      *
-     * @param config 当前配置对象
+     * @param credentials 当前认证对象
      * @return 更新之后的配置对象
      */
-    DISConfig configUpdate(DISConfig config);
+    DISCredentials updateCredentials(DISCredentials credentials);
 }

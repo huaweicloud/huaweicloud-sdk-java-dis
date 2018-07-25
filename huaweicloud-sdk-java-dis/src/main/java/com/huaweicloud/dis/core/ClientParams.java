@@ -16,7 +16,7 @@
 
 package com.huaweicloud.dis.core;
 
-import com.cloud.sdk.auth.credentials.Credentials;
+import com.huaweicloud.dis.core.auth.credentials.Credentials;
 
 /**
  * 提供获取云服务公共参数的方法

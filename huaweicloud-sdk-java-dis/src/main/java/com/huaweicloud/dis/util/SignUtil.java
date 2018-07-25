@@ -18,10 +18,10 @@ package com.huaweicloud.dis.util;
 
 import org.apache.http.HttpRequest;
 
-import com.cloud.sdk.Request;
-import com.cloud.sdk.auth.credentials.BasicCredentials;
-import com.cloud.sdk.auth.signer.Signer;
-import com.cloud.sdk.auth.signer.SignerFactory;
+import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
+import com.huaweicloud.dis.core.auth.signer.Signer;
+import com.huaweicloud.dis.core.auth.signer.SignerFactory;
 import com.huaweicloud.dis.Constants;
 
 public class SignUtil

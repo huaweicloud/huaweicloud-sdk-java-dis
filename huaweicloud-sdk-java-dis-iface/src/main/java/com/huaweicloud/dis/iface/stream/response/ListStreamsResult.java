@@ -24,47 +24,70 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ListStreamsResult {
-
+public class ListStreamsResult
+{
+    
     @JsonProperty("total_number")
     private int streamNumber;
     
     @JsonProperty("stream_names")
     private List<String> streamNames;
     
+    /**
+     * <p>
+     * 通道的详情列表。
+     * </p>
+     */
+    @JsonProperty("stream_info_list")
+    private List<StreamInfo> streamInfos;
+    
     @JsonProperty("has_more_streams")
     private Boolean hasMoreStreams;
-
-	public int getStreamNumber() {
-		return streamNumber;
-	}
-
-	public void setStreamNumber(int streamNumber) {
-		this.streamNumber = streamNumber;
-	}
-
-	public List<String> getStreamNames() {
-		return streamNames;
-	}
-
-	public void setStreamNames(List<String> streamNames) {
-		this.streamNames = streamNames;
-	}
-
-	public Boolean getHasMoreStreams()
+    
+    public int getStreamNumber()
+    {
+        return streamNumber;
+    }
+    
+    public void setStreamNumber(int streamNumber)
+    {
+        this.streamNumber = streamNumber;
+    }
+    
+    public List<String> getStreamNames()
+    {
+        return streamNames;
+    }
+    
+    public void setStreamNames(List<String> streamNames)
+    {
+        this.streamNames = streamNames;
+    }
+    
+    public Boolean getHasMoreStreams()
     {
         return hasMoreStreams;
     }
-
+    
     public void setHasMoreStreams(Boolean hasMoreStreams)
     {
         this.hasMoreStreams = hasMoreStreams;
     }
-
+    
+    public List<StreamInfo> getStreamInfos()
+    {
+        return streamInfos;
+    }
+    
+    public void setStreamInfos(List<StreamInfo> streamInfos)
+    {
+        this.streamInfos = streamInfos;
+    }
+    
     @Override
-	public String toString() {
-		return "ListStreamResult [streamNumber=" + streamNumber
-				+ ", streamsDesc=" + streamNames + "]";
-	}
-
+    public String toString()
+    {
+        return "ListStreamResult [streamNumber=" + streamNumber + ", streamsDesc=" + streamNames + "]";
+    }
+    
 }

@@ -22,16 +22,24 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by s00348548 on 2018/1/10.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CloudtableSchema
 {
+    /**
+     * <p>
+     * HBase rowkey Schema used by the CloudTable cluster to convert JSON data into HBase rowkeys.
+     Value range: 1 to 64
+     * </p>
+     */
     @JsonProperty("row_key")
     private List<SchemaField> rowKeySchema;
-    
+
+    /**
+     * <p>
+     * HBase column Schema used by the CloudTable cluster to convert JSON data into HBase columns.
+     * </p>
+     */
     @JsonProperty("columns")
     private List<SchemaField> columnsSchema;
 

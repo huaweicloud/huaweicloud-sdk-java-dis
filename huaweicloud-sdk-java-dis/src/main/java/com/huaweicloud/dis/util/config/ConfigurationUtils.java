@@ -65,7 +65,7 @@ public class ConfigurationUtils
             {
                 inputStream = classLoader.getResourceAsStream(configurationFileName);
                 if(inputStream != null){
-                    LOGGER.info("get from classLoader");
+                    LOGGER.debug("get from classLoader");
                 }
             }
             
@@ -73,21 +73,21 @@ public class ConfigurationUtils
             {
                 inputStream = this.getClass().getResourceAsStream(configurationFileName);
                 if(inputStream != null){
-                    LOGGER.info("get from class");
+                    LOGGER.debug("get from class");
                 }
             }
             
             if (null == inputStream && configurationFileName.startsWith("/") && null != classLoader){
                 inputStream = classLoader.getResourceAsStream("." + configurationFileName);
                 if(inputStream != null){
-                    LOGGER.info("get from ./");
+                    LOGGER.debug("get from ./");
                 }
             }
             
             if (null == inputStream && configurationFileName.startsWith("/") && null != classLoader){
                 inputStream = classLoader.getResourceAsStream(configurationFileName.substring(1));
                 if(inputStream != null){
-                    LOGGER.info("get from no /");
+                    LOGGER.debug("get from no /");
                 }
             }
             
@@ -95,7 +95,7 @@ public class ConfigurationUtils
             {
                 inputStream = ClassLoader.getSystemResourceAsStream(configurationFileName);
                 if(inputStream != null){
-                    LOGGER.info("get from ClassLoader");
+                    LOGGER.debug("get from ClassLoader");
                 }
             }
             
@@ -105,14 +105,14 @@ public class ConfigurationUtils
                 if(file.exists()){
                     inputStream = new FileInputStream(configurationFileName);    
                     if(inputStream != null){
-                        LOGGER.info("get from file.");
+                        LOGGER.debug("get from file.");
                     }
                 }
             }
             
             if (null == inputStream)
             {
-                LOGGER.error("get from file returns null.");
+                LOGGER.warn("configuration file {} not found, ignore it.", configurationFileName);
                 return;
             }
             
@@ -123,7 +123,7 @@ public class ConfigurationUtils
                 String propName = (String)propNames.nextElement();
                 propertyMapFromFile.put(propName, props.getProperty(propName));
             }
-            LOGGER.info("propertyMapFromFile size : {}", propertyMapFromFile.size());
+            LOGGER.debug("propertyMapFromFile size : {}", propertyMapFromFile.size());
         }
         finally
         {

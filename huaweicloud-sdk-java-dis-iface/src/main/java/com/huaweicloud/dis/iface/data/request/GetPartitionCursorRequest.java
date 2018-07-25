@@ -60,6 +60,11 @@ public class GetPartitionCursorRequest
      * AFTER_SEQUENCE_NUMBER - 从特定序列号后的记录开始读取。
      * </p>
      * </li>
+	 * <li>
+     * <p>
+     * AT_TIMESTAMP - 从分区中最接近指定时间戳的记录开始读取。需要传入Timestamp字段
+     * </p>
+     * </li>
      * <li>
      * <p>
      * TRIM_HORIZON - 从分区中最时间最长的记录开始读取。

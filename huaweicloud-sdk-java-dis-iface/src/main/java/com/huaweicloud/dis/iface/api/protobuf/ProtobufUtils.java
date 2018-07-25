@@ -43,8 +43,8 @@ public class ProtobufUtils
         List<PutRecordsResultEntry> records = new ArrayList<PutRecordsResultEntry>();
         for(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry protoEntry : putRecordsResult.getRecordsList()){
             PutRecordsResultEntry entry = new PutRecordsResultEntry();
-            entry.setErrorCode(protoEntry.getErrorCode());
-            entry.setErrorMessage(protoEntry.getErrorMessage());
+            entry.setErrorCode(protoEntry.getErrorCode().isEmpty() ? null : protoEntry.getErrorCode());
+            entry.setErrorMessage(protoEntry.getErrorMessage().isEmpty() ? null : protoEntry.getErrorMessage());
             entry.setSequenceNumber(protoEntry.getSequenceNumber());
             entry.setPartitionId(protoEntry.getShardId());
             

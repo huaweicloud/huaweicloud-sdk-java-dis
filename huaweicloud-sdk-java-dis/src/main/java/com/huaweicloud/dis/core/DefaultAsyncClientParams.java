@@ -18,7 +18,7 @@ package com.huaweicloud.dis.core;
 
 import java.util.concurrent.ExecutorService;
 
-import com.cloud.sdk.auth.credentials.Credentials;
+import com.huaweicloud.dis.core.auth.credentials.Credentials;
 
 /**
  * Default implementation of {@code AsyncClientParams}

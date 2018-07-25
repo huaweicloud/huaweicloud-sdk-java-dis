@@ -16,7 +16,7 @@
 
 package com.huaweicloud.dis.core.restresource;
 
-import com.cloud.sdk.util.StringUtils;
+import com.huaweicloud.dis.core.util.StringUtils;
 
 /**
  * Created by z00382129 on 2017/11/8.

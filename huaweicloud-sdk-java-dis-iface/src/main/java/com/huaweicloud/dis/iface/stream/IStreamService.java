@@ -20,26 +20,34 @@ import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
 import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
 import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
+import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
 
 /**
  * DIS服务的管理面接口
  * */
 public interface IStreamService
 {
-    //管理
+    /**
+     * 创建流
+     * */
     CreateStreamResult createStream(CreateStreamRequest createStreamRequest);
     
+    /**
+     * 删除流
+     * */
     DeleteStreamResult deleteStream(DeleteStreamRequest deleteStreamRequest);
     
-    //管理面
+    /**
+     * 查询流清单
+     * */
     ListStreamsResult listStreams(ListStreamsRequest listStreamsRequest);
     
     /**
-     * 管理面API
      * <p>
      * 查询指定通道详情。
      * </p>
@@ -49,4 +57,12 @@ public interface IStreamService
      */
     DescribeStreamResult describeStream(DescribeStreamRequest describeStreamRequest);
     
+    /**
+     * 更新流分片的扩缩容接口：
+     * 被减少的分片，分片状态先置为deleted状态，只读。待达到该分片的有效期后（分片内没有数据），分片变为expired状态，不可读不可写。
+     * 扩容分片时，会重用存在deleted状态的分片
+     * 
+     * deleted状态和expired状态的分片不参与计费。
+     * */
+    UpdatePartitionCountResult updatePartitionCount(UpdatePartitionCountRequest updatePartitionCountRequest);
 }

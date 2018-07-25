@@ -1,7 +1,7 @@
 // 如果使用此注释，则使用proto3; 否则使用proto2
 syntax = "proto2";
 
-option java_package = "com.bigdata.dis.api.protobuf";  
+option java_package = "com.huaweicloud.dis.iface.api.protobuf";  
 option java_outer_classname="Message";
 
 message PutRecordsRequest {

@@ -19,7 +19,7 @@ package com.huaweicloud.dis;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import com.cloud.sdk.util.StringUtils;
+import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.core.ClientParams;
 import com.huaweicloud.dis.core.builder.SyncClientBuilder;
 
@@ -34,6 +34,8 @@ public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, 
     
     private boolean defaultClientCertAuthEnabled;
     
+    private boolean dataCompressEnabled;
+    
     public final DISClientBuilder withProperty(String key, String value)
     {
         extendProperties.put(key, value);
@@ -42,34 +44,35 @@ public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, 
     
     public final DISClientBuilder withDataEncryptEnabled(boolean dataEncryptEnabled)
     {
-        setDataEncryptEnabled(dataEncryptEnabled);
+        this.dataEncryptEnabled = dataEncryptEnabled;
         return getSubclass();
     }
     
     public final DISClientBuilder withDefaultClientCertAuthEnabled(boolean defaultClientCertAuthEnabled)
     {
-        setDefaultClientCertAuthEnabled(defaultClientCertAuthEnabled);
+        this.defaultClientCertAuthEnabled = defaultClientCertAuthEnabled;
+        return getSubclass();
+    }
+    
+    public final DISClientBuilder withDataCompressEnabled(boolean dataCompressEnabled)
+    {
+        this.dataCompressEnabled = dataCompressEnabled;
         return getSubclass();
     }
     
     public final boolean isDataEncryptEnabled()
     {
-        return dataEncryptEnabled;
-    }
-
-    public final void setDataEncryptEnabled(boolean dataEncryptEnabled)
-    {
-        this.dataEncryptEnabled = dataEncryptEnabled;
+        return this.dataEncryptEnabled;
     }
 
     public final boolean isDefaultClientCertAuthEnabled()
     {
-        return defaultClientCertAuthEnabled;
+        return this.defaultClientCertAuthEnabled;
     }
-
-    public final void setDefaultClientCertAuthEnabled(boolean defaultClientCertAuthEnabled)
+    
+    public final boolean isDataCompressEnabled()
     {
-        this.defaultClientCertAuthEnabled = defaultClientCertAuthEnabled;
+        return this.dataCompressEnabled;
     }
 
     /**
@@ -111,6 +114,7 @@ public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, 
             disConfig.setEndpoint(endpoint);
         disConfig.setDataEncryptEnabled(dataEncryptEnabled);
         disConfig.setDefaultClientCertAuthEnabled(defaultClientCertAuthEnabled);
+        disConfig.setDataCompressEnabled(dataCompressEnabled);
         
         Enumeration iter = extendProperties.propertyNames();// 得到配置文件的名字
         while (iter.hasMoreElements())

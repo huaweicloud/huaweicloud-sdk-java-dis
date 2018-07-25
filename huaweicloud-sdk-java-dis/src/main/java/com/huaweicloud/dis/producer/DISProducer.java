@@ -18,12 +18,7 @@ package com.huaweicloud.dis.producer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,9 +42,6 @@ import com.huaweicloud.dis.producer.internals.StreamPartition;
 public class DISProducer
 {
     private static final Logger log = LoggerFactory.getLogger(DISProducer.class);
-
-    // 默认发送线程数
-    private static final int ASYNC_THREAD_COUNT = 100;
     
     private static final String STABLE_PARTITION_ID = "nb";
     
@@ -67,9 +59,9 @@ public class DISProducer
     
     public DISProducer(DISConfig disConfig)
     {
-        this(disConfig, Executors.newFixedThreadPool(ASYNC_THREAD_COUNT));
+        this(disConfig, Executors.newFixedThreadPool(disConfig.getMaxInFlightRequestsPerConnection()));
     }
-
+    
     public DISProducer(DISConfig disConfig, ExecutorService executorService)
     {
         this.executorService = executorService;
@@ -80,7 +72,6 @@ public class DISProducer
         int batchCount = config.getBatchCount();
         long bufferSize = config.getBufferMemory();
         int bufferCount = config.getBufferCount();
-        
         DISAsync client = new DISClientAsync(config, this.executorService);
         this.accumulator = new RecordAccumulator(batchSize, batchCount, bufferSize, bufferCount, this.lingerMs);
         this.sender = new Sender(client, accumulator, this.lingerMs);

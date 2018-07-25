@@ -27,7 +27,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloud.sdk.util.StringUtils;
+import com.huaweicloud.dis.core.util.StringUtils;
 
 /**
  * IO Utils

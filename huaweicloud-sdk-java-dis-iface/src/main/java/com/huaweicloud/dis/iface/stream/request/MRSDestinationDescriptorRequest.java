@@ -21,29 +21,44 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-/**
- * Created by s00348548 on 2017/10/25.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MRSDestinationDescriptorRequest extends OBSDestinationDescriptorRequest
 {
-    /** MRS clusterName */
+    /**
+     * <p>
+     * String Name of the MRS cluster to which data in the DIS stream will be dumped. The chosen MRS cluster must be
+     * non-Kerberos authenticated.
+     * </p>
+     */
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("mrs_cluster_name")
     private String mrsClusterName;
     
-    /** MRS clusterId */
+    /**
+     * <p>
+     * ID of the MRS cluster to which data in the DIS stream will be dumped.
+     * </p>
+     */
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("mrs_cluster_id")
     private String mrsClusterId;
     
-    /** MRS hdfsPath */
+    /**
+     * <p>
+     * Hadoop Distributed File System (HDFS) path of the MRS cluster to which data in the DIS stream will be dumped.
+     * </p>
+     */
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("mrs_hdfs_path")
     private String mrsHdfsPath;
     
-    /** appends the hdfs folder prefix to delivered files */
+    /**
+     * <p>
+     * Directory to hold files that will be dumped to MRS. Different directory levels are separated by a forward slash
+     * (/) and cannot start with a forward slash (/).
+     * </p>
+     */
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("hdfs_prefix_folder")
     private String hdfsPrefixFolder;

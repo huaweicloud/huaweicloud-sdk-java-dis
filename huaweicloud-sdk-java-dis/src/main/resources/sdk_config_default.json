@@ -1,0 +1,8 @@
+{
+  "defaultSigner": {
+    "signerType": "DefaultSignerType"
+  },
+  "serviceSigners": [],
+  "regionSigners": [],
+  "serviceRegionSigners": []
+}

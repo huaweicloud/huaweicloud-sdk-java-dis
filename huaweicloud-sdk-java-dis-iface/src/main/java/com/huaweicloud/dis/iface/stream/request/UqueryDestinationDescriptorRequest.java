@@ -21,23 +21,47 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
-/**
- * Created by s00348548 on 2017/11/8.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UqueryDestinationDescriptorRequest extends OBSDestinationDescriptorRequest
 {
-    /** Uquery databaseName */
+    /**
+     * <p>
+     * Name of the DLI database to which data in the DIS stream will be dumped.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("dli_database_name")
+    private String dliDatabaseName;
+    
+    /**
+     * <p>
+     * Name of the DLI table to which data in the DIS stream will be dumped.Currently, only tables in DLI are supported.
+     * Before selecting a DLI table, ensure that you have the permission to insert data into the table.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("dli_table_name")
+    private String dliTableName;
+    
+    /**
+     * <p>
+     * for old use. Name of the DLI database to which data in the DIS stream will be dumped.
+     * </p>
+     */
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("uquery_database_name")
     private String uqueryDatabaseName;
     
-    /** Uquery tableName */
+    /**
+     * <p>
+     * for old use. Name of the DLI table to which data in the DIS stream will be dumped.Currently, only tables in DLI are supported.
+     * Before selecting a DLI table, ensure that you have the permission to insert data into the table.
+     * </p>
+     */
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("uquery_table_name")
     private String uqueryTableName;
-
     
     public String getUqueryDatabaseName()
     {
@@ -57,5 +81,25 @@ public class UqueryDestinationDescriptorRequest extends OBSDestinationDescriptor
     public void setUqueryTableName(String uqueryTableName)
     {
         this.uqueryTableName = uqueryTableName;
+    }
+    
+    public String getDliDatabaseName()
+    {
+        return dliDatabaseName;
+    }
+    
+    public void setDliDatabaseName(String dliDatabaseName)
+    {
+        this.dliDatabaseName = dliDatabaseName;
+    }
+    
+    public String getDliTableName()
+    {
+        return dliTableName;
+    }
+    
+    public void setDliTableName(String dliTableName)
+    {
+        this.dliTableName = dliTableName;
     }
 }

@@ -17,16 +17,12 @@
 package com.huaweicloud.dis;
 
 import com.huaweicloud.dis.core.handler.AsyncHandler;
-import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
-import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutFilesRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutFilesResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
 import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
+import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
 
 /**
  * DIS服务的数据面异步接口
@@ -120,14 +116,6 @@ public interface DISAsync extends DIS
     
     //所有的异步接口，只在同步接口正式对外发布的时候才处理，同步接口发布为异步的过程，各个接口的实现方式是一样的
     
-//    java.util.concurrent.Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointParam);
-//
-//    java.util.concurrent.Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointParam, AsyncHandler<CommitCheckpointResult> asyncHandler);
-//    
-//    java.util.concurrent.Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest);
-//
-//    java.util.concurrent.Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest, AsyncHandler<GetCheckpointResult> asyncHandler);
-//
 //    java.util.concurrent.Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest);
 //
 //    java.util.concurrent.Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest, AsyncHandler<ListStreamsResult> asyncHandler);
@@ -163,5 +151,116 @@ public interface DISAsync extends DIS
      * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
      * @return 包含上传小文件结果的 JAVA Future 对象
      */
-    java.util.concurrent.Future<PutFilesResult> putFilesAsync(PutFilesRequest putFilesRequest, AsyncHandler<PutFilesResult> asyncHandler);
+    java.util.concurrent.Future<PutFilesResult> putFilesAsync(PutFilesRequest putFilesRequest,
+        AsyncHandler<PutFilesResult> asyncHandler);
+
+    /**
+     * <p>
+     * 提交Checkpoint
+     * </p>
+     *
+     * @param commitCheckpointRequest 提交Checkpoint
+     * @return 包含提交Checkpoint结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<CommitCheckpointResult> commitCheckpointAsync(
+        CommitCheckpointRequest commitCheckpointRequest);
+    
+    /**
+     * <p>
+     * 提交Checkpoint
+     * </p>
+     *
+     * @param commitCheckpointRequest 提交Checkpoint
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含提交Checkpoint结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<CommitCheckpointResult> commitCheckpointAsync(
+        CommitCheckpointRequest commitCheckpointRequest, AsyncHandler<CommitCheckpointResult> asyncHandler);
+    
+    /**
+     * <p>
+     * 获取Checkpoint
+     * </p>
+     *
+     * @param getCheckpointRequest 获取Checkpoint
+     * @return 包含获取Checkpoint结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest);
+    
+    /**
+     * <p>
+     * 获取Checkpoint
+     * </p>
+     *
+     * @param getCheckpointRequest 获取Checkpoint
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含获取Checkpoint结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest,
+        AsyncHandler<GetCheckpointResult> asyncHandler);
+
+    /**
+     * <p>
+     * 创建App
+     * </p>
+     *
+     * @param appName App名称
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明App创建成功
+     */
+    java.util.concurrent.Future<Void> createAppAsync(String appName);
+    
+    /**
+     * <p>
+     * 创建App
+     * </p>
+     *
+     * @param appName App名称
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明App创建成功
+     */
+    java.util.concurrent.Future<Void> createAppAsync(String appName, AsyncHandler<Void> asyncHandler);
+    
+    /**
+     * <p>
+     * 删除App
+     * </p>
+     *
+     * @param appName App名称
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明App删除成功
+     */
+    java.util.concurrent.Future<Void> deleteAppAsync(String appName);
+    
+    /**
+     * <p>
+     * 删除App
+     * </p>
+     *
+     * @param appName App名称
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明App删除成功
+     */
+    java.util.concurrent.Future<Void> deleteAppAsync(String appName, AsyncHandler<Void> asyncHandler);
+    
+    /**
+     * <p>
+     * 变更分区数量
+     * </p>
+     *
+     * @param updatePartitionCountRequest 变更分区数量请求体
+     * @return 包含分区变更结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<UpdatePartitionCountResult> updatePartitionCountAsync(
+        UpdatePartitionCountRequest updatePartitionCountRequest);
+    
+    /**
+     * <p>
+     * 变更分区数量
+     * </p>
+     *
+     * @param updatePartitionCountRequest 变更分区数量请求体
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含分区变更结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<UpdatePartitionCountResult> updatePartitionCountAsync(
+        UpdatePartitionCountRequest updatePartitionCountRequest, AsyncHandler<UpdatePartitionCountResult> asyncHandler);
 }

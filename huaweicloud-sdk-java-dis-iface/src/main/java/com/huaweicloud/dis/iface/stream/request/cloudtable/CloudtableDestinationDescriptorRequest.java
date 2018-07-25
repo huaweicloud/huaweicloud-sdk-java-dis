@@ -21,45 +21,91 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.huaweicloud.dis.iface.stream.request.ForceStringDeserializer;
 import com.huaweicloud.dis.iface.stream.request.OBSDestinationDescriptorRequest;
 
-/**
- * Created by s00348548 on 2018/1/10.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CloudtableDestinationDescriptorRequest extends OBSDestinationDescriptorRequest
 {
-    /** Cloudtable cluster name */
+    /**
+     * <p>
+     * Name of the CloudTable cluster to which data will be dumped. If data will be dumped to OpenTSDB, the CloudTable
+     * cluster must enable OpenTSDB.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("cloudtable_cluster_name")
     private String cloudtableClusterName;
     
+    /**
+     * <p>
+     * ID of the CloudTable cluster to which data will be dumped. If data will be dumped to OpenTSDB, the CloudTable
+     * cluster must enable OpenTSDB.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("cloudtable_cluster_id")
     private String cloudtableClusterId;
     
-    /** Cloudtable table name */
+    /**
+     * <p>
+     * HBase table name of the CloudTable cluster to which data will be dumped. The parameter is mandatory when data is
+     * dumped to CloudTable HBase.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("cloudtable_table_name")
     private String cloudtableTableName;
     
-    /** rowKey delimiter */
+    /**
+     * <p>
+     * Delimiter of the CloudTable HBase data' rowkey. Default value: Spot "."
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("cloudtable_row_key_delimiter")
     private String cloudtableRowkeyDelimiter;
     
-    /** Cloudtable schema */
+    /**
+     * <p>
+     * Schema configuration of the CloudTable HBase data. After this parameter is set, the JSON data in the stream can
+     * be converted to another format and then be imported to CloudTable HBase. You can set either this parameter or
+     * opentsdb_schema, but this parameter is mandatory when data will be dumped to HBase.
+     * </p>
+     */
     @JsonProperty("cloudtable_schema")
     private CloudtableSchema cloudtableSchema;
     
-    /** openTSDB schema */
+    /**
+     * <p>
+     * Schema configuration of the CloudTable OpenTSDB data. After this parameter is set, the JSON data in the stream
+     * can be converted to another format and then be imported to the CloudTable OpenTSDB. You can set either this
+     * parameter or opentsdb_schema, but this parameter is mandatory when data will be dumped to OpenTSDB.
+     * </p>
+     */
     @JsonProperty("opentsdb_schema")
     private List<OpenTSDBSchema> opentsdbSchema;
     
-    /** OBS error backup file name prefix */
-    @JsonProperty("backup_file_prefix")
-    private String backupfilePrefix;
-    
-    /** obs error backup Bucket path */
+    /**
+     * <p>
+     * Name of the OBS bucket used to back up data that failed to be dumped to CloudTable.
+     * </p>
+     */
     @JsonProperty("obs_backup_bucket_path")
     private String obsBackupBucketPath;
+    
+    /**
+     * <p>
+     * Name of the OBS bucket used to back up data that failed to be dumped to CloudTable. Self-definable directory
+     * created in the OBS bucket and used to back up data that failed to be dumped to CloudTable. Directory levels are
+     * separated by slash (/) and cannot start with a slash. The entered directory name cannot exceed 50 characters. By
+     * default, this parameter is left unspecified.
+     * </p>
+     */
+    @JsonProperty("backup_file_prefix")
+    private String backupfilePrefix;
     
     public String getCloudtableClusterName()
     {

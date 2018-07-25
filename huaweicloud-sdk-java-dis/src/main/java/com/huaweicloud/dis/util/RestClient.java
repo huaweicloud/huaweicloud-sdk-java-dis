@@ -28,22 +28,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.*;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustStrategy;
@@ -56,8 +55,8 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloud.sdk.http.HttpMethodName;
 import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.http.HttpMethodName;
 import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.DefaultResponseErrorHandler;
 import com.huaweicloud.dis.http.HttpMessageConverterExtractor;
@@ -226,7 +225,7 @@ public class RestClient
     
     public <T> T put(String url, Class<T> responseClazz, Map<String, String> headers, HttpEntity entity)
     {
-        HttpPut request = new HttpPut();
+        HttpPut request = new HttpPut(url);
         request = this.setHeaders(request, headers);
         
         request.setEntity(entity);
@@ -332,11 +331,11 @@ public class RestClient
     {
         
         // TODO 使用 HttpMessageConverter 来实现
-    	if (data instanceof byte[])
-    	{
-			return new ByteArrayEntity((byte[]) data);
-		}
-    	else if (data instanceof String || data instanceof Integer)
+        if (data instanceof byte[])
+        {
+            return new ByteArrayEntity((byte[])data);
+        }
+        else if (data instanceof String || data instanceof Integer)
         {
             return new StringEntity(data.toString(), "UTF-8");
         }
@@ -349,10 +348,10 @@ public class RestClient
     private CloseableHttpClient getHttpClient()
     {
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.<ConnectionSocketFactory> create();
-        ConnectionSocketFactory plainSF = new PlainConnectionSocketFactory();
-        registryBuilder.register("http", plainSF);
+        registryBuilder.register("http", new PlainConnectionSocketFactory());
+
+        HostnameVerifier verifier = null;
         // 指定信任密钥存储对象和连接套接字工厂
-        
         try
         {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
@@ -377,10 +376,11 @@ public class RestClient
                     }
                 };
                 sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy).build();
+                verifier = NoopHostnameVerifier.INSTANCE;
             }
             
             LayeredConnectionSocketFactory sslSF = new SSLConnectionSocketFactory(sslContext,
-                new String[] {"TLSv1.2", "TLSv1.1"}, null, SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+                new String[] {"TLSv1.2", "TLSv1.1"}, null, verifier);
             registryBuilder.register("https", sslSF);
         }
         catch (KeyStoreException e)
@@ -409,7 +409,7 @@ public class RestClient
             // }
             // }
         }
-        
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(disConfig.getSocketTimeOut()).setConnectTimeout(disConfig.getConnectionTimeOut()).build();
         Registry<ConnectionSocketFactory> registry = registryBuilder.build();
         // 设置连接管理器
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(registry);
@@ -417,10 +417,12 @@ public class RestClient
         connManager.setMaxTotal(disConfig.getMaxTotal());
         // connManager.setDefaultConnectionConfig(connConfig);
         // connManager.setDefaultSocketConfig(socketConfig);
+        
         // 构建客户端
         return HttpClientBuilder.create()
             .setConnectionManager(connManager)
             .setRetryHandler(new HttpRequestRetryHandler(3, true))
+            .setDefaultRequestConfig(requestConfig)
             .build();
     }
     

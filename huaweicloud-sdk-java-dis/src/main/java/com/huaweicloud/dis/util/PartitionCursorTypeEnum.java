@@ -18,6 +18,6 @@ package com.huaweicloud.dis.util;
 
 public enum PartitionCursorTypeEnum
 {
-    AT_SEQUENCE_NUMBER, AFTER_SEQUENCE_NUMBER, TRIM_HORIZON, LATEST
+    AT_SEQUENCE_NUMBER, AFTER_SEQUENCE_NUMBER, AT_TIMESTAMP, TRIM_HORIZON, LATEST
     
 }

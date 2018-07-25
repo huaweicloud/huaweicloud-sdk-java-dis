@@ -22,22 +22,43 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * Created by s00348548 on 2018/2/6.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OpenTSDBSchema
 {
+    /**
+     * <p>
+     * Schema configuration of the OpenTSDB data metric in the CloudTable cluster. After this parameter is set, the JSON
+     * data in the stream can be converted to the metric of the OpenTSDB data.
+     * </p>
+     */
     @JsonProperty("metric")
     private List<SchemaField> metricSchema;
     
+    /**
+     * <p>
+     * Schema configuration of the OpenTSDB data timestamp in the CloudTable cluster. After this parameter is set, the
+     * JSON data in the stream can be converted to the timestamp of the OpenTSDB data.
+     * </p>
+     */
     @JsonProperty("timestamp")
     private SchemaField timestampSchema;
     
+    /**
+     * <p>
+     * Schema configuration of the OpenTSDB data value in the CloudTable cluster. After this parameter is set, the JSON
+     * data in the stream can be converted to the value of the OpenTSDB data.
+     * </p>
+     */
     @JsonProperty("value")
     private SchemaField valueSchema;
     
+    /**
+     * <p>
+     * Schema configuration of the OpenTSDB data tags in the CloudTable cluster. After this parameter is set, the JSON
+     * data in the stream can be converted to the tags of the OpenTSDB data.
+     * </p>
+     */
     @JsonProperty("tags")
     private List<SchemaField> tagsSchema;
     

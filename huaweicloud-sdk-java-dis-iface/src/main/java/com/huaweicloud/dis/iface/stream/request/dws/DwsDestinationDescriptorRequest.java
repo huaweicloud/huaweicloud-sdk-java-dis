@@ -19,6 +19,8 @@ package com.huaweicloud.dis.iface.stream.request.dws;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.huaweicloud.dis.iface.stream.request.ForceStringDeserializer;
 import com.huaweicloud.dis.iface.stream.request.OBSDestinationDescriptorRequest;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -27,40 +29,96 @@ public class DwsDestinationDescriptorRequest extends OBSDestinationDescriptorReq
 {
     /** Destination type */
     private String type;
-    
+
+    /**
+     * <p>
+     * Name of the DWS cluster used to store data in the DIS stream.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("dws_cluster_name")
     private String dwsClusterName;
     
-    /** DWS clusterId */
+    /**
+     * <p>
+     * ID of the DWS cluster used to store data in the DIS stream.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("dws_cluster_id")
     private String dwsClusterId;
     
+    /**
+     * <p>
+     * Schema of the DWS database used to store data in the DIS stream.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("dws_schema")
     private String dwsSchema;
     
+    /**
+     * <p>
+     * Name of the DWS database used to store data in the DIS stream.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("dws_database_name")
     private String dwsDatabaseName;
     
+    /**
+     * <p>
+     * Username of the DWS database used to store data in the DIS stream.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("user_name")
     private String userName;
     
+    /**
+     * <p>
+     * Password of the DWS database used to store data in the DIS stream.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("user_password")
     private String userPassword;
     
+    /**
+     * <p>
+     * Name of the table in the DWS database used to store data in the DIS stream.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("dws_table_name")
     private String dwsTableName;
     
+    /**
+     * <p>
+     * An indication that implies data is in different rows.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("dws_delimiter")
     private String dwsDelimiter;
     
+    /**
+     * <p>
+     * Key created in Key Management Service (KMS) and used to encrypt the password of the DWS database.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("kms_user_key_name")
     private String kmsUserKeyName;
     
+    /**
+     * <p>
+     * ID of the key created in Key Management Service (KMS) and used to encrypt the password of the DWS database.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("kms_user_key_id")
     private String kmsUserKeyId;
-    
-    @JsonProperty("kms_data_cipher_text")
-    private String kmsDataCipherText;
     
     public String getDwsClusterName()
     {
@@ -152,16 +210,6 @@ public class DwsDestinationDescriptorRequest extends OBSDestinationDescriptorReq
         this.kmsUserKeyId = kmsUserKeyId;
     }
     
-    public String getKmsDataCipherText()
-    {
-        return kmsDataCipherText;
-    }
-    
-    public void setKmsDataCipherText(String kmsDataCipherText)
-    {
-        this.kmsDataCipherText = kmsDataCipherText;
-    }
-    
     public String getDwsDelimiter()
     {
         return dwsDelimiter;
@@ -171,12 +219,12 @@ public class DwsDestinationDescriptorRequest extends OBSDestinationDescriptorReq
     {
         this.dwsDelimiter = dwsDelimiter;
     }
-    
+
     public String getType()
     {
         return type;
     }
-    
+
     public void setType(String type)
     {
         this.type = type;

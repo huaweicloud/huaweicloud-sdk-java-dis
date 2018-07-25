@@ -16,11 +16,11 @@
 
 package com.huaweicloud.dis.iface.stream.response;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -42,7 +42,7 @@ public class DescribeStreamResult
      */
     @JsonProperty("stream_name")
     private String streamName;
-
+    
     /**
      * <p>
      * 通道创建时间。
@@ -50,7 +50,7 @@ public class DescribeStreamResult
      */
     @JsonProperty("create_time")
     private long createTime;
-
+    
     /**
      * <p>
      * 通道最近修改时间。
@@ -58,7 +58,7 @@ public class DescribeStreamResult
      */
     @JsonProperty("last_modified_time")
     private long lastModifiedTime;
-
+    
     /**
      * <p>
      * 数据保留时长。
@@ -66,7 +66,7 @@ public class DescribeStreamResult
      */
     @JsonProperty("retention_period")
     private int retentionPeriod;
-
+    
     /**
      * <p>
      * 通道的当前状态，可能是以下的某种状态：
@@ -111,7 +111,37 @@ public class DescribeStreamResult
      */
     @JsonProperty("stream_type")
     private String streamType;
-
+    
+    /**
+     * <p>
+     * 源数据类型。表示用户上传通道的源数据类型。
+     * </p>
+     * <ul>
+     * <li>
+     * <p>
+     * BLOB - 表示二进制数据，DIS支持将BLOB类型数据转储至OBS、MRS服务。
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * JSON - DIS支持将JSON格式的数据转储至OBS、MRS、CloudTable服务。
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * CSV - DIS支持将CSV格式数据转储至OBS、MRS、DWS、DLI服务。
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * FILE - 表示小文件，DIS支持将用户上传的小文件转储至OBS服务。
+     * </p>
+     * </li>
+     * </ul>
+     */
+    @JsonProperty("data_type")
+    private String dataType;
+    
     /**
      * <p>
      * 通道的分区列表。
@@ -122,7 +152,7 @@ public class DescribeStreamResult
     
     @JsonProperty("has_more_partitions")
     private Boolean hasMorePartitions = false;
-
+    
     @JsonProperty("update_partition_counts")
     private List<UpdatePartitionCount> updatePartitionCounts;
     
@@ -130,42 +160,42 @@ public class DescribeStreamResult
     {
         return streamId;
     }
-
+    
     public void setStreamId(String streamId)
     {
         this.streamId = streamId;
     }
-
+    
     public String getStreamName()
     {
         return streamName;
     }
-
+    
     public void setStreamName(String streamName)
     {
         this.streamName = streamName;
     }
-
+    
     public int getRetentionPeriod()
     {
         return retentionPeriod;
     }
-
+    
     public void setRetentionPeriod(int retentionPeriod)
     {
         this.retentionPeriod = retentionPeriod;
     }
-
+    
     public String getStatus()
     {
         return status;
     }
-
+    
     public void setStatus(String status)
     {
         this.status = status;
     }
-
+    
     /**
      * <p>
      * 通道类型。
@@ -190,7 +220,7 @@ public class DescribeStreamResult
     {
         return streamType;
     }
-
+    
     /**
      * <p>
      * 通道类型。
@@ -215,68 +245,75 @@ public class DescribeStreamResult
     {
         this.streamType = streamType;
     }
-
+    
     public List<PartitionResult> getPartitions()
     {
         return partitions;
     }
-
+    
     public void setPartitions(List<PartitionResult> partitions)
     {
         this.partitions = partitions;
     }
-
+    
     public long getCreateTime()
     {
         return createTime;
     }
-
+    
     public void setCreateTime(long createTime)
     {
         this.createTime = createTime;
     }
-
+    
     public long getLastModifiedTime()
     {
         return lastModifiedTime;
     }
-
+    
     public void setLastModifiedTime(long lastModifiedTime)
     {
         this.lastModifiedTime = lastModifiedTime;
     }
-
+    
     public Boolean getHasMorePartitions()
     {
         return hasMorePartitions;
     }
-
+    
     public void setHasMorePartitions(Boolean hasMorePartitions)
     {
         this.hasMorePartitions = hasMorePartitions;
     }
-
-    
     
     public List<UpdatePartitionCount> getUpdatePartitionCounts()
     {
         return updatePartitionCounts;
     }
-
+    
     public void setUpdatePartitionCounts(List<UpdatePartitionCount> updatePartitionCounts)
     {
         this.updatePartitionCounts = updatePartitionCounts;
     }
-
+    
+    public String getDataType()
+    {
+        return dataType;
+    }
+    
+    public void setDataType(String dataType)
+    {
+        this.dataType = dataType;
+    }
+    
     @Override
     public String toString()
     {
         return "DescribeStreamResult [streamId=" + streamId + ", streamName=" + streamName + ", createTime="
             + createTime + ", lastModifiedTime=" + lastModifiedTime + ", retentionPeriod=" + retentionPeriod
-            + ", status=" + status + ", streamType=" + streamType + ", partitions=" + partitions
-            + ", hasMorePartitions=" + hasMorePartitions + ", updatePartitionCounts=" + updatePartitionCounts + "]";
+            + ", status=" + status + ", streamType=" + streamType + ", dataType=" + dataType + ", partitions="
+            + partitions + ", hasMorePartitions=" + hasMorePartitions + ", updatePartitionCounts="
+            + updatePartitionCounts + "]";
     }
-
-
-
+    
 }

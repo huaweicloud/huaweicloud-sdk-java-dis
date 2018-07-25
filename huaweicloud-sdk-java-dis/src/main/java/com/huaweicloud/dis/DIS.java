@@ -1,5 +1,6 @@
 package com.huaweicloud.dis;
 
+import com.huaweicloud.dis.iface.app.IAppService;
 import com.huaweicloud.dis.iface.data.IDataService;
 import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
 import com.huaweicloud.dis.iface.data.response.PutRecordResult;
@@ -13,13 +14,11 @@ import com.huaweicloud.dis.iface.stream.IStreamService;
  * 
  * 
  */
-public interface DIS extends IDataService,IStreamService
+public interface DIS extends IDataService, IStreamService, IAppService
 {
     
     /**
      * 上传单条记录到通道
      * */
     PutRecordResult putRecord(PutRecordRequest putRecordParam);
-    
-    
 }

@@ -28,23 +28,14 @@ import java.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloud.sdk.util.StringUtils;
+import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
-import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
-import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutFilesRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntryExtendedInfo;
-import com.huaweicloud.dis.iface.data.request.QueryFileState;
-import com.huaweicloud.dis.iface.data.request.StreamType;
-import com.huaweicloud.dis.iface.data.response.FileUploadResult;
-import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutFilesResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
 import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
+import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
 import com.huaweicloud.dis.util.IOUtils;
 
 public class DISClientAsync extends DISClient implements DISAsync
@@ -143,43 +134,107 @@ public class DISClientAsync extends DISClient implements DISAsync
             };
         });
     }
-    
 
-//    @Override
-//    public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointParam)
-//    {
-//        return commitCheckpointAsync(commitCheckpointParam, null);
-//    }
-//    
-//    @Override
-//    public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointParam,
-//        AsyncHandler<CommitCheckpointResult> asyncHandler)
-//    {
-//        return submit(commitCheckpointParam, asyncHandler, new InnerExecutor<CommitCheckpointRequest, CommitCheckpointResult>()
-//        {
-//            public CommitCheckpointResult innerExecute(CommitCheckpointRequest commitCheckpointParam) {
-//                return innerCommitCheckpoint(commitCheckpointParam);
-//            };
-//        });
-//    }
-//    
-//    @Override
-//    public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest)
-//    {
-//        return getCheckpointAsync(getCheckpointRequest, null);
-//    }
-//    
-//    @Override
-//    public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest,
-//        AsyncHandler<GetCheckpointResult> asyncHandler)
-//    {
-//        return submit(getCheckpointRequest, asyncHandler, new InnerExecutor<GetCheckpointRequest, GetCheckpointResult>()
-//        {
-//            public GetCheckpointResult innerExecute(GetCheckpointRequest commitCheckpointParam) {
-//                return innerGetCheckpoint(getCheckpointRequest);
-//            };
-//        });
-//    }
+    @Override
+    public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest)
+    {
+        return commitCheckpointAsync(commitCheckpointRequest, null);
+    }
+    
+    @Override
+    public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest,
+        AsyncHandler<CommitCheckpointResult> asyncHandler)
+    {
+        return submit(commitCheckpointRequest,
+            asyncHandler,
+            new InnerExecutor<CommitCheckpointRequest, CommitCheckpointResult>()
+            {
+                public CommitCheckpointResult innerExecute(CommitCheckpointRequest commitCheckpointRequest)
+                {
+                    return innerCommitCheckpoint(commitCheckpointRequest);
+                }
+            });
+    }
+    
+    @Override
+    public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest)
+    {
+        return getCheckpointAsync(getCheckpointRequest, null);
+    }
+    
+    @Override
+    public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest,
+        AsyncHandler<GetCheckpointResult> asyncHandler)
+    {
+        return submit(getCheckpointRequest, asyncHandler, new InnerExecutor<GetCheckpointRequest, GetCheckpointResult>()
+        {
+            public GetCheckpointResult innerExecute(GetCheckpointRequest getCheckpointRequest)
+            {
+                return innerGetCheckpoint(getCheckpointRequest);
+            }
+        });
+    }
+    
+    @Override
+    public Future<Void> createAppAsync(String appName)
+    {
+        return createAppAsync(appName, null);
+    }
+    
+    @Override
+    public Future<Void> createAppAsync(String appName, AsyncHandler<Void> asyncHandler)
+    {
+        return submit(appName, asyncHandler, new InnerExecutor<String, Void>()
+        {
+            public Void innerExecute(String appName)
+            {
+                innerCreateApp(appName);
+                return null;
+            }
+        });
+    }
+
+    @Override
+    public Future<Void> deleteAppAsync(String appName)
+    {
+        return deleteAppAsync(appName, null);
+    }
+    
+    @Override
+    public Future<Void> deleteAppAsync(String appName, AsyncHandler<Void> asyncHandler)
+    {
+        return submit(appName, asyncHandler, new InnerExecutor<String, Void>()
+        {
+            public Void innerExecute(String appName)
+            {
+                innerDeleteApp(appName);
+                return null;
+            }
+        });
+    }
+    
+    @Override
+    public Future<UpdatePartitionCountResult> updatePartitionCountAsync(
+        UpdatePartitionCountRequest updatePartitionCountRequest)
+    {
+        return updatePartitionCountAsync(updatePartitionCountRequest, null);
+    }
+    
+    @Override
+    public Future<UpdatePartitionCountResult> updatePartitionCountAsync(
+        UpdatePartitionCountRequest updatePartitionCountRequest, AsyncHandler<UpdatePartitionCountResult> asyncHandler)
+    {
+        return submit(updatePartitionCountRequest,
+            asyncHandler,
+            new InnerExecutor<UpdatePartitionCountRequest, UpdatePartitionCountResult>()
+            {
+                public UpdatePartitionCountResult innerExecute(UpdatePartitionCountRequest updatePartitionCountRequest)
+                {
+                    return innerUpdatePartitionCount(updatePartitionCountRequest);
+                }
+            });
+    }
+    
 //    
 //    @Override
 //    public Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest)
@@ -285,22 +340,27 @@ public class DISClientAsync extends DISClient implements DISAsync
                 queryFileState.setFileName(putFilesRequest.getFileName());
                 queryFileState.setDeliverDataId(String.valueOf(DELIVER_DATA_ID));
                 
+                boolean isSuccessful = false;
                 while (true)
                 {
                     // 查询当前文件转储状态（获取文件状态接口不进行重试）
                     FileUploadResult fileUploadResult = innerGetFileUploadResult(queryFileState);
                     if (FileUploadResult.STATE_IN_OBS.equals(fileUploadResult.getState()))
                     {
+                        isSuccessful = true;
                         break; // 文件转储已经完成，返回
                     }
 
                     if(FileUploadResult.STATE_CANCELLED.equals(fileUploadResult.getState()))
                     {
                         //可能流已经被删除了
-                        LOG.warn("Transferring file {} from dis to obs is cancelled",fileUploadResult.getFileName());
+                        LOG.error("Failed to upload file {}, {}", putFilesRequest.getFilePath(), fileUploadResult);
                         break;
                     }
                     
+                    LOG.info("Wait for file {} transferring completed, {}",
+                        putFilesRequest.getFilePath(),
+                        fileUploadResult);
                     try
                     {
                         Thread.sleep(5000);
@@ -313,7 +373,7 @@ public class DISClientAsync extends DISClient implements DISAsync
                 
                 // TODO 响应信息待优化
                 PutFilesResult putFilesResult = new PutFilesResult();
-                putFilesResult.setSuccessful(true);
+                putFilesResult.setSuccessful(isSuccessful);
                 return putFilesResult;
             };
         });
@@ -351,7 +411,7 @@ public class DISClientAsync extends DISClient implements DISAsync
             @Override
             public void doWithRetry(PutRecordsRequest request, int maxRetries, long maxDelay)
             {
-                PutRecordsResult putRecordsResult = innerPutRecords(putRecordsRequest);
+                PutRecordsResult putRecordsResult = innerPutRecordsWithRetry(putRecordsRequest);
                 
                 if (putRecordsResult.getFailedRecordCount().intValue() > 0)
                 {

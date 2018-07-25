@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public enum StreamDestinationType
 {
-    DEFAULT("NOWHERE"), OBS("OBS"), MRS("MRS"), UQUERY("UQUERY"), CLOUDTABLE("CLOUDTABLE"), OPENTSDB("OPENTSDB"), DWS("DWS");
+    DEFAULT("NOWHERE"), OBS("OBS"), MRS("MRS"), UQUERY("UQUERY"), DLI("DLI"), CLOUDTABLE("CLOUDTABLE"), OPENTSDB("OPENTSDB"), DWS("DWS");
     
     private String typeString;
     
@@ -36,5 +36,17 @@ public enum StreamDestinationType
     public String toString()
     {
         return typeString;
+    }
+    
+    public static StreamDestinationType getByTypeString(String typeString)
+    {
+        for (StreamDestinationType streamDestinationType : values())
+        {
+            if (streamDestinationType.toString().equals(typeString))
+            {
+                return streamDestinationType;
+            }
+        }
+        return null;
     }
 }

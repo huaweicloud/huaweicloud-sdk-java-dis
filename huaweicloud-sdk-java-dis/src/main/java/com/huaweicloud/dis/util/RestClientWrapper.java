@@ -32,8 +32,9 @@ import org.apache.http.conn.ConnectTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloud.sdk.Request;
-import com.cloud.sdk.http.HttpMethodName;
+import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
+import com.huaweicloud.dis.core.http.HttpMethodName;
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
@@ -63,9 +64,7 @@ public class RestClientWrapper
     {
         beforeRequest(requestContent, region);
         
-        request = SignUtil.sign(request, ak, sk, region);
-        
-        return doRequest(request, requestContent, returnType);
+        return doRequest(request, requestContent, ak, sk, region, returnType);
     }
     
     private void beforeRequest(Object requestContent, String region)
@@ -86,11 +85,16 @@ public class RestClientWrapper
         HttpMethodName methodName = request.getHttpMethod();
         if (methodName.equals(HttpMethodName.POST) || methodName.equals(HttpMethodName.PUT))
         {
-            if(requestContent instanceof byte[]){
+            if (requestContent instanceof byte[])
+            {
                 request.setContent(new ByteArrayInputStream((byte[])requestContent));
-            }else if(requestContent instanceof String || requestContent instanceof Integer){
+            }
+            else if (requestContent instanceof String || requestContent instanceof Integer)
+            {
                 request.setContent(new ByteArrayInputStream(Utils.encodingBytes(requestContent.toString())));
-            }else{
+            }
+            else
+            {
                 String reqJson = JsonUtils.objToJson(requestContent);
                 request.setContent(new ByteArrayInputStream(Utils.encodingBytes(reqJson)));
             }
@@ -99,13 +103,15 @@ public class RestClientWrapper
     
     private void setContentType()
     {
-        //默认为json格式
-        if(!request.getHeaders().containsKey("Content-Type")){
+        // 默认为json格式
+        if (!request.getHeaders().containsKey("Content-Type"))
+        {
             request.addHeader("Content-Type", "application/json; charset=utf-8");
         }
         
-        if(!request.getHeaders().containsKey("accept")){
-            request.addHeader("accept", "*/*; charset=utf-8");    
+        if (!request.getHeaders().containsKey("accept"))
+        {
+            request.addHeader("accept", "*/*; charset=utf-8");
         }
     }
     
@@ -156,8 +162,9 @@ public class RestClientWrapper
         
     }
     
-    //将Request转为restTemplate的请求参数.由于请求需要签名，故请求的body直接传byte[]，响应的反序列化，可以直接利用spring的messageConvert机制
-    private <T> T doRequest(Request<HttpRequest> request, Object requestContent, Class<T> returnType)
+    // 将Request转为restTemplate的请求参数.由于请求需要签名，故请求的body直接传byte[]，响应的反序列化，可以直接利用spring的messageConvert机制
+    private <T> T doRequest(Request<HttpRequest> request, Object requestContent, String ak, String sk, String region,
+        Class<T> returnType)
     {
         
         Map<String, String> parameters = request.getParameters();
@@ -195,7 +202,11 @@ public class RestClientWrapper
             
             try
             {
-                return restClient.exchange(uri.toString(), request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
+                request.getHeaders().remove(SignerConstants.AUTHORIZATION);
+                // 每次重传需要重新签名
+                request = SignUtil.sign(request, ak, sk, region);
+                return restClient.exchange(uri
+                    .toString(), request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
             }
             catch (Throwable t)
             {
@@ -211,8 +222,10 @@ public class RestClientWrapper
                 {
                     throw new DISClientException(errorMsg, t);
                 }
-                LOG.warn("Find Retriable Exception [{}], currRetryCount is {}",
+                LOG.warn("Find Retriable Exception [{}], url [{} {}], currRetryCount is {}",
                     errorMsg.replaceAll("[\\r\\n]", ""),
+                    request.getHttpMethod(),
+                    uri.toString(),
                     retryCount);
             }
         } while (retryCount < disConfig.getExceptionRetries());
@@ -220,11 +233,14 @@ public class RestClientWrapper
         return null;
     }
     
-    public static byte[] toByteArray(InputStream input) throws IOException {
+    public static byte[] toByteArray(InputStream input)
+        throws IOException
+    {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         byte[] buffer = new byte[4096];
         int n = 0;
-        while (-1 != (n = input.read(buffer))) {
+        while (-1 != (n = input.read(buffer)))
+        {
             output.write(buffer, 0, n);
         }
         return output.toByteArray();

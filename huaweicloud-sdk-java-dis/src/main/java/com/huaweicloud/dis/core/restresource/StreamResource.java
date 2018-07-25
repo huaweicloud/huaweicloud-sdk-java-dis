@@ -16,7 +16,7 @@
 
 package com.huaweicloud.dis.core.restresource;
 
-import com.cloud.sdk.util.StringUtils;
+import com.huaweicloud.dis.core.util.StringUtils;
 
 /**
  * 代表Stream资源

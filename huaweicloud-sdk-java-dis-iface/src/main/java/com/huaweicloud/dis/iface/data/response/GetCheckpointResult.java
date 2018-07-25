@@ -59,7 +59,7 @@ public class GetCheckpointResult
     @Override
     public String toString()
     {
-        return "StringResponse [sequenceNumber=" + sequenceNumber + ", metadata=" + metadata + "]";
+        return "GetCheckpointResult [sequenceNumber=" + sequenceNumber + ", metadata=" + metadata + "]";
     }
 
 }

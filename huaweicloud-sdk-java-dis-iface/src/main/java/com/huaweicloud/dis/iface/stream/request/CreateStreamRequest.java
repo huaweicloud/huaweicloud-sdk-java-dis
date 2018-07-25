@@ -24,11 +24,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.huaweicloud.dis.iface.stream.request.cloudtable.CloudtableDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.dws.DwsDestinationDescriptorRequest;
 
-/**
- * 
- * @author s00313265
- *
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CreateStreamRequest
@@ -70,6 +65,10 @@ public class CreateStreamRequest
     @JsonProperty("uquery_destination_descriptor")
     private List<UqueryDestinationDescriptorRequest> uqueryDestinationDescriptors;
     
+    /** dli目的对象描述:Uquery服务改名为dli，为兼容原接口，保留uquery_destination_descriptor */
+    @JsonProperty("dli_destination_descriptor")
+    private List<UqueryDestinationDescriptorRequest> dliDestinationDescriptors;
+    
     /** cloudttable目的对象描述 */
     @JsonProperty("cloudtable_destination_descriptor")
     private List<CloudtableDestinationDescriptorRequest> cloudtableDestinationDescriptors;
@@ -91,7 +90,7 @@ public class CreateStreamRequest
     // 数据的类型，目前支持：BLOB、JSON格式
     @JsonProperty("data_type")
     private String dataType;
-    
+
     /**
      * 数据保留时长，单位为小时，默认为24小时
      */
@@ -191,15 +190,27 @@ public class CreateStreamRequest
     {
         this.cloudtableDestinationDescriptors = cloudtableDestinationDescriptors;
     }
-
-    public List<DwsDestinationDescriptorRequest> getDwsDestinationDescriptors() {
+    
+    public List<DwsDestinationDescriptorRequest> getDwsDestinationDescriptors()
+    {
         return dwsDestinationDescriptors;
     }
-
-    public void setDwsDestinationDescriptors(List<DwsDestinationDescriptorRequest> dwsDestinationDescriptors) {
+    
+    public void setDwsDestinationDescriptors(List<DwsDestinationDescriptorRequest> dwsDestinationDescriptors)
+    {
         this.dwsDestinationDescriptors = dwsDestinationDescriptors;
     }
-
+    
+    public List<UqueryDestinationDescriptorRequest> getDliDestinationDescriptors()
+    {
+        return dliDestinationDescriptors;
+    }
+    
+    public void setDliDestinationDescriptors(List<UqueryDestinationDescriptorRequest> dliDestinationDescriptors)
+    {
+        this.dliDestinationDescriptors = dliDestinationDescriptors;
+    }
+    
     public String getDataType()
     {
         return dataType;

@@ -128,7 +128,7 @@ public class CommitCheckpointRequest
     @Override
     public String toString()
     {
-        return "CommitCheckpointRequest [appId=" + appName + ", checkpointType=" + checkpointType + ", streamName="
+        return "CommitCheckpointRequest [appName=" + appName + ", checkpointType=" + checkpointType + ", streamName="
             + streamName + ", partitionId=" + partitionId + ", sequenceNumber=" + sequenceNumber + ", metadata="
             + metadata + "]";
     }

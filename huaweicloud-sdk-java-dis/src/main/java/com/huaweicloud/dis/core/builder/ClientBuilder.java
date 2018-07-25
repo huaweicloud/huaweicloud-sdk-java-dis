@@ -16,7 +16,7 @@
 
 package com.huaweicloud.dis.core.builder;
 
-import com.cloud.sdk.auth.credentials.Credentials;
+import com.huaweicloud.dis.core.auth.credentials.Credentials;
 
 /**
  * Base class for all service specific client builders.
