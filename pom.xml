@@ -12,11 +12,10 @@
 	<url>https://www.huaweicloud.com/product/dis.html</url>
 	<description>Huawei Cloud Data Ingestion Service Java SDK</description>
 	<scm>
-        <connection>scm:git:https://github.com/huaweicloud/huaweicloud-sdk-java-dis.git</connection>
-        <developerConnection>scm:git:git@github.com:huaweicloud/huaweicloud-sdk-java-dis.git</developerConnection>
-        <url>https://github.com/huaweicloud/huaweicloud-sdk-java-dis</url>
-    </scm>
-
+		<connection>scm:git:https://github.com/huaweicloud/huaweicloud-sdk-java-dis.git</connection>
+		<developerConnection>scm:git:git@github.com:huaweicloud/huaweicloud-sdk-java-dis.git</developerConnection>
+		<url>https://github.com/huaweicloud/huaweicloud-sdk-java-dis</url>
+	</scm>
 	<licenses>
 		<license>
 			<name>Apache 2.0 License</name>
@@ -24,6 +23,17 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	<developers>
+		<developer>
+			<id>huaweicloud</id>
+			<organization>Huawei Cloud</organization>
+			<organizationUrl>https://huaweicloud.com</organizationUrl>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+	</developers>
+	
 
 	<!-- Modules -->
 	<modules>
