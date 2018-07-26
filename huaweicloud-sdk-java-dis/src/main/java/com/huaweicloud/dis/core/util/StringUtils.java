@@ -151,6 +151,7 @@ public class StringUtils {
      * Joins the strings in parts with joiner between each string
      * @param joiner the string to insert between the strings in parts
      * @param parts the parts to join
+     * @return String after joining the parts string
      */
     public static String join(String joiner, String... parts) {
         StringBuilder builder = new StringBuilder();
@@ -166,6 +167,9 @@ public class StringUtils {
     /**
      * A null-safe trim method. If the input string is null, returns null;
      * otherwise returns a trimmed version of the input.
+     * 
+     * @param value The input string.
+     * @return String after being trimmed.
      */
     public static String trim(String value) {
         if (value == null) {
@@ -175,6 +179,9 @@ public class StringUtils {
     }
 
     /**
+     * Judge a String is null or empty.
+     * 
+     * @param value The input string.
      * @return true if the given value is either null or the empty string
      */
     public static boolean isNullOrEmpty(String value) {

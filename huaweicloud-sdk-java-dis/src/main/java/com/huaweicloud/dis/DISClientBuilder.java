@@ -24,7 +24,7 @@ import com.huaweicloud.dis.core.ClientParams;
 import com.huaweicloud.dis.core.builder.SyncClientBuilder;
 
 /**
- * Fluent builder for {@link com.bigdata.dis.sdk.DIS}.
+ * Fluent builder for {@link com.huaweicloud.dis.DIS}.
  */
 public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, DIS>
 {
@@ -85,7 +85,7 @@ public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, 
     /**
      * 默认客户端，从dis.properties文件中读取配置项并生成 {@link DISConfig} 实例
      * 
-     * @return Default client using the {@link com.bigdata.dis.sdk.DISConfig}
+     * @return Default client using the {@link com.huaweicloud.dis.DISConfig}
      */
     public static DIS defaultClient() {
         return standard().build();
@@ -128,13 +128,14 @@ public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, 
         return disConfig;
     }
     
-    /**
-     * Construct a synchronous implementation of DISClient using the current builder configuration.
-     *
-     * @param params
-     *        Current builder configuration represented as a parameter object.
-     * @return Fully configured implementation of DISIngestionClient.
-     */
+	/**
+	 * Construct a synchronous implementation of DISClient using the current builder
+	 * configuration.
+	 *
+	 * @param clientParams
+	 *            Current builder configuration represented as a parameter object.
+	 * @return Fully configured implementation of DISIngestionClient.
+	 */
     @Override
     protected DIS build(ClientParams clientParams) {
         DISConfig disConfig = configDISConfig((DISConfig)clientParams);

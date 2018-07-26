@@ -53,9 +53,12 @@ public interface Request<T> {
      */
     Map<String, String> getHeaders();
     
-    /**
-     * Sets all headers, clearing any existing ones.
-     */
+	/**
+	 * Sets all headers, clearing any existing ones.
+	 * 
+	 * @param headers
+	 *            A map of headers
+	 */
     void setHeaders(Map<String, String> headers);
 
     /**
@@ -103,9 +106,12 @@ public interface Request<T> {
      */
     Map<String, String> getParameters();
     
-    /**
-     * Sets all parameters, clearing any existing values.
-     */
+	/**
+	 * Sets all parameters, clearing any existing values.
+	 * 
+	 * @param parameters
+	 *            A map of parameters
+	 */
     void setParameters(Map<String, String> parameters);
 
     /**
@@ -198,13 +204,15 @@ public interface Request<T> {
     void setTimeOffset(int timeOffset);
     
     
-    /**
-     * Sets the optional value for time offset for this request.  This
-     * will be used by the signer to adjust for potential clock skew.  
-     * Value is in seconds, positive values imply the current clock is "fast",
-     * negative values imply clock is slow.
-     *
-     * @return The updated request object.
-     */
+	/**
+	 * Sets the optional value for time offset for this request. This will be used
+	 * by the signer to adjust for potential clock skew. Value is in seconds,
+	 * positive values imply the current clock is "fast", negative values imply
+	 * clock is slow.
+	 *
+	 * @param timeOffset
+	 *            The time offset
+	 * @return The updated request object.
+	 */
     Request<T> withTimeOffset(int timeOffset);
 }

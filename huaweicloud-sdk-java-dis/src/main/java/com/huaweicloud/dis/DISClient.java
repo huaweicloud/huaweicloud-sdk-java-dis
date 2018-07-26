@@ -237,9 +237,9 @@ public class DISClient implements DIS
         return putRecordsResult;
     }
     
-    /**
-     * Internal API
-     */
+	/*
+	 * Internal API
+	 */
     protected final PutRecordsResult innerPutRecords(PutRecordsRequest putRecordsParam)
     {
         // Decorate PutRecordsRequest if needed
@@ -279,7 +279,7 @@ public class DISClient implements DIS
         return innerGetPartitionCursor(getPartitionCursorParam);
     }
     
-    /**
+    /*
      * Internal API
      */
     protected final GetPartitionCursorResult innerGetPartitionCursor(GetPartitionCursorRequest getPartitionCursorParam)
@@ -304,7 +304,7 @@ public class DISClient implements DIS
         return innerGetRecords(getRecordsParam);
     }
     
-    /**
+    /*
      * Internal API
      */
     protected final GetRecordsResult innerGetRecords(GetRecordsRequest getRecordsParam)
@@ -577,7 +577,7 @@ public class DISClient implements DIS
         return innerDescribeStream(describeStreamRequest);
     }
     
-    /**
+    /*
      * Internal API
      */
     protected final DescribeStreamResult innerDescribeStream(DescribeStreamRequest describeStreamRequest)
@@ -711,7 +711,7 @@ public class DISClient implements DIS
         return null;
     }
 
-    /**
+    /*
      * Internal API
      */
     protected final FileUploadResult innerGetFileUploadResult(QueryFileState queryFileState)

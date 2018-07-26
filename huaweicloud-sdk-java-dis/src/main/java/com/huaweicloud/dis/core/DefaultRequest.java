@@ -27,8 +27,9 @@ import org.apache.http.annotation.NotThreadSafe;
 import com.huaweicloud.dis.core.http.HttpMethodName;
 
 /**
+ * <p>
  * Default implementation of the {@linkplain Request} interface.
- * <p/>
+ * </p>
  * This class is only intended for internal use inside the AWS client libraries.
  * Callers shouldn't ever interact directly with objects of this class.
  */
@@ -178,7 +179,7 @@ public class DefaultRequest<T> implements Request<T> {
     }
 
     /**
-     * @see Request#setHttpMethod(com.cloud.sdk.http.HttpMethodName)
+     * @see Request#setHttpMethod
      */
     public void setHttpMethod(HttpMethodName httpMethod) {
         this.httpMethod = httpMethod;

@@ -25,11 +25,15 @@ public abstract class RestResource
     
     /**
      * 获取资源名称
+     * 
+     * @return 资源名称
      */
     public abstract String getResourceName();
     
     /**
      * 获取资源ID
+     * 
+     * @return 资源ID
      */
     public abstract String getResourceId();
     

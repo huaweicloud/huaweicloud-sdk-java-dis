@@ -22,7 +22,6 @@ import java.nio.charset.Charset;
  * Exception thrown when an HTTP 5xx is received.
  *
  * @since 1.3.0
- * @see DefaultResponseErrorHandler
  */
 public class HttpServerErrorException extends HttpStatusCodeException {
 
@@ -31,7 +30,7 @@ public class HttpServerErrorException extends HttpStatusCodeException {
 
 	/**
 	 * Construct a new instance of {@code HttpServerErrorException} based on
-	 * an {@link HttpStatus}.
+	 * a status code.
 	 * @param statusCode the status code
 	 */
 	public HttpServerErrorException(int statusCode) {
@@ -40,7 +39,7 @@ public class HttpServerErrorException extends HttpStatusCodeException {
 
 	/**
 	 * Construct a new instance of {@code HttpServerErrorException} based on
-	 * an {@link HttpStatus} and status text.
+	 * a status code and status text.
 	 * @param statusCode the status code
 	 * @param statusText the status text
 	 */
@@ -50,7 +49,7 @@ public class HttpServerErrorException extends HttpStatusCodeException {
 
 	/**
 	 * Construct a new instance of {@code HttpServerErrorException} based on
-	 * an {@link HttpStatus}, status text, and response body content.
+	 * a status code, status text, and response body content.
 	 * @param statusCode the status code
 	 * @param statusText the status text
 	 * @param responseBody the response body content (may be {@code null})

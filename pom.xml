@@ -5,12 +5,17 @@
 
 	<groupId>com.huaweicloud.dis</groupId>
 	<artifactId>huaweicloud-sdk-java-dis-pom</artifactId>
-	<version>1.3.0-SNAPSHOT</version>
+	<version>1.3.0</version>
 	<packaging>pom</packaging>
 
 	<name>huaweicloud-sdk-java-dis</name>
 	<url>https://www.huaweicloud.com/product/dis.html</url>
 	<description>Huawei Cloud Data Ingestion Service Java SDK</description>
+	<scm>
+        <connection>scm:git:https://github.com/huaweicloud/huaweicloud-sdk-java-dis.git</connection>
+        <developerConnection>scm:git:git@github.com:huaweicloud/huaweicloud-sdk-java-dis.git</developerConnection>
+        <url>https://github.com/huaweicloud/huaweicloud-sdk-java-dis</url>
+    </scm>
 
 	<licenses>
 		<license>
@@ -42,36 +47,14 @@
 	</distributionManagement>
 
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.9.1</version>
-					<configuration>
-						<excludePackageNames>*.transform</excludePackageNames>
-						<minmemory>128m</minmemory>
-						<maxmemory>1024m</maxmemory>
-					</configuration>
-				</plugin>
-				<!-- <plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-gpg-plugin</artifactId>
-					<version>1.5</version>
-					<executions>
-						<execution>
-							<id>sign-artifacts</id>
-							<phase>verify</phase>
-							<goals>
-								<goal>sign</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin> -->
+		<plugins>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-javadoc-plugin</artifactId>
 					<version>2.10.4</version>
+					<configuration>
+						<excludePackageNames>com.huaweicloud.dis.iface.api.protobuf.*:com.huaweicloud.dis.core.*</excludePackageNames>
+					</configuration>
 					<executions>
 						<execution>
 							<id>attach-javadocs</id>
@@ -94,8 +77,22 @@
 						</execution>
 					</executions>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>1.5</version>
+					<executions>
+						<execution>
+							<id>sign-artifacts</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>sign</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
 			</plugins>
-		</pluginManagement>
+		
 	</build>
 
 </project>

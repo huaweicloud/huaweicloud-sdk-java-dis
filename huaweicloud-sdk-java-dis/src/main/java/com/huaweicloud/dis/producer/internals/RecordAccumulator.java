@@ -65,10 +65,10 @@ public final class RecordAccumulator {
     
     /**
      * 
-     * @param maxBatchSize
-     * @param maxBatchCount
-     * @param maxBufferSize
-     * @param maxBufferCount
+     * @param maxBatchSize 最大批量大小
+     * @param maxBatchCount 最大批量计数
+     * @param maxBufferSize 最大缓冲大小
+     * @param maxBufferCount 最大缓冲计数
      * @param retryBackoffMs 一个上传单元，缓冲的最长时间，到时间后，即使大小很小，也要上传远端
      */
     public RecordAccumulator(long maxBatchSize, int maxBatchCount, long maxBufferSize, int maxBufferCount, long retryBackoffMs)
@@ -95,6 +95,8 @@ public final class RecordAccumulator {
      * @param putRecordsRequest the records to add
      * @param callback The user-supplied callback to execute when the request is complete
      * @param maxTimeToBlock The maximum time in milliseconds to block for adding
+     * @return The append result
+     * @throws InterruptedException The current thread was interrupted
      */
     public RecordAppendResult append(StreamPartition tp,
                                      long timestamp,
@@ -185,7 +187,7 @@ public final class RecordAccumulator {
     }
 
 
-    /**
+    /*
      *  Try to append to a ProducerBatch.
      *  If it is full, we return null and a new batch is created. We also close the batch for record appends
      */
@@ -202,7 +204,7 @@ public final class RecordAccumulator {
         return null;
     }
 
-    /**
+    /*
      * Re-enqueue the given record batch in the accumulator to retry
      */
     public void reenqueue(ProducerBatch batch, long now) {
@@ -213,7 +215,7 @@ public final class RecordAccumulator {
         }
     }
 
-    /**
+    /*
      * Check whether there are any batches which haven't been drained
      */
     public boolean hasUndrained() {
@@ -292,7 +294,7 @@ public final class RecordAccumulator {
         return batches.get(tp);
     }
 
-    /**
+    /*
      * Get the deque for the given topic-partition, creating it if necessary.
      */
     private Deque<ProducerBatch> getOrCreateDeque(StreamPartition tp) {
@@ -307,7 +309,7 @@ public final class RecordAccumulator {
             return previous;
     }
 
-    /**
+    /*
      * Are there any threads currently waiting on a flush?
      *
      * package private for test
@@ -321,21 +323,21 @@ public final class RecordAccumulator {
         return Collections.unmodifiableMap(batches);
     }
 
-    /**
+    /*
      * Initiate the flushing of data from the accumulator...this makes all requests immediately ready
      */
     public void beginFlush() {
         this.flushesInProgress.getAndIncrement();
     }
 
-    /**
+    /*
      * Are there any threads currently appending messages?
      */
     private boolean appendsInProgress() {
         return appendsInProgress.get() > 0;
     }
 
-    /**
+    /*
      * Close this accumulator and force all the record buffers to be drained
      */
     public void close() {

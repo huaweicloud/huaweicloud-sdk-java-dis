@@ -35,10 +35,16 @@ public enum IOUtils {
     private static final int BUFFER_SIZE = 1024 * 4;
     private static final Log defaultLog = LogFactory.getLog(IOUtils.class);
 
-    /**
-     * Reads and returns the rest of the given input stream as a byte array.
-     * Caller is responsible for closing the given input stream.
-     */
+	/**
+	 * Reads and returns the rest of the given input stream as a byte array. Caller
+	 * is responsible for closing the given input stream.
+	 * 
+	 * @param is
+	 *            The given inputstream.
+	 * @return The byte array output.
+	 * @throws IOException
+	 *             if there is any IO exception during read or write.
+	 */
     public static byte[] toByteArray(InputStream is) throws IOException {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
@@ -56,6 +62,12 @@ public enum IOUtils {
     /**
      * Reads and returns the rest of the given input stream as a string.
      * Caller is responsible for closing the given input stream.
+     * 
+     * @param is
+	 *            The given inputstream.
+	 * @return The byte array output.
+	 * @throws IOException
+	 *             if there is any IO exception during read or write.
      */
     public static String toString(InputStream is) throws IOException {
         return new String(toByteArray(is), StringUtils.UTF8);
@@ -81,7 +93,10 @@ public enum IOUtils {
 
     /**
      * Releases the given {@link java.io.Closeable} especially if it was an instance of
-     * {@link com.cloud.sdk.internal.Releasable}.
+     * {@link com.huaweicloud.dis.core.internal.Releasable}.
+     * 
+     * @param is  the given closeable
+     * @param log logger used to log any failure should the close fail
      */
     public static void release(Closeable is, Log log) {
         closeQuietly(is, log);
@@ -91,12 +106,18 @@ public enum IOUtils {
         }
     }
 
-    /**
-     * Copies all bytes from the given input stream to the given output stream.
-     * Caller is responsible for closing the streams.
-     *
-     * @throws java.io.IOException if there is any IO exception during read or write.
-     */
+	/**
+	 * Copies all bytes from the given input stream to the given output stream.
+	 * Caller is responsible for closing the streams.
+	 *
+	 * @param in
+	 *            The input stream to read.
+	 * @param out
+	 *            The output stream to write.
+	 * @return The output stream.
+	 * @throws java.io.IOException
+	 *             if there is any IO exception during read or write.
+	 */
     public static long copy(InputStream in, OutputStream out)
             throws IOException {
         byte[] buf = new byte[BUFFER_SIZE];

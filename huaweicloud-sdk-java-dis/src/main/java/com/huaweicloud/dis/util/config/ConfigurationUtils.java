@@ -47,7 +47,7 @@ public class ConfigurationUtils
      * load configuration from a file
      * 
      * @param configurationFileName the file path , do nothing if it's null
-     * @throws IOException 
+     * @throws IOException IO exception throws when reading configuration file
      */
     public ConfigurationUtils(String configurationFileName) throws IOException
     {
@@ -145,9 +145,9 @@ public class ConfigurationUtils
     /**
      * Get the value string of a property, if the property does not exist,the defaultValue is returned.
      * 
-     * @param propertyName
-     * @param defaultValue
-     * @return
+     * @param propertyName property name
+     * @param defaultValue default value
+     * @return property value
      */
     
     public String getProperty(String propertyName, String defaultValue)
@@ -174,8 +174,8 @@ public class ConfigurationUtils
     /**
      * set a property's value.
      * 
-     * @param propertyName
-     * @param value
+     * @param propertyName property name
+     * @param value peoperty value
      */
     
     public void setProperty(String propertyName, String value)

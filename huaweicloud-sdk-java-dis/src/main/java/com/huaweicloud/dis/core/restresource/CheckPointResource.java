@@ -21,7 +21,7 @@ import com.huaweicloud.dis.core.util.StringUtils;
 /**
  * 代表CheckPoint资源
  *
- * @see {@code RestResource}
+ * @see RestResource
  */
 public class CheckPointResource extends RestResource
 {

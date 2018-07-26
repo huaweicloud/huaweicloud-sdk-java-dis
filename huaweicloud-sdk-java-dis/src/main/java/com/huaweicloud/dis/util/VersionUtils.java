@@ -42,7 +42,7 @@ public class VersionUtils
     /** SDK platform info */
     private static String platform;
     
-    /** 获取版本信息 */
+    /* 获取版本信息 */
     public static String getVersion()
     {
         if (version == null)
@@ -56,7 +56,7 @@ public class VersionUtils
         return version;
     }
     
-    /** 获取平台信息 */
+    /* 获取平台信息 */
     public static String getPlatform()
     {
         if (platform == null)
@@ -70,7 +70,7 @@ public class VersionUtils
         return platform;
     }
     
-    /** 从版本配置文件读取配置文件信息 */
+    /* 从版本配置文件读取配置文件信息 */
     private static void initializeVersion()
     {
         try

@@ -19,7 +19,7 @@ package com.huaweicloud.dis.http.exception;
 import java.nio.charset.Charset;
 
 /**
- * Abstract base class for exceptions based on an {@link HttpStatus}.
+ * Abstract base class for exceptions based on status code.
  *
  * @since 1.3.0
  */
@@ -32,7 +32,7 @@ public abstract class HttpStatusCodeException extends RestClientResponseExceptio
 
 
 	/**
-	 * Construct a new instance with an {@link HttpStatus}.
+	 * Construct a new instance with a status code.
 	 * @param statusCode the status code
 	 */
 	protected HttpStatusCodeException(int statusCode) {
@@ -40,7 +40,7 @@ public abstract class HttpStatusCodeException extends RestClientResponseExceptio
 	}
 
 	/**
-	 * Construct a new instance with an {@link HttpStatus} and status text.
+	 * Construct a new instance with a status code and status text.
 	 * @param statusCode the status code
 	 * @param statusText the status text
 	 */
@@ -49,7 +49,7 @@ public abstract class HttpStatusCodeException extends RestClientResponseExceptio
 	}
 
     /**
-     * Construct instance with an {@link HttpStatus}, status text, content, and a response charset.
+     * Construct instance with a status code, status text, content, and a response charset.
      * 
      * @param statusCode the status code
      * @param statusText the status text
@@ -67,6 +67,8 @@ public abstract class HttpStatusCodeException extends RestClientResponseExceptio
 
 	/**
 	 * Return the HTTP status code.
+	 * 
+	 * @return The status code.
 	 */
 	public int getStatusCode() {
 		return this.statusCode;

@@ -39,15 +39,20 @@ public enum JodaTime {
     /**
      * Returns the current version of joda-time used during runtime; or null
      * if it cannot be determined.
+     * 
+     * @return The current version of joda-time.
      */
     public static String getVersion() {
         return LazyHolder.version;
     }
     
-    /**
-     * Returns true if the current version of joda-time used during runtime
-     * behaves as expected by the Java SDK; false otherwise.
-     */
+	/**
+	 * Returns true if the current version of joda-time used during runtime behaves
+	 * as expected by the Java SDK; false otherwise.
+	 * 
+	 * @return {@code true} Behaves as expected by the Java SDK. {@code false}
+	 *         otherwise.
+	 */
     public static boolean hasExpectedBehavior() {
         return expectedBehavior;
     }

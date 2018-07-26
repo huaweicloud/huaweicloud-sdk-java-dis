@@ -61,9 +61,14 @@ public class DateUtils {
             DateTimeFormat.forPattern("yyyyMMdd'T'HHmmss'Z'")
             .withZone(GMT);
 
-    /**
-     * @deprecated by the more efficient static method {@link #parseISO8601Date(String)}
-     */
+	/**
+	 * @deprecated by the more efficient static method
+	 *             {@link #parseISO8601Date(String)}
+	 * 
+	 * @param dateString
+	 *            The date string to parse.
+	 * @return The parsed Date object.
+	 */
     @Deprecated
     public Date parseIso8601Date(String dateString) {
         return parseISO8601Date(dateString);
@@ -143,9 +148,14 @@ public class DateUtils {
         throw new IllegalStateException("Joda-time 2.2 or later version is required, but found version: " + JodaTime.getVersion(), ex);
     }
 
-    /**
-     * @deprecated by the more efficient static method {@link #formatISO8601Date(java.util.Date)}
-     */
+	/**
+	 * @deprecated by the more efficient static method
+	 *             {@link #formatISO8601Date(java.util.Date)}
+	 * 
+	 * @param date
+	 *            The date to format.
+	 * @return The parsed data object to return.
+	 */
     @Deprecated
     public String formatIso8601Date(Date date) {
         return formatISO8601Date(date);
@@ -167,9 +177,14 @@ public class DateUtils {
         }
     }
 
-    /**
-     * @deprecated by the more efficient static method {@link #parseRFC822Date(String)}
-     */
+	/**
+	 * @deprecated by the more efficient static method
+	 *             {@link #parseRFC822Date(String)}
+	 * 
+	 * @param dateString
+	 *            The date string to parse.
+	 * @return The parsed Date object.
+	 */
     @Deprecated
     public Date parseRfc822Date(String dateString) {
         return parseRFC822Date(dateString);
@@ -192,9 +207,14 @@ public class DateUtils {
         }
     }
 
-    /**
-     * @deprecated by the more efficient static method {@link #formatRFC822Date(java.util.Date)}
-     */
+	/**
+	 * @deprecated by the more efficient static method
+	 *             {@link #formatRFC822Date(java.util.Date)}
+	 * 
+	 * @param date
+	 *            The date to format.
+	 * @return The RFC 822 string representing the specified date.
+	 */
     @Deprecated
     public String formatRfc822Date(Date date) {
         return formatRFC822Date(date);
@@ -216,9 +236,14 @@ public class DateUtils {
         }
     }
 
-    /**
-     * @deprecated by the more efficient static method {@link #parseCompressedISO8601Date(String)}
-     */
+	/**
+	 * @deprecated by the more efficient static method
+	 *             {@link #parseCompressedISO8601Date(String)}
+	 * 
+	 * @param dateString
+	 *            The date string to parse.
+	 * @return The parsed Date object.
+	 */
     @Deprecated
     public Date parseCompressedIso8601Date(String dateString) {
         return parseCompressedISO8601Date(dateString);
@@ -241,10 +266,13 @@ public class DateUtils {
         }
    }
 
-    /**
-     * Parses the given date string returned by the service into a Date
-     * object.
-     */
+	/**
+	 * Parses the given date string returned by the service into a Date object.
+	 * 
+	 * @param dateString
+	 *            The date string to parse.
+	 * @return The parsed Date object.
+	 */
     public static Date parseServiceSpecificDate(String dateString) {
         if (dateString == null)
             return null;
@@ -258,9 +286,13 @@ public class DateUtils {
         }
     }
 
-    /**
-     * Formats the give date object into an Service format.
-     */
+	/**
+	 * Formats the give date object into an Service format.
+	 * 
+	 * @param date
+	 *            The date to format.
+	 * @return The string representing the specific date.
+	 */
     public static String formatServiceSpecificDate(Date date) {
         if (date == null)
             return null;
@@ -273,10 +305,14 @@ public class DateUtils {
         return date == null ? null : new Date(date.getTime());
     }
 
-    /**
-     * Returns the number of days since epoch with respect to the given number
-     * of milliseconds since epoch.
-     */
+	/**
+	 * Returns the number of days since epoch with respect to the given number of
+	 * milliseconds since epoch.
+	 * 
+	 * @param milliSinceEpoch
+	 *            millisecond since epoch.
+	 * @return Number of days since epoch.
+	 */
     public static long numberOfDaysSinceEpoch(long milliSinceEpoch) {
         return TimeUnit.MILLISECONDS.toDays(milliSinceEpoch);
     }

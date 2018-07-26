@@ -52,8 +52,7 @@ public final class ProduceRequestResult {
     /**
      * Set the result of the produce request.
      *
-     * @param baseOffset The base offset assigned to the record
-     * @param logAppendTime The log append time or -1 if CreateTime is being used
+     * @param putRecordsResult Result of the PutRecords operation returned by the service.
      * @param error The error that occurred if there was one, or null
      */
     public void set(PutRecordsResult putRecordsResult, RuntimeException error) {
@@ -72,6 +71,8 @@ public final class ProduceRequestResult {
 
     /**
      * Await the completion of this request
+     * 
+     * @throws InterruptedException InterruptedException when being interrupted.
      */
     public void await() throws InterruptedException {
         latch.await();
@@ -82,6 +83,7 @@ public final class ProduceRequestResult {
      * @param timeout The maximum time to wait
      * @param unit The unit for the max time
      * @return true if the request completed, false if we timed out
+     * @throws InterruptedException InterruptedException when being interrupted.
      */
     public boolean await(long timeout, TimeUnit unit) throws InterruptedException {
         return latch.await(timeout, unit);
@@ -89,6 +91,8 @@ public final class ProduceRequestResult {
 
     /**
      * The base offset for the request (the first offset in the record set)
+     * 
+     * @return The base offset for the request.
      */
     public PutRecordsResult putRecordsResult() {
         return putRecordsResult;
@@ -96,6 +100,8 @@ public final class ProduceRequestResult {
 
     /**
      * The error thrown (generally on the server) while processing this request
+     * 
+     * @return The error thrown while processing this request.
      */
     public RuntimeException error() {
         return error;
@@ -103,14 +109,18 @@ public final class ProduceRequestResult {
 
     /**
      * The topic and partition to which the record was appended
+     * 
+     * @return The topic and partition to which the record was appended.
      */
     public StreamPartition topicPartition() {
         return topicPartition;
     }
 
-    /**
-     * Has the request completed?
-     */
+	/**
+	 * Has the request completed?
+	 * 
+	 * @return {@code true} completed {@code false} otherwise
+	 */
     public boolean completed() {
         return this.latch.getCount() == 0L;
     }

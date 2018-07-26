@@ -51,6 +51,8 @@ public class StringHttpMessageConverter extends AbstractHttpMessageConverter<Str
 	/**
 	 * A constructor accepting a default charset to use if the requested content
 	 * type does not specify one.
+	 * 
+	 * @param defaultCharset Default charset.
 	 */
 	public StringHttpMessageConverter(Charset defaultCharset) {
 		super(defaultCharset, ContentType.TEXT_PLAIN);

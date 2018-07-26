@@ -37,7 +37,7 @@ public class SnappyUtils
      * 
      * @param input the input data
      * @return the compressed byte array
-     * @throws IOException 
+     * @throws IOException IO exception when compressing
      * @since 1.3.0
      */
     public static byte[] compress(byte[] input) throws IOException
@@ -48,9 +48,9 @@ public class SnappyUtils
     /**
      * Uncompressing the input byte array.
      * 
-     * @param input
+     * @param input the input to be uncompressed
      * @return the uncompressed byte array
-     * @throws IOException 
+     * @throws IOException IO exception when uncompressing
      * @since 1.3.0
      */
     public static byte[] uncompress(byte[] input) throws IOException

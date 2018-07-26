@@ -81,6 +81,8 @@ public abstract class AbstractHttpMessageConverter<T> implements HttpMessageConv
 
 	/**
 	 * Set the list of {@link ContentType} objects supported by this converter.
+	 * 
+	 * @param supportedContentTypes List of supported content types.
 	 */
 	public void setSupportedContentTypes(List<ContentType> supportedContentTypes) {
 		this.supportedContentTypes = new ArrayList<ContentType>(supportedContentTypes);
@@ -93,6 +95,8 @@ public abstract class AbstractHttpMessageConverter<T> implements HttpMessageConv
 
 	/**
 	 * Set the default character set, if any.
+	 * 
+	 * @param defaultCharset Default charset.
 	 * @since 1.3.0
 	 */
 	public void setDefaultCharset(Charset defaultCharset) {
@@ -101,6 +105,8 @@ public abstract class AbstractHttpMessageConverter<T> implements HttpMessageConv
 
 	/**
 	 * Return the default character set, if any.
+	 * 
+	 * @return The default charset.
 	 * @since 1.3.0
 	 */
 	public Charset getDefaultCharset() {
@@ -152,6 +158,7 @@ public abstract class AbstractHttpMessageConverter<T> implements HttpMessageConv
 	 * Can be overridden in subclasses.
 	 * @param t the type to return the content type for
 	 * @return the content type, or {@code null} if not known
+	 * @throws IOException in case of I/O errors
 	 */
 	protected ContentType getDefaultContentType(T t) throws IOException {
 		List<ContentType> contentTypes = getSupportedContentTypes();
@@ -163,7 +170,9 @@ public abstract class AbstractHttpMessageConverter<T> implements HttpMessageConv
 	 * <p>By default, this returns {@code null}, meaning that the content length is unknown.
 	 * Can be overridden in subclasses.
 	 * @param t the type to return the content length for
+	 * @param contentType content type
 	 * @return the content length, or {@code null} if not known
+	 * @throws IOException in case of I/O errors
 	 */
 	protected Long getContentLength(T t, ContentType contentType) throws IOException {
 		return null;

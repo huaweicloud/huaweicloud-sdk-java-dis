@@ -51,32 +51,45 @@ public final class RequestClientOptions {
      * @deprecated by {@link #getClientMarker(Marker)}.
      *
      * Returns the "USER_AGENT" marker as a space-delimited string.
+     * 
+     * @return The "User_AGENT" marker
      */
     @Deprecated
     public String getClientMarker() {
         return getClientMarker(Marker.USER_AGENT);
     }
 
-    /**
-     * Returns the value of the specified marker; or null if there is no such
-     * value.
-     */
+	/**
+	 * Returns the value of the specified marker; or null if there is no such value.
+	 * 
+	 * @param marker
+	 *            marker
+	 * @return The client marker
+	 */
     public String getClientMarker(Marker marker) {
         return markers.get(marker);
     }
 
-    /**
-     * Associates the given value with the given marker.
-     */
+	/**
+	 * Associates the given value with the given marker.
+	 * 
+	 * @param marker
+	 *            marker
+	 * @param value
+	 *            value associates with the given marker
+	 */
     public void putClientMarker(Marker marker, String value) {
         markers.put(marker, value);
     }
 
-    /**
-     * @deprecated by {@link #appendUserAgent(String)}.
-     *
-     * Adds a "USER_AGENT" client marker, if it wasn't already present.
-     */
+	/**
+	 * @deprecated by {@link #appendUserAgent(String)}.
+	 *
+	 *             Adds a "USER_AGENT" client marker, if it wasn't already present.
+	 * 
+	 * @param clientMarker
+	 *            The client marker
+	 */
     @Deprecated
     public void addClientMarker(String clientMarker) {
         appendUserAgent(clientMarker);
@@ -84,6 +97,8 @@ public final class RequestClientOptions {
 
     /**
      * Appends a user agent to the USER_AGENT client marker.
+     * 
+     * @param userAgent user agent
      */
     public void appendUserAgent(String userAgent) {
         String marker = markers.get(Marker.USER_AGENT);
@@ -104,7 +119,8 @@ public final class RequestClientOptions {
     /**
      * Returns the mark-and-reset read limit; defaults to
      * {@value #DEFAULT_STREAM_BUFFER_SIZE}.
-     *
+     * 
+     * @return read limit
      * @see java.io.InputStream#mark(int)
      */
     public final int getReadLimit() {
@@ -115,6 +131,7 @@ public final class RequestClientOptions {
      * Sets the optional mark-and-reset read limit used for signing and retry
      * purposes.
      *
+     * @param readLimit read limit
      * @see java.io.InputStream#mark(int)
      */
     public final void setReadLimit(int readLimit) {
@@ -124,6 +141,8 @@ public final class RequestClientOptions {
     /**
      * Copy the internal states of this <code>RequestClientOptions</code> to the
      * target <code>RequestClientOptions</code>.
+     * 
+     * @param target target request client options.
      */
     void copyTo(RequestClientOptions target) {
         target.setReadLimit(getReadLimit());

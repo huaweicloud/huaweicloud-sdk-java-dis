@@ -52,7 +52,7 @@ public class DISClientAsync extends DISClient implements DISAsync
      * 
      * @param disConfig DIS客户端参数
      * @param executorService Instance of {@code ExecutorService}, default thread pool size is 50.
-     * @see {@code ExecutorFactory}
+     * @see com.huaweicloud.dis.core.builder.ExecutorFactory
      */
     public DISClientAsync(DISConfig disConfig, ExecutorService executorService)
     {
@@ -536,18 +536,16 @@ public class DISClientAsync extends DISClient implements DISAsync
  
     protected static interface InnerExecutor<REQUEST, RESULT>
     {
-        /**
+        /*
          * 异步方法需要执行的接口
-         * @param request
          */
         RESULT innerExecute(REQUEST request);
     }
     
     protected static interface RetryExecutor<REQUEST>
     {
-        /**
+        /*
          * 需要重试的代码块
-         * @param request
          */
         void doWithRetry(REQUEST request, int maxRetries, long maxDelay);
     }

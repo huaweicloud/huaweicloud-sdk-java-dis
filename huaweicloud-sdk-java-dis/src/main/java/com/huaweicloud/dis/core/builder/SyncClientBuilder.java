@@ -21,11 +21,13 @@ import com.huaweicloud.dis.core.ClientParams;
 public abstract class SyncClientBuilder<Subclass extends SyncClientBuilder, TypeToBuild> extends ClientBuilder<Subclass, TypeToBuild>
 {
     
-    /**
-     * Builds a client with the configure properties.
-     *
-     * @return Client instance to make API calls with.
-     */
+	/**
+	 * Builds a client with the configure properties.
+	 *
+	 * @param clientParams
+	 *            Client params
+	 * @return Client instance to make API calls with.
+	 */
     protected abstract TypeToBuild build(ClientParams clientParams);
     
 }

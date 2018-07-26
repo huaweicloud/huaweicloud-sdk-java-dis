@@ -105,15 +105,15 @@ public class HttpUtils {
         }
     }
 
-    /**
-     * Returns true if the specified URI is using a non-standard port (i.e. any
-     * port other than 80 for HTTP URIs or any port other than 443 for HTTPS
-     * URIs).
-     *
-     * @param uri
-     * @return True if the specified URI is using a non-standard port, otherwise
-     * false.
-     */
+	/**
+	 * Returns true if the specified URI is using a non-standard port (i.e. any port
+	 * other than 80 for HTTP URIs or any port other than 443 for HTTPS URIs).
+	 *
+	 * @param uri
+	 *            The specified URI.
+	 * @return True if the specified URI is using a non-standard port, otherwise
+	 *         false.
+	 */
     public static boolean isUsingNonDefaultPort(URI uri) {
         String scheme = uri.getScheme().toLowerCase();
         int port = uri.getPort();
@@ -170,10 +170,16 @@ public class HttpUtils {
         return encodedParams;
     }
 
-    /**
-     * Append the given path to the given baseUri.
-     * By default, all slash characters in path will not be url-encoded.
-     */
+	/**
+	 * Append the given path to the given baseUri. By default, all slash characters
+	 * in path will not be url-encoded.
+	 * 
+	 * @param baseUri
+	 *            Base uri to be appended.
+	 * @param path
+	 *            Path string to append.
+	 * @return Uri string after appending the given path.
+	 */
     public static String appendUri(String baseUri, String path) {
         return appendUri(baseUri, path, false);
     }

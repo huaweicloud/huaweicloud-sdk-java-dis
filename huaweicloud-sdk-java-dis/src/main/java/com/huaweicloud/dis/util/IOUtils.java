@@ -50,12 +50,10 @@ public class IOUtils
      * 以字节方式读取文件，每次读取执行回调函数 {@link IOHandler}
      * 
      * @param filePath 文件路径
-     * @param readBytes 每次读取字节数
+     * @param readBytesPerTime 每次读取字节数
      * @param bandwidth 流通道带宽，单位为M
      * @param handler 回调函数
-     * @see {@link IOHandler}
-     * @return
-     * @throws IOException
+     * @see IOHandler
      */
     public static void readFileByBytes(String filePath, int readBytesPerTime, int bandwidth, IOHandler<ByteBuffer> handler)
     {
@@ -165,18 +163,19 @@ public class IOUtils
         }
     }
     
-    /**
-     * 
-     * <p>
-     * 检查文件名是否合法
-     * </p>
-     * <p>
-     * 校验规则：允许使用反斜杠分割多级目录和文件，目录和文件名称不能包含特殊字符
-     * </p>
-     * 
-     * @param fileName 文件名
-     * @return
-     */
+	/**
+	 * 
+	 * <p>
+	 * 检查文件名是否合法
+	 * </p>
+	 * <p>
+	 * 校验规则：允许使用反斜杠分割多级目录和文件，目录和文件名称不能包含特殊字符
+	 * </p>
+	 * 
+	 * @param fileName
+	 *            文件名
+	 * @return {@code true} 文件名合法 {@code false} 文件名不合法
+	 */
     public static boolean isValidFileName(String fileName)
     {
         // 文件名校验

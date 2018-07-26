@@ -19,8 +19,6 @@ package com.huaweicloud.dis.core;
 /**
  * Base exception class for any errors that occur while attempting to use an 
  * client to make service calls to  Web Services.
- *
- * @see ServiceException
  */
 public class ClientException extends RuntimeException {
     private static final long serialVersionUID = 1L;
@@ -49,10 +47,12 @@ public class ClientException extends RuntimeException {
         super(t);
     }
 
-    /**
-     * Returns a hint as to whether it makes sense to retry upon this exception.
-     * Default is true, but subclass may override.
-     */
+	/**
+	 * Returns a hint as to whether it makes sense to retry upon this exception.
+	 * Default is true, but subclass may override.
+	 * 
+	 * @return {@code true} retryable {@code false} not retryable
+	 */
     public boolean isRetryable() {
         return true;
     }

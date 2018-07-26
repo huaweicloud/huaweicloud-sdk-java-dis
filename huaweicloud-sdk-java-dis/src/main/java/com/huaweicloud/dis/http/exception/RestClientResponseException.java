@@ -42,6 +42,7 @@ public class RestClientResponseException extends RestClientException
     /**
      * Construct a new instance of with the given response data.
      * 
+     * @param message the response message
      * @param statusCode the raw status code value
      * @param statusText the status text
      * @param responseBody the response body content (may be {@code null})
@@ -60,6 +61,8 @@ public class RestClientResponseException extends RestClientException
     
     /**
      * Return the raw HTTP status code value.
+     * 
+     * @return The raw status code.
      */
     public int getRawStatusCode()
     {
@@ -68,6 +71,8 @@ public class RestClientResponseException extends RestClientException
     
     /**
      * Return the HTTP status text.
+     * 
+     * @return The status text.
      */
     public String getStatusText()
     {
@@ -76,6 +81,8 @@ public class RestClientResponseException extends RestClientException
     
     /**
      * Return the response body as a byte array.
+     * 
+     * @return The response body as a byte array.
      */
     public byte[] getResponseBodyAsByteArray()
     {
@@ -84,6 +91,8 @@ public class RestClientResponseException extends RestClientException
     
     /**
      * Return the response body as a string.
+     * 
+     * @return The response body as a string.
      */
     public String getResponseBodyAsString()
     {

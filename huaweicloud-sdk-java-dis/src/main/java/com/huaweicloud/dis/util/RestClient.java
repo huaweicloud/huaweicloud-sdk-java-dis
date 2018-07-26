@@ -119,6 +119,8 @@ public class RestClient
      * Set the message body converters to use.
      * <p>
      * These converters are used to convert from and to HTTP requests and responses.
+     * 
+     * @param messageConverters List of message converters.
      */
     public void setMessageConverters(List<HttpMessageConverter<?>> messageConverters)
     {
@@ -135,6 +137,8 @@ public class RestClient
     
     /**
      * Return the message body converters.
+     * 
+     * @return List of message converters.
      */
     public List<HttpMessageConverter<?>> getMessageConverters()
     {
@@ -145,6 +149,8 @@ public class RestClient
      * Set the error handler.
      * <p>
      * By default, RestTemplate uses a {@link DefaultResponseErrorHandler}.
+     * 
+     * @param errorHandler response error handler.
      */
     public void setErrorHandler(ResponseErrorHandler errorHandler)
     {
@@ -156,6 +162,8 @@ public class RestClient
     
     /**
      * Return the error handler.
+     * 
+     * @return response error handler.
      */
     public ResponseErrorHandler getErrorHandler()
     {
@@ -250,7 +258,8 @@ public class RestClient
      * 
      * @param request 请求体
      * @param responseExtractor 响应解析器
-     * @return
+     * @param <T> Generic type
+     * @return 响应体
      */
     protected <T> T execute(final HttpUriRequest request, ResponseExtractor<T> responseExtractor)
     {
@@ -308,7 +317,7 @@ public class RestClient
      * 
      * @param request 请求体
      * @param headers 需要添加到请求体重的头域
-     * @return
+     * @return 修改后的请求体
      */
     private <T> T setHeaders(T request, Map<String, String> headers)
     {

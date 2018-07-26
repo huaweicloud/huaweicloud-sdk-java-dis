@@ -215,7 +215,7 @@ public class DISConfig extends Properties implements ClientParams
     }
 
     /**
-     * 批量发送延迟时间
+     * @return 批量发送延迟时间
      */
     public long getLingerMs()
     {
@@ -224,7 +224,7 @@ public class DISConfig extends Properties implements ClientParams
     }
 
     /**
-     * 一个批次的总大小限制(B)
+     * @return 一个批次的总大小限制(B)
      */
     public long getBatchSize()
     {
@@ -232,7 +232,7 @@ public class DISConfig extends Properties implements ClientParams
     }
 
     /**
-     * 一个批次的总条数限制
+     * @return 一个批次的总条数限制
      */
     public int getBatchCount()
     {
@@ -240,7 +240,7 @@ public class DISConfig extends Properties implements ClientParams
     }
 
     /**
-     * 总缓存的内存大小(B)
+     * @return 总缓存的内存大小(B)
      */
     public long getBufferMemory()
     {
@@ -248,25 +248,26 @@ public class DISConfig extends Properties implements ClientParams
     }
 
     /**
-     * 总缓存的批次数量限制
+     * @return 总缓存的批次数量限制
      */
     public int getBufferCount()
     {
         return getInt(PROPERTY_PRODUCER_BUFFER_COUNT, 5000);
     }
 
-    /**
-     * 当发送缓冲区满，是否一直阻塞
-     * 如为true，表示一直阻塞，max.block.ms会修改为Long.MAX_VALUE；如为false，则根据max.block.ms的时间阻塞，超过时间抛出异常
-     * @return
-     */
+	/**
+	 * 当发送缓冲区满，是否一直阻塞
+	 * 如为true，表示一直阻塞，max.block.ms会修改为Long.MAX_VALUE；如为false，则根据max.block.ms的时间阻塞，超过时间抛出异常
+	 * 
+	 * @return {@code true} 阻塞 {@code false} 不阻塞
+	 */
     public boolean isBlockOnBufferFull()
     {
         return getBoolean(PROPERTY_PRODUCER_BLOCK_ON_BUFFER_FULL, false);
     }
 
     /**
-     * Buffer满时的阻塞时间(ms)
+     * @return Buffer满时的阻塞时间(ms)
      */
     public long getMaxBlockMs()
     {
@@ -281,7 +282,7 @@ public class DISConfig extends Properties implements ClientParams
     }
 
     /**
-     * 单次backoff最长等待时间
+     * @return 单次backoff最长等待时间
      */
     public long getBackOffMaxIntervalMs()
     {

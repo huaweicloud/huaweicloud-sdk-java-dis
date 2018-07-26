@@ -22,7 +22,8 @@ import com.huaweicloud.dis.iface.data.response.*;
 /**
  * DIS服务的数据面接口
  * 
- * 这个接口实现了protobuf，如果要改结构，请同步修改protobuf定义以及protobuf对象和该entity的转换@see {@link ProtobufUtils}
+ * 这个接口实现了protobuf，如果要改结构，请同步修改protobuf定义以及protobuf对象和该entity的转换
+ * @see com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils
  * */
 public interface IDataService
 {

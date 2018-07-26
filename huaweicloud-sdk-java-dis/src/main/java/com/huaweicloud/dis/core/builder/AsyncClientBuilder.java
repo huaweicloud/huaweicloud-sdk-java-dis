@@ -55,11 +55,13 @@ public abstract class AsyncClientBuilder<Subclass extends AsyncClientBuilder, Ty
         this.executorFactory = executorFactory;
     }
     
-    /**
-     * Builds a client with the configure properties.
-     *
-     * @return Client instance to make API calls with.
-     */
+	/**
+	 * Builds a client with the configure properties.
+	 *
+	 * @param asyncClientParams
+	 *            Client params
+	 * @return Client instance to make API calls with.
+	 */
     protected abstract TypeToBuild build(AsyncClientParams asyncClientParams);
     
 }

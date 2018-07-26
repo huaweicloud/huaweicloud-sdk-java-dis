@@ -31,10 +31,18 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
- * AES Coder<br/>
- * secret key length: 128bit, default: 128 bit<br/>
- * mode: ECB/CBC/PCBC/CTR/CTS/CFB/CFB8 to CFB128/OFB/OBF8 to OFB128<br/>
+ * <p>
+ * AES Coder
+ * </p>
+ * <p>
+ * secret key length: 128bit, default: 128 bit
+ * </p>
+ * <p>
+ * mode: ECB/CBC/PCBC/CTR/CTS/CFB/CFB8 to CFB128/OFB/OBF8 to OFB128
+ * </p>
+ * <p>
  * padding: Nopadding/PKCS5Padding/ISO10126Padding/
+ * </p>
  * 
  * @author Aub
  *         
@@ -85,13 +93,14 @@ public class AESCoder
      * 
      * @param data 待加密数据
      * @param key 二进制密钥
+     * @param ivbs 加密向量
      * @return byte[] 加密数据
-     * @throws BadPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws InvalidAlgorithmParameterException @
+     * @throws BadPaddingException BadPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static byte[] encrypt(byte[] data, byte[] key, byte[] ivbs)
         throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -104,15 +113,16 @@ public class AESCoder
      * 加密
      * 
      * @param data 待加密数据
-     * @param key 密钥
+     * @param keybs 密钥
      * @param cipherAlgorithm 加密算法/工作模式/填充方式
+     * @param ivbs 加密向量
      * @return byte[] 加密数据
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws BadPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws InvalidAlgorithmParameterException @
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws BadPaddingException BadPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static byte[] encrypt(byte[] data, byte[] keybs, String cipherAlgorithm, byte[] ivbs)
         throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,
@@ -135,13 +145,14 @@ public class AESCoder
      * 
      * @param data 待解密数据
      * @param key 二进制密钥
+     * @param ivbs 加密向量
      * @return byte[] 解密数据
-     * @throws BadPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws InvalidAlgorithmParameterException @
+     * @throws BadPaddingException BadPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static byte[] decrypt(byte[] data, byte[] key, byte[] ivbs)
         throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -154,15 +165,16 @@ public class AESCoder
      * 解密
      * 
      * @param data 待解密数据
-     * @param key 密钥
+     * @param keybs 密钥
      * @param cipherAlgorithm 加密算法/工作模式/填充方式
+     * @param ivbs 加密向量
      * @return byte[] 解密数据
-     * @throws NoSuchPaddingException
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeyException
-     * @throws BadPaddingException
-     * @throws IllegalBlockSizeException
-     * @throws InvalidAlgorithmParameterException @
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws BadPaddingException BadPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static byte[] decrypt(byte[] data, byte[] keybs, String cipherAlgorithm, byte[] ivbs)
         throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException,

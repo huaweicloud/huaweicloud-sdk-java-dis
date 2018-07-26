@@ -44,6 +44,7 @@ public class EncryptUtils
      * 
      * @param bytes 随机数位数
      * @return 随机数进行 Hex小写编码的结果
+     * @throws NoSuchAlgorithmException no algorithm found
      */
     public static String randomHex(int bytes)
         throws NoSuchAlgorithmException
@@ -57,6 +58,8 @@ public class EncryptUtils
      * @param data 待转换的文本
      * @param hexSalt 小写hex编码的盐值
      * @return 转换后的并经过hex小写编码的结果,HASH长度默认64*8
+     * @throws NoSuchAlgorithmException no algorithm found
+     * @throws InvalidKeySpecException invalid key spec
      */
     public static String PBKDF2encode(String data, String hexSalt)
         throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -71,6 +74,8 @@ public class EncryptUtils
      * @param hexSalt 小写hex编码的盐值
      * @param length HASH结果长度
      * @return 转换后的并经过hex小写编码的结果
+     * @throws NoSuchAlgorithmException no algorithm found
+     * @throws InvalidKeySpecException invalid key spec
      */
     public static String PBKDF2encode(String data, String hexSalt, int length)
         throws NoSuchAlgorithmException, InvalidKeySpecException
@@ -82,6 +87,7 @@ public class EncryptUtils
      * 生成AES 128位key,并做hex小写编码
      * 
      * @return key hex
+     * @throws NoSuchAlgorithmException no algorithm found
      */
     public static String initAES128Key()
         throws NoSuchAlgorithmException
@@ -97,7 +103,12 @@ public class EncryptUtils
      * @param hexKey 小写hex编码的key
      * @param hexIv 小写hex编码的IV
      * @return 加密结果
-     * @throws UnsupportedEncodingException
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static String encryptAES128(byte[] data, String hexKey, String hexIv)
         throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -114,6 +125,12 @@ public class EncryptUtils
      * @param key key
      * @param hexIv 小写hex编码的IV
      * @return 加密结果
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static String encryptAES128(byte[] data, byte[] key, String hexIv)
         throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -131,6 +148,12 @@ public class EncryptUtils
      * @param hexKey 小写hex编码的key
      * @param hexIv 小写hex编码的IV
      * @return 解密结果
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static String decryptAES128(String hexData, String hexKey, String hexIv)
         throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -144,9 +167,15 @@ public class EncryptUtils
      * 将hex格式的文本进行对称解密
      * 
      * @param hexData 待加密文本
-     * @param hexKey 小写hex编码的key
+     * @param key 小写hex编码的key
      * @param hexIv 小写hex编码的IV
      * @return 解密结果
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static String decryptAES128(String hexData, byte[] key, String hexIv)
         throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, IllegalBlockSizeException,
@@ -198,10 +227,17 @@ public class EncryptUtils
     /**
      * 根秘钥加密
      * 
-     * @param srcKey [] 秘钥分片
+     * @param srcKeys 秘钥分片
      * @param pwd 待加密数据
      * @return 加密结果
-     * @throws UnsupportedEncodingException 
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws InvalidKeySpecException InvalidKeySpecException
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
+     * @throws UnsupportedEncodingException UnsupportedEncodingException
      */
     public static String gen(String[] srcKeys, String pwd)
         throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, NoSuchPaddingException,
@@ -213,9 +249,16 @@ public class EncryptUtils
     /**
      * 根秘钥解密
      * 
-     * @param srcKey [] 秘钥分片
-     * @param pwd 待解密数据
+     * @param srcKeys 秘钥分片
+     * @param ser 待解密数据
      * @return 解密结果
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws InvalidKeySpecException InvalidKeySpecException
+     * @throws InvalidKeyException InvalidKeyException
+     * @throws NoSuchPaddingException NoSuchPaddingException
+     * @throws IllegalBlockSizeException IllegalBlockSizeException
+     * @throws BadPaddingException BadPaddingException
+     * @throws InvalidAlgorithmParameterException InvalidAlgorithmParameterException
      */
     public static String dec(String[] srcKeys, String ser)
         throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, NoSuchPaddingException,

@@ -48,8 +48,14 @@ public class HttpMessageConverterExtractor<T> implements ResponseExtractor<T> {
 
 
 	/**
-	 * Create a new instance of the {@code HttpMessageConverterExtractor} with the given response
-	 * type and message converters. The given converters must support the response type.
+	 * Create a new instance of the {@code HttpMessageConverterExtractor} with the
+	 * given response type and message converters. The given converters must support
+	 * the response type.
+	 * 
+	 * @param responseType
+	 *            The response type.
+	 * @param messageConverters
+	 *            The given list of message converters.
 	 */
 	public HttpMessageConverterExtractor(Class<T> responseType, List<HttpMessageConverter<?>> messageConverters) {
 		this((Type) responseType, messageConverters);
@@ -58,6 +64,11 @@ public class HttpMessageConverterExtractor<T> implements ResponseExtractor<T> {
 	/**
 	 * Creates a new instance of the {@code HttpMessageConverterExtractor} with the given response
 	 * type and message converters. The given converters must support the response type.
+	 * 
+	 * @param responseType
+	 *            The response type.
+	 * @param messageConverters
+	 *            The given list of message converters.
 	 */
 	public HttpMessageConverterExtractor(Type responseType, List<HttpMessageConverter<?>> messageConverters) {
 		this(responseType, messageConverters, LogFactory.getLog(HttpMessageConverterExtractor.class));

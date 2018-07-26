@@ -247,12 +247,13 @@ public class RestClientWrapper
     }
 
 
-    /**
-     * 判断此异常是否可以重试
-     *
-     * @param t
-     * @return
-     */
+	/**
+	 * 判断此异常是否可以重试
+	 *
+	 * @param t
+	 *            throwable exception
+	 * @return {@code true} retriable {@code false} not retriable
+	 */
     protected boolean isRetriableSendException(Throwable t)
     {
         // 对于连接超时/网络闪断/Socket异常/服务端5xx错误进行重试

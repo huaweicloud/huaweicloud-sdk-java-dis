@@ -69,7 +69,7 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
         return getSubclass();
     }
     
-    /**
+    /*
      * Gets the AWSCredentialsProvider currently configured in the builder.
      */
     public final Credentials getCredentials() {

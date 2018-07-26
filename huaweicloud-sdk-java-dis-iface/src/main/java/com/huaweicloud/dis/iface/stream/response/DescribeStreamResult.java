@@ -21,6 +21,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.huaweicloud.dis.iface.data.request.StreamType;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -213,7 +214,7 @@ public class DescribeStreamResult
      * </li>
      * </ul>
      * 
-     * @see {@link StreamType}
+     * @see com.huaweicloud.dis.iface.data.request.StreamType
      * @return 通道类型。表示通道支持的最大带宽。
      */
     public String getStreamType()
@@ -238,8 +239,8 @@ public class DescribeStreamResult
      * </li>
      * </ul>
      * 
-     * @see {@link StreamType}
-     * @param 通道类型。表示通道支持的最大带宽。
+     * @see com.huaweicloud.dis.iface.data.request.StreamType
+     * @param streamType 通道类型。表示通道支持的最大带宽。
      */
     public void setStreamType(String streamType)
     {

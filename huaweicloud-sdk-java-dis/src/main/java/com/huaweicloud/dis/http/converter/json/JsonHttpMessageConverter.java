@@ -56,6 +56,9 @@ public class JsonHttpMessageConverter extends AbstractHttpMessageConverter<Objec
 	/**
 	 * A constructor accepting a default charset to use if the requested content
 	 * type does not specify one.
+	 * 
+	 * @param defaultCharset
+	 *            default charset.
 	 */
 	public JsonHttpMessageConverter(Charset defaultCharset) {
 		super(defaultCharset, ContentType.APPLICATION_JSON);

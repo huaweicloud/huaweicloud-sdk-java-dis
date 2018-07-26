@@ -26,7 +26,7 @@ import com.huaweicloud.dis.core.builder.ExecutorFactory;
 
 
 /**
- * Fluent builder for {@link com.bigdata.dis.sdk.DISAsync}.
+ * Fluent builder for {@link com.huaweicloud.dis.DISAsync}.
  */
 public class DISClientAsyncBuilder extends AsyncClientBuilder<DISClientAsyncBuilder, DISAsync>
 {
@@ -75,7 +75,7 @@ public class DISClientAsyncBuilder extends AsyncClientBuilder<DISClientAsyncBuil
     }
     
     /**
-     * @return Default client using the {@link com.bigdata.dis.sdk.DISConfig}
+     * @return Default client using the {@link DISConfig}
      */
     public static DISAsync defaultClient() {
         return standard().build();
@@ -108,13 +108,14 @@ public class DISClientAsyncBuilder extends AsyncClientBuilder<DISClientAsyncBuil
         return new DISClientAsync(disConfig, executorFactory.newExecutor());
     }
 
-    /**
-     * Construct a asynchronous implementation of DisIngestionClientAsync using the current builder configuration.
-     *
-     * @param params
-     *        Current builder configuration represented as a parameter object.
-     * @return Fully configured implementation of DisIngestionClientAsync.
-     */
+	/**
+	 * Construct a asynchronous implementation of DisIngestionClientAsync using the
+	 * current builder configuration.
+	 *
+	 * @param asyncClientParams
+	 *            Current builder configuration represented as a parameter object.
+	 * @return Fully configured implementation of DisIngestionClientAsync.
+	 */
     @Override
     protected DISAsync build(AsyncClientParams asyncClientParams)
     {

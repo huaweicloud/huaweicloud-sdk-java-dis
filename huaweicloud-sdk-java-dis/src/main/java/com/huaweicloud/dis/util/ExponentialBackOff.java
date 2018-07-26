@@ -56,6 +56,8 @@ public class ExponentialBackOff
      *
      * @param initialInterval the initial interval in milliseconds
      * @param multiplier the multiplier (should be greater than or equal to 1)
+     * @param maxInterval the max interval.
+     * @param maxElapsedTime the default maximum elapsed time.
      */
     public ExponentialBackOff(long initialInterval, double multiplier, long maxInterval, long maxElapsedTime)
     {

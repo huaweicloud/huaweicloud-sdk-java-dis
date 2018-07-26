@@ -83,6 +83,8 @@ public abstract class WebServiceRequest implements Cloneable {
     /**
      * Gets the options stored with this request object. Intended for internal
      * use only.
+     * 
+     * @return request client options.
      */
     public RequestClientOptions getRequestClientOptions() {
         return requestClientOptions;
@@ -101,10 +103,11 @@ public abstract class WebServiceRequest implements Cloneable {
     }
 
     /**
+     * <p>
      * Put a new custom header to the map of custom header names to custom
      * header values, and return the previous value if the header has already
      * been set in this map.
-     * <p/>
+     * </p>
      * NOTE: Custom header values set via this method will overwrite any
      * conflicting values coming from the request parameters.
      *
@@ -122,6 +125,8 @@ public abstract class WebServiceRequest implements Cloneable {
     /**
      * Convenient method to return the optional read limit for mark-and-reset
      * during retries.
+     * 
+     * @return read limit.
      */
     public final int getReadLimit() {
         return requestClientOptions.getReadLimit();
@@ -131,6 +136,8 @@ public abstract class WebServiceRequest implements Cloneable {
      * Copies the internal state of this base class to that of the target
      * request.
      *
+     * @param target target request
+     * @param <T> Generic type
      * @return the target request
      */
     protected final <T extends WebServiceRequest> T copyBaseTo(T target) {

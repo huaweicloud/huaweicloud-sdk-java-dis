@@ -56,10 +56,18 @@ public enum Jackson {
         }
     }
 
-    /**
-     * Returns the deserialized object from the given json string and target
-     * class; or null if the given json string is null.
-     */
+	/**
+	 * Returns the deserialized object from the given json string and target class;
+	 * or null if the given json string is null.
+	 * 
+	 * @param json
+	 *            The input json string.
+	 * @param clazz
+	 *            The target class type.
+	 * @param <T>
+	 *            The generic type.
+	 * @return The deserialized object from the given json string.
+	 */
     public static <T> T fromJsonString(String json, Class<T> clazz) {
         if (json == null)
             return null;

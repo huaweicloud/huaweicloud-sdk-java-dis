@@ -17,8 +17,12 @@ import com.huaweicloud.dis.iface.stream.IStreamService;
 public interface DIS extends IDataService, IStreamService, IAppService
 {
     
-    /**
-     * 上传单条记录到通道
-     * */
+	/**
+	 * 上传单条记录到通道
+	 * 
+	 * @param putRecordParam
+	 *            Represents the input for <code>PutRecord</code>.
+	 * @return Result of the PutRecord operation returned by the service.
+	 */
     PutRecordResult putRecord(PutRecordRequest putRecordParam);
 }
