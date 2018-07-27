@@ -17,6 +17,7 @@
 package com.huaweicloud.dis.iface.app;
 
 import com.huaweicloud.dis.iface.app.response.AppEntry;
+import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 
 /**
  * IAppService为开放到SDK的接口, IAppIdService为内部扩展接口不对SDK暴露
@@ -33,4 +34,16 @@ public interface IAppIdService extends IAppService
      * @return
      */
     AppEntry describeApp(String appName);
+
+    /**
+     * <p>
+     * 获取用户所有app。
+     * </p>
+     *
+     * @param projectId  projectId
+     * @return
+     */
+    ListAppsResult listApps(String projectId);
+
+
 }
