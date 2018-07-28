@@ -25,6 +25,9 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.response.AppEntry;
+import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,7 +215,46 @@ public class DISClientAsync extends DISClient implements DISAsync
             }
         });
     }
-    
+
+
+    @Override
+    public Future<AppEntry> describeAppAsync(String appName)
+    {
+        return describeAppAsync(appName, null);
+    }
+
+    @Override
+    public Future<AppEntry> describeAppAsync(String appName, AsyncHandler<AppEntry> asyncHandler)
+    {
+        return submit(appName, asyncHandler, new InnerExecutor<String, AppEntry>()
+        {
+            public AppEntry innerExecute(String appName)
+            {
+                return innerDescribeApp(appName);
+            }
+        });
+    }
+
+
+    @Override
+    public Future<ListAppsResult> listAppAsync(ListAppsRequest listAppsRequest)
+    {
+        return listAppAsync(listAppsRequest,null);
+    }
+
+    @Override
+    public Future<ListAppsResult> listAppAsync(ListAppsRequest listAppsRequest, AsyncHandler<ListAppsResult> asyncHandler)
+    {
+        return submit(listAppsRequest, asyncHandler, new InnerExecutor<ListAppsRequest, ListAppsResult>()
+        {
+            public ListAppsResult innerExecute(ListAppsRequest listAppsRequest)
+            {
+                return innerListApps(listAppsRequest);
+            }
+        });
+    }
+
+
     @Override
     public Future<UpdatePartitionCountResult> updatePartitionCountAsync(
         UpdatePartitionCountRequest updatePartitionCountRequest)
