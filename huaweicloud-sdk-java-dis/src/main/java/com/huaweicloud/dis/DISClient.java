@@ -35,6 +35,9 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
+import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.response.AppEntry;
+import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -770,6 +773,46 @@ public class DISClient implements DIS
         setEndpoint(request, disConfig.getManagerEndpoint());
         request(null, request, null);
     }
+
+    @Override
+    public AppEntry describeApp(String appName)
+    {
+        return innerDescribeApp(appName);
+    }
+
+    public final AppEntry innerDescribeApp(String appName)
+    {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.GET);
+
+        final String resourcePath = ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new AppsResource(appName))
+                .build();
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        return request(null, request, AppEntry.class);
+    }
+
+    @Override
+    public ListAppsResult listApps(ListAppsRequest listAppsRequest){
+        return innerListApps(listAppsRequest);
+    }
+
+    public final ListAppsResult innerListApps(ListAppsRequest listAppsRequest)
+    {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.GET);
+
+        final String resourcePath = ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new AppsResource(null))
+                .build();
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        return request(listAppsRequest, request, ListAppsResult.class);
+    }
+
 
     public CommitCheckpointResult commitCheckpoint(CommitCheckpointRequest commitCheckpointParam)
     {
