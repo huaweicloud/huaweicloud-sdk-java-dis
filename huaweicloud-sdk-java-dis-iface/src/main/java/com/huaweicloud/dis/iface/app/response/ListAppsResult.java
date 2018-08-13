@@ -18,6 +18,7 @@ package com.huaweicloud.dis.iface.app.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
@@ -25,9 +26,11 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ListAppsResult {
 
+    @JsonProperty("has_more_app")
     private Boolean hasMoreApp;
 
-    private List<AppEntry> appEntries;
+    @JsonProperty("apps")
+    private List<DescribeAppResult> apps;
 
     public Boolean getHasMoreApp() {
         return hasMoreApp;
@@ -37,11 +40,11 @@ public class ListAppsResult {
         this.hasMoreApp = hasMoreApp;
     }
 
-    public List<AppEntry> getAppEntries() {
-        return appEntries;
+    public List<DescribeAppResult> getApps() {
+        return apps;
     }
 
-    public void setAppEntries(List<AppEntry> appEntries) {
-        this.appEntries = appEntries;
+    public void setApps(List<DescribeAppResult> apps) {
+        this.apps = apps;
     }
 }

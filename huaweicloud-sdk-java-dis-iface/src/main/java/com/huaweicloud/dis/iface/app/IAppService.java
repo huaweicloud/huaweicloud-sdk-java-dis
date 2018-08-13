@@ -17,7 +17,7 @@
 package com.huaweicloud.dis.iface.app;
 
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
-import com.huaweicloud.dis.iface.app.response.AppEntry;
+import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 
 public interface IAppService
@@ -42,7 +42,7 @@ public interface IAppService
      * @param appName App名称
      * @return app的描述信息
      */
-    AppEntry describeApp(String appName);
+    DescribeAppResult describeApp(String appName);
 
     /**
      * <p>
