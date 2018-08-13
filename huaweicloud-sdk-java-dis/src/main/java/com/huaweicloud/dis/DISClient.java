@@ -16,6 +16,36 @@
 
 package com.huaweicloud.dis;
 
+import com.huaweicloud.dis.DISConfig.BodySerializeType;
+import com.huaweicloud.dis.core.DISCredentials;
+import com.huaweicloud.dis.core.DefaultRequest;
+import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.http.HttpMethodName;
+import com.huaweicloud.dis.core.restresource.*;
+import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
+import com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils;
+import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
+import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
+import com.huaweicloud.dis.iface.app.response.ListAppsResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.iface.stream.request.*;
+import com.huaweicloud.dis.iface.stream.response.*;
+import com.huaweicloud.dis.util.ExponentialBackOff;
+import com.huaweicloud.dis.util.RestClientWrapper;
+import com.huaweicloud.dis.util.SnappyUtils;
+import com.huaweicloud.dis.util.Utils;
+import com.huaweicloud.dis.util.config.ICredentialsProvider;
+import com.huaweicloud.dis.util.encrypt.EncryptUtils;
+import org.apache.http.HttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -30,38 +60,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
-import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
-import com.huaweicloud.dis.iface.app.response.AppEntry;
-import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import org.apache.http.HttpRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.huaweicloud.dis.core.DefaultRequest;
-import com.huaweicloud.dis.core.Request;
-import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.core.util.StringUtils;
-import com.huaweicloud.dis.DISConfig.BodySerializeType;
-import com.huaweicloud.dis.core.DISCredentials;
-import com.huaweicloud.dis.core.restresource.*;
-import com.huaweicloud.dis.exception.DISClientException;
-import com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils;
-import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
-import com.huaweicloud.dis.iface.data.request.*;
-import com.huaweicloud.dis.iface.data.response.*;
-import com.huaweicloud.dis.iface.stream.request.*;
-import com.huaweicloud.dis.iface.stream.response.*;
-import com.huaweicloud.dis.util.ExponentialBackOff;
-import com.huaweicloud.dis.util.RestClientWrapper;
-import com.huaweicloud.dis.util.SnappyUtils;
-import com.huaweicloud.dis.util.Utils;
-import com.huaweicloud.dis.util.config.ICredentialsProvider;
-import com.huaweicloud.dis.util.encrypt.EncryptUtils;
 
 public class DISClient implements DIS
 {
@@ -775,12 +773,12 @@ public class DISClient implements DIS
     }
 
     @Override
-    public AppEntry describeApp(String appName)
+    public DescribeAppResult describeApp(String appName)
     {
         return innerDescribeApp(appName);
     }
 
-    public final AppEntry innerDescribeApp(String appName)
+    public final DescribeAppResult innerDescribeApp(String appName)
     {
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
         request.setHttpMethod(HttpMethodName.GET);
@@ -791,7 +789,7 @@ public class DISClient implements DIS
                 .build();
         request.setResourcePath(resourcePath);
         setEndpoint(request, disConfig.getManagerEndpoint());
-        return request(null, request, AppEntry.class);
+        return request(null, request, DescribeAppResult.class);
     }
 
     @Override

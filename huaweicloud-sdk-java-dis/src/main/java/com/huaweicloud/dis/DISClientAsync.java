@@ -16,7 +16,20 @@
 
 package com.huaweicloud.dis;
 
-import static java.util.concurrent.Executors.newFixedThreadPool;
+import com.huaweicloud.dis.core.handler.AsyncHandler;
+import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
+import com.huaweicloud.dis.iface.app.response.ListAppsResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
+import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
+import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
+import com.huaweicloud.dis.util.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -25,21 +38,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
-import com.huaweicloud.dis.iface.app.response.AppEntry;
-import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.huaweicloud.dis.core.util.StringUtils;
-import com.huaweicloud.dis.core.handler.AsyncHandler;
-import com.huaweicloud.dis.iface.data.request.*;
-import com.huaweicloud.dis.iface.data.response.*;
-import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
-import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
-import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
-import com.huaweicloud.dis.util.IOUtils;
+import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class DISClientAsync extends DISClient implements DISAsync
 {
@@ -218,17 +217,17 @@ public class DISClientAsync extends DISClient implements DISAsync
 
 
     @Override
-    public Future<AppEntry> describeAppAsync(String appName)
+    public Future<DescribeAppResult> describeAppAsync(String appName)
     {
         return describeAppAsync(appName, null);
     }
 
     @Override
-    public Future<AppEntry> describeAppAsync(String appName, AsyncHandler<AppEntry> asyncHandler)
+    public Future<DescribeAppResult> describeAppAsync(String appName, AsyncHandler<DescribeAppResult> asyncHandler)
     {
-        return submit(appName, asyncHandler, new InnerExecutor<String, AppEntry>()
+        return submit(appName, asyncHandler, new InnerExecutor<String, DescribeAppResult>()
         {
-            public AppEntry innerExecute(String appName)
+            public DescribeAppResult innerExecute(String appName)
             {
                 return innerDescribeApp(appName);
             }
