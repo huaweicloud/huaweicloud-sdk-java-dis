@@ -18,7 +18,7 @@ package com.huaweicloud.dis;
 
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
-import com.huaweicloud.dis.iface.app.response.AppEntry;
+import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.data.request.*;
 import com.huaweicloud.dis.iface.data.response.*;
@@ -253,7 +253,7 @@ public interface DISAsync extends DIS
      * @param appName App名称
      * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息成功
      */
-    java.util.concurrent.Future<AppEntry> describeAppAsync(String appName);
+    java.util.concurrent.Future<DescribeAppResult> describeAppAsync(String appName);
 
     /**
      * <p>
@@ -264,7 +264,7 @@ public interface DISAsync extends DIS
      * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
      * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息成功
      */
-    java.util.concurrent.Future<AppEntry> describeAppAsync(String appName, AsyncHandler<AppEntry> asyncHandler);
+    java.util.concurrent.Future<DescribeAppResult> describeAppAsync(String appName, AsyncHandler<DescribeAppResult> asyncHandler);
 
 
     /**
