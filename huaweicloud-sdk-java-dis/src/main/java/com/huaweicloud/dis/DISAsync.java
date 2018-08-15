@@ -17,6 +17,9 @@
 package com.huaweicloud.dis;
 
 import com.huaweicloud.dis.core.handler.AsyncHandler;
+import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
+import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.data.request.*;
 import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
@@ -240,7 +243,52 @@ public interface DISAsync extends DIS
      * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明App删除成功
      */
     java.util.concurrent.Future<Void> deleteAppAsync(String appName, AsyncHandler<Void> asyncHandler);
-    
+
+
+    /**
+     * <p>
+     * 描述App
+     * </p>
+     *
+     * @param appName App名称
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息成功
+     */
+    java.util.concurrent.Future<DescribeAppResult> describeAppAsync(String appName);
+
+    /**
+     * <p>
+     * 描述App
+     * </p>
+     *
+     * @param appName App名称
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息成功
+     */
+    java.util.concurrent.Future<DescribeAppResult> describeAppAsync(String appName, AsyncHandler<DescribeAppResult> asyncHandler);
+
+
+    /**
+     * <p>
+     * 获取App列表
+     * </p>
+     *
+     * @param listAppsRequest list app的参数
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息列表成功
+     */
+    java.util.concurrent.Future<ListAppsResult> listAppAsync(ListAppsRequest listAppsRequest);
+
+    /**
+     * <p>
+     * 获取App列表
+     * </p>
+     *
+     * @param listAppsRequest list app的参数
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息列表成功
+     */
+    java.util.concurrent.Future<ListAppsResult> listAppAsync(ListAppsRequest listAppsRequest, AsyncHandler<ListAppsResult> asyncHandler);
+
+
     /**
      * <p>
      * 变更分区数量

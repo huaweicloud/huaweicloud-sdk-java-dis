@@ -16,6 +16,10 @@
 
 package com.huaweicloud.dis.iface.app;
 
+import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
+import com.huaweicloud.dis.iface.app.response.ListAppsResult;
+
 public interface IAppService
 {
     /**
@@ -29,4 +33,24 @@ public interface IAppService
      * @param appName App名称
      */
     void deleteApp(String appName);
+
+    /**
+     * <p>
+     * 根据App名称查询App详情。
+     * </p>
+     *
+     * @param appName App名称
+     * @return app的描述信息
+     */
+    DescribeAppResult describeApp(String appName);
+
+    /**
+     * <p>
+     * 获取用户所有app。
+     * </p>
+     *
+     * @param listAppsRequest  listAppsRequestc参数
+     * @return app的描述信息列表
+     */
+    ListAppsResult listApps(ListAppsRequest listAppsRequest);
 }
