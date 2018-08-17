@@ -17,26 +17,8 @@ package com.huaweicloud.dis.iface.transfertask.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DeleteTransferTaskResult
-{
-    /**
-     * <p>
-     * The name of the delivery task.
-     * </p>
-     */
-    @JsonProperty("task_name")
-    private String transferTaskName;
-
-
-    public String getTransferTaskName() {
-        return transferTaskName;
-    }
-
-    public void setTransferTaskName(String transferTaskName) {
-        this.transferTaskName = transferTaskName;
-    }
+public class DeleteTransferTaskResult {
 }

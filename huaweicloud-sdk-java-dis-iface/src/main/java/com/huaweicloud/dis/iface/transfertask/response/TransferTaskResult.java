@@ -22,9 +22,14 @@ import com.huaweicloud.dis.iface.stream.request.StreamDestinationType;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class TransferTaskResult
-{
-    private StreamDestinationType type;
+public class TransferTaskResult {
+    /**
+     * <p>
+     * The destination type of the delivery task. For Example, OBS.
+     * </p>
+     */
+    @JsonProperty("destination_type")
+    private StreamDestinationType destinationType;
 
     /**
      * <p>
@@ -33,7 +38,7 @@ public class TransferTaskResult
      */
     @JsonProperty("task_name")
     private String transferTaskName;
-    
+
     /**
      * <p>
      * The create time of the transfer task.
@@ -41,7 +46,15 @@ public class TransferTaskResult
      */
     @JsonProperty("create_time")
     private long createTime;
-    
+
+    /**
+     * <p>
+     * The transfer state of the delivery task.
+     * </p>
+     */
+    @JsonProperty("state")
+    private String state;
+
     /**
      * <p>
      * The lastest transfer timeStamp of the transfer task.
@@ -49,62 +62,44 @@ public class TransferTaskResult
      */
     @JsonProperty("last_transfer_timestamp")
     private long lastTransferTimeStamp;
-    
-    /**
-     * <p>
-     * The lastest partition transfer offsets of the transfer task.
-     * </p>
-     */
-    @JsonProperty("last_partitions_transfer_offset")
-    private String lastPartitionsTransferOffset;
-    
-    public StreamDestinationType getType()
-    {
-        return type;
+
+    public StreamDestinationType getDestinationType() {
+        return destinationType;
     }
-    
-    public void setType(StreamDestinationType type)
-    {
-        this.type = type;
+
+    public void setDestinationType(StreamDestinationType destinationType) {
+        this.destinationType = destinationType;
     }
-    
-    public String getTransferTaskName()
-    {
+
+    public String getTransferTaskName() {
         return transferTaskName;
     }
-    
-    public void setTransferTaskName(String transferTaskName)
-    {
+
+    public void setTransferTaskName(String transferTaskName) {
         this.transferTaskName = transferTaskName;
     }
-    
-    public long getCreateTime()
-    {
+
+    public long getCreateTime() {
         return createTime;
     }
-    
-    public void setCreateTime(long createTime)
-    {
+
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
-    
-    public long getLastTransferTimeStamp()
-    {
+
+    public long getLastTransferTimeStamp() {
         return lastTransferTimeStamp;
     }
-    
-    public void setLastTransferTimeStamp(long lastTransferTimeStamp)
-    {
+
+    public void setLastTransferTimeStamp(long lastTransferTimeStamp) {
         this.lastTransferTimeStamp = lastTransferTimeStamp;
     }
-    
-    public String getLastPartitionsTransferOffset()
-    {
-        return lastPartitionsTransferOffset;
+
+    public String getState() {
+        return state;
     }
-    
-    public void setLastPartitionsTransferOffset(String lastPartitionsTransferOffset)
-    {
-        this.lastPartitionsTransferOffset = lastPartitionsTransferOffset;
+
+    public void setState(String state) {
+        this.state = state;
     }
 }
