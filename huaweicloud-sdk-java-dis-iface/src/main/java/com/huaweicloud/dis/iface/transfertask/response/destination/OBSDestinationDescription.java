@@ -73,7 +73,6 @@ public class OBSDestinationDescription
      * Default value: 300s
      * </p>
      */
-    @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("deliver_time_interval")
     private int deliverTimeInterval;
     

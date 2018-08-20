@@ -18,18 +18,16 @@ package com.huaweicloud.dis.iface.transfertask.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.huaweicloud.dis.iface.stream.request.ForceStringDeserializer;
 import com.huaweicloud.dis.iface.stream.request.MRSDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.OBSDestinationDescriptorRequest;
+import com.huaweicloud.dis.iface.stream.request.StreamDestinationType;
 import com.huaweicloud.dis.iface.stream.request.UqueryDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.cloudtable.CloudtableDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.dws.DwsDestinationDescriptorRequest;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateTransferTaskRequest
-{
+public class CreateTransferTaskRequest {
     /**
      * <p>
      * The name of the delivery stream.
@@ -37,7 +35,14 @@ public class CreateTransferTaskRequest
      */
     @JsonProperty("stream_name")
     private String streamName;
-    
+
+    /**
+     * <p>
+     * The destination type of the delivery task. For Example, OBS.
+     * </p>
+     */
+    private StreamDestinationType type;
+
     /**
      * <p>
      * Parameter list of the OBS to which data in the DIS stream will be dumped.
@@ -45,7 +50,7 @@ public class CreateTransferTaskRequest
      */
     @JsonProperty("obs_destination_descriptor")
     private OBSDestinationDescriptorRequest obsDestinationDescriptor;
-    
+
     /**
      * <p>
      * Parameter list of the MRS to which data in the DIS stream will be dumped.
@@ -53,7 +58,7 @@ public class CreateTransferTaskRequest
      */
     @JsonProperty("mrs_destination_descriptor")
     private MRSDestinationDescriptorRequest mrsDestinationDescriptor;
-    
+
     /**
      * <p>
      * Parameter list of the DLI to which data in the DIS stream will be dumped.
@@ -61,7 +66,7 @@ public class CreateTransferTaskRequest
      */
     @JsonProperty("dli_destination_descriptor")
     private UqueryDestinationDescriptorRequest dliDestinationDescriptor;
-    
+
     /**
      * <p>
      * A list of parameters required for dumping data to CloudTable.
@@ -69,7 +74,7 @@ public class CreateTransferTaskRequest
      */
     @JsonProperty("cloudtable_destination_descriptor")
     private CloudtableDestinationDescriptorRequest cloudtableDestinationDescriptor;
-    
+
     /**
      * <p>
      * A list of parameters required for dumping to DWS.
@@ -77,71 +82,66 @@ public class CreateTransferTaskRequest
      */
     @JsonProperty("dws_destination_descriptor")
     private DwsDestinationDescriptorRequest dwsDestinationDescriptor;
-    
-    public String getStreamName()
-    {
+
+    public String getStreamName() {
         return streamName;
     }
-    
-    public void setStreamName(String streamName)
-    {
+
+    public void setStreamName(String streamName) {
         this.streamName = streamName;
     }
-    
-    public OBSDestinationDescriptorRequest getObsDestinationDescriptor()
-    {
+
+    public StreamDestinationType getType() {
+        return type;
+    }
+
+    public void setType(StreamDestinationType type) {
+        this.type = type;
+    }
+
+    public OBSDestinationDescriptorRequest getObsDestinationDescriptor() {
         return obsDestinationDescriptor;
     }
-    
-    public void setObsDestinationDescriptor(OBSDestinationDescriptorRequest obsDestinationDescriptor)
-    {
+
+    public void setObsDestinationDescriptor(OBSDestinationDescriptorRequest obsDestinationDescriptor) {
         this.obsDestinationDescriptor = obsDestinationDescriptor;
     }
-    
-    public MRSDestinationDescriptorRequest getMrsDestinationDescriptor()
-    {
+
+    public MRSDestinationDescriptorRequest getMrsDestinationDescriptor() {
         return mrsDestinationDescriptor;
     }
-    
-    public void setMrsDestinationDescriptor(MRSDestinationDescriptorRequest mrsDestinationDescriptor)
-    {
+
+    public void setMrsDestinationDescriptor(MRSDestinationDescriptorRequest mrsDestinationDescriptor) {
         this.mrsDestinationDescriptor = mrsDestinationDescriptor;
     }
-    
-    public UqueryDestinationDescriptorRequest getDliDestinationDescriptor()
-    {
+
+    public UqueryDestinationDescriptorRequest getDliDestinationDescriptor() {
         return dliDestinationDescriptor;
     }
-    
-    public void setDliDestinationDescriptor(UqueryDestinationDescriptorRequest dliDestinationDescriptor)
-    {
+
+    public void setDliDestinationDescriptor(UqueryDestinationDescriptorRequest dliDestinationDescriptor) {
         this.dliDestinationDescriptor = dliDestinationDescriptor;
     }
-    
-    public CloudtableDestinationDescriptorRequest getCloudtableDestinationDescriptor()
-    {
+
+    public CloudtableDestinationDescriptorRequest getCloudtableDestinationDescriptor() {
         return cloudtableDestinationDescriptor;
     }
-    
+
     public void setCloudtableDestinationDescriptor(
-        CloudtableDestinationDescriptorRequest cloudtableDestinationDescriptor)
-    {
+            CloudtableDestinationDescriptorRequest cloudtableDestinationDescriptor) {
         this.cloudtableDestinationDescriptor = cloudtableDestinationDescriptor;
     }
-    
-    public DwsDestinationDescriptorRequest getDwsDestinationDescriptor()
-    {
+
+    public DwsDestinationDescriptorRequest getDwsDestinationDescriptor() {
         return dwsDestinationDescriptor;
     }
-    
-    public void setDwsDestinationDescriptor(DwsDestinationDescriptorRequest dwsDestinationDescriptor)
-    {
+
+    public void setDwsDestinationDescriptor(DwsDestinationDescriptorRequest dwsDestinationDescriptor) {
         this.dwsDestinationDescriptor = dwsDestinationDescriptor;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "CreateTransferTaskRequest{" + "streamName='" + streamName + '\'' + '}';
     }
 }

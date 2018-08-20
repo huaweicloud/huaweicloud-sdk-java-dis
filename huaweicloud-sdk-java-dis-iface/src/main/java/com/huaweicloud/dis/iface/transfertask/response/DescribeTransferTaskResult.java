@@ -18,12 +18,14 @@ package com.huaweicloud.dis.iface.transfertask.response;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.huaweicloud.dis.iface.stream.request.StreamDestinationType;
 import com.huaweicloud.dis.iface.transfertask.response.destination.*;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DescribeTransferTaskResult
-{
+public class DescribeTransferTaskResult {
     /**
      * <p>
      * The name of the delivery stream.
@@ -31,7 +33,7 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("stream_name")
     private String streamName;
-    
+
     /**
      * <p>
      * The name of the delivery task.
@@ -40,7 +42,22 @@ public class DescribeTransferTaskResult
     @JsonProperty("task_name")
     private String transferTaskName;
 
-    
+    /**
+     * <p>
+     * The destination type of the delivery task. For Example, OBS.
+     * </p>
+     */
+    private StreamDestinationType type;
+
+    /**
+     * <p>
+     * The transfer state of the delivery task.
+     * </p>
+     */
+    @JsonProperty("transfer_state")
+    private String transferState;
+
+
     /**
      * <p>
      * The create time of the transfer task.
@@ -48,7 +65,7 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("create_time")
     private long createTime;
-    
+
     /**
      * <p>
      * The lastest transfer timeStamp of the transfer task.
@@ -56,15 +73,14 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("last_transfer_timestamp")
     private long lastTransferTimeStamp;
-    
+
     /**
      * <p>
-     * The lastest partition transfer offsets of the transfer task.
+     * The transfer details of the partitions.
      * </p>
      */
-    @JsonProperty("last_partitions_transfer_offset")
-    private String lastPartitionsTransferOffset;
-    
+    private List<PartitionTransferResult> partitions;
+
     /**
      * <p>
      * description of a task that dump data from DIS to OBS.
@@ -72,7 +88,7 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("obs_destination_description")
     private OBSDestinationDescription obsDestinationDescription;
-    
+
     /**
      * <p>
      * description of a task that dump data from DIS to MRS.
@@ -80,7 +96,7 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("mrs_destination_description")
     private MRSDestinationDescription mrsDestinationDescription;
-    
+
     /**
      * <p>
      * description of a task that dump data from DIS to DLI.
@@ -88,7 +104,7 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("dli_destination_description")
     private DliDestinationDescription dliDestinationDescription;
-    
+
     /**
      * <p>
      * description of a task that dump data from DIS to DWS.
@@ -96,7 +112,7 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("dws_destination_description")
     private DwsDestinationDescription dwsDestinationDescription;
-    
+
     /**
      * <p>
      * description of a task that dump data from DIS to CloudTable.
@@ -104,14 +120,12 @@ public class DescribeTransferTaskResult
      */
     @JsonProperty("cloudtable_destination_description")
     private CloudtableDestinationDescription cloudtableDestinationDescription;
-    
-    public String getStreamName()
-    {
+
+    public String getStreamName() {
         return streamName;
     }
-    
-    public void setStreamName(String streamName)
-    {
+
+    public void setStreamName(String streamName) {
         this.streamName = streamName;
     }
 
@@ -123,83 +137,83 @@ public class DescribeTransferTaskResult
         this.transferTaskName = transferTaskName;
     }
 
-    public long getCreateTime()
-    {
+    public long getCreateTime() {
         return createTime;
     }
-    
-    public void setCreateTime(long createTime)
-    {
+
+    public void setCreateTime(long createTime) {
         this.createTime = createTime;
     }
-    
-    public long getLastTransferTimeStamp()
-    {
+
+    public long getLastTransferTimeStamp() {
         return lastTransferTimeStamp;
     }
-    
-    public void setLastTransferTimeStamp(long lastTransferTimeStamp)
-    {
+
+    public void setLastTransferTimeStamp(long lastTransferTimeStamp) {
         this.lastTransferTimeStamp = lastTransferTimeStamp;
     }
-    
-    public String getLastPartitionsTransferOffset()
-    {
-        return lastPartitionsTransferOffset;
+
+    public String getTransferState() {
+        return transferState;
     }
-    
-    public void setLastPartitionsTransferOffset(String lastPartitionsTransferOffset)
-    {
-        this.lastPartitionsTransferOffset = lastPartitionsTransferOffset;
+
+    public void setTransferState(String transferState) {
+        this.transferState = transferState;
     }
-    
-    public OBSDestinationDescription getObsDestinationDescription()
-    {
+
+    public List<PartitionTransferResult> getPartitions() {
+        return partitions;
+    }
+
+    public void setPartitions(List<PartitionTransferResult> partitions) {
+        this.partitions = partitions;
+    }
+
+    public OBSDestinationDescription getObsDestinationDescription() {
         return obsDestinationDescription;
     }
-    
-    public void setObsDestinationDescription(OBSDestinationDescription obsDestinationDescription)
-    {
+
+    public void setObsDestinationDescription(OBSDestinationDescription obsDestinationDescription) {
         this.obsDestinationDescription = obsDestinationDescription;
     }
-    
-    public MRSDestinationDescription getMrsDestinationDescription()
-    {
+
+    public MRSDestinationDescription getMrsDestinationDescription() {
         return mrsDestinationDescription;
     }
-    
-    public void setMrsDestinationDescription(MRSDestinationDescription mrsDestinationDescription)
-    {
+
+    public void setMrsDestinationDescription(MRSDestinationDescription mrsDestinationDescription) {
         this.mrsDestinationDescription = mrsDestinationDescription;
     }
-    
-    public DliDestinationDescription getDliDestinationDescription()
-    {
+
+    public DliDestinationDescription getDliDestinationDescription() {
         return dliDestinationDescription;
     }
-    
-    public void setDliDestinationDescription(DliDestinationDescription dliDestinationDescription)
-    {
+
+    public void setDliDestinationDescription(DliDestinationDescription dliDestinationDescription) {
         this.dliDestinationDescription = dliDestinationDescription;
     }
-    
-    public DwsDestinationDescription getDwsDestinationDescription()
-    {
+
+    public DwsDestinationDescription getDwsDestinationDescription() {
         return dwsDestinationDescription;
     }
-    
-    public void setDwsDestinationDescription(DwsDestinationDescription dwsDestinationDescription)
-    {
+
+    public void setDwsDestinationDescription(DwsDestinationDescription dwsDestinationDescription) {
         this.dwsDestinationDescription = dwsDestinationDescription;
     }
-    
-    public CloudtableDestinationDescription getCloudtableDestinationDescription()
-    {
+
+    public CloudtableDestinationDescription getCloudtableDestinationDescription() {
         return cloudtableDestinationDescription;
     }
-    
-    public void setCloudtableDestinationDescription(CloudtableDestinationDescription cloudtableDestinationDescription)
-    {
+
+    public void setCloudtableDestinationDescription(CloudtableDestinationDescription cloudtableDestinationDescription) {
         this.cloudtableDestinationDescription = cloudtableDestinationDescription;
+    }
+
+    public StreamDestinationType getType() {
+        return type;
+    }
+
+    public void setType(StreamDestinationType type) {
+        this.type = type;
     }
 }

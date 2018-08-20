@@ -15,51 +15,33 @@
  */
 package com.huaweicloud.dis.iface.transfertask.response;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.List;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ListTransferTasksResult
-{
+public class ListTransferTasksResult {
     @JsonProperty("total_number")
     private int taskNumber;
-    
-    private List<TransferTaskResult> details;
-    
-    @JsonProperty("has_more_tasks")
-    private Boolean hasMoreTasks;
-    
-    public int getTaskNumber()
-    {
+
+    private List<TransferTaskResult> tasks;
+
+    public int getTaskNumber() {
         return taskNumber;
     }
-    
-    public void setTaskNumber(int taskNumber)
-    {
+
+    public void setTaskNumber(int taskNumber) {
         this.taskNumber = taskNumber;
     }
-    
-    public List<TransferTaskResult> getDetails()
-    {
-        return details;
+
+    public List<TransferTaskResult> getTasks() {
+        return tasks;
     }
-    
-    public void setDetails(List<TransferTaskResult> details)
-    {
-        this.details = details;
-    }
-    
-    public Boolean getHasMoreTasks()
-    {
-        return hasMoreTasks;
-    }
-    
-    public void setHasMoreTasks(Boolean hasMoreTasks)
-    {
-        this.hasMoreTasks = hasMoreTasks;
+
+    public void setTasks(List<TransferTaskResult> tasks) {
+        this.tasks = tasks;
     }
 }
