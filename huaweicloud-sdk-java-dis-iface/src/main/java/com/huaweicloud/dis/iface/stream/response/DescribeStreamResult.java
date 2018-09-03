@@ -142,6 +142,14 @@ public class DescribeStreamResult
      */
     @JsonProperty("data_type")
     private String dataType;
+
+    /**
+     * <p>
+     * 用户JOSN、CSV格式数据schema,用avro shema描述
+     * </p>
+     */
+    @JsonProperty("data_schema")
+    private String dataSchema;
     
     /**
      * <p>
@@ -306,7 +314,15 @@ public class DescribeStreamResult
     {
         this.dataType = dataType;
     }
-    
+
+    public String getDataSchema() {
+        return dataSchema;
+    }
+
+    public void setDataSchema(String dataSchema) {
+        this.dataSchema = dataSchema;
+    }
+
     @Override
     public String toString()
     {

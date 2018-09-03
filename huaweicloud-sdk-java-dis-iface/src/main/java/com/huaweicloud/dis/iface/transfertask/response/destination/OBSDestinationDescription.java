@@ -21,6 +21,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.huaweicloud.dis.iface.stream.request.ForceStringDeserializer;
 
+import java.util.Map;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OBSDestinationDescription
@@ -119,6 +121,14 @@ public class OBSDestinationDescription
      */
     @JsonProperty("avro_schema")
     private String avroSchema;
+
+    /**
+     * <p>
+     * CarbonWriter.builder.withTableProperties(tablePropertiesMap)
+     * </p>
+     */
+    @JsonProperty("carbon_properties")
+    private Map<String, String> carbonProperties;
     
     /**
      * <p>
@@ -237,5 +247,13 @@ public class OBSDestinationDescription
     public void setConsumerStrategy(String consumerStrategy)
     {
         this.consumerStrategy = consumerStrategy;
+    }
+
+    public Map<String, String> getCarbonProperties() {
+        return carbonProperties;
+    }
+
+    public void setCarbonProperties(Map<String, String> carbonProperties) {
+        this.carbonProperties = carbonProperties;
     }
 }
