@@ -39,6 +39,14 @@ public class UpdateStreamRequest
      */
     @JsonProperty("target_data_type")
     private String targetDataType;
+
+    /**
+     * <p>
+     * 指定修改后的源数据schema.
+     * </p>
+     */
+    @JsonProperty("target_data_schema")
+    private String targetDataSchema;
     
     public String getStreamName()
     {
@@ -59,7 +67,15 @@ public class UpdateStreamRequest
     {
         this.targetDataType = targetDataType;
     }
-    
+
+    public String getTargetDataSchema() {
+        return targetDataSchema;
+    }
+
+    public void setTargetDataSchema(String targetDataSchema) {
+        this.targetDataSchema = targetDataSchema;
+    }
+
     @Override
     public String toString()
     {
