@@ -150,7 +150,7 @@ public class PartitionResult
                 ", hashRange='" + hashRange + '\'' +
                 ", status='" + status + '\'' +
                 ", parentPartitionIds='" + parentPartitionIds + '\'' +
-//                ", sequenceNumberRange='" + sequenceNumberRange + '\'' +
+                ", sequenceNumberRange='" + sequenceNumberRange + '\'' +
                 '}';
     }
 }
