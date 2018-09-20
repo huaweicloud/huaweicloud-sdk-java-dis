@@ -16,30 +16,29 @@
 
 package com.huaweicloud.dis.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.SocketException;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.SSLException;
-
+import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
+import com.huaweicloud.dis.core.http.HttpMethodName;
+import com.huaweicloud.dis.exception.DISClientException;
+import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
+import com.huaweicloud.dis.http.exception.RestClientResponseException;
+import com.huaweicloud.dis.http.exception.UnknownHttpStatusCodeException;
 import org.apache.http.HttpRequest;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.huaweicloud.dis.core.Request;
-import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
-import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.DISConfig;
-import com.huaweicloud.dis.exception.DISClientException;
-import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
-import com.huaweicloud.dis.http.exception.RestClientResponseException;
-import com.huaweicloud.dis.http.exception.UnknownHttpStatusCodeException;
+import javax.net.ssl.SSLException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
+import java.util.HashMap;
+import java.util.Map;
 
 public class RestClientWrapper
 {
@@ -218,7 +217,7 @@ public class RestClientWrapper
                 }
                 
                 // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
-                if (!isRetriableSendException(t) || retryCount >= disConfig.getExceptionRetries())
+                if (!isRetriableSendException(t, request) || retryCount >= disConfig.getExceptionRetries())
                 {
                     throw new DISClientException(errorMsg, t);
                 }
@@ -252,15 +251,16 @@ public class RestClientWrapper
 	 *
 	 * @param t
 	 *            throwable exception
-	 * @return {@code true} retriable {@code false} not retriable
+	 * @param request
+     * @return {@code true} retriable {@code false} not retriable
 	 */
-    protected boolean isRetriableSendException(Throwable t)
+    protected boolean isRetriableSendException(Throwable t, Request<HttpRequest> request)
     {
         // 对于连接超时/网络闪断/Socket异常/服务端5xx错误进行重试
         return t instanceof ConnectTimeoutException || t instanceof NoHttpResponseException
-            || t instanceof SocketException || t instanceof SSLException
-            || (t instanceof RestClientResponseException
-                && ((RestClientResponseException)t).getRawStatusCode() / 100 == 5)
-            || (t.getCause() != null && isRetriableSendException(t.getCause()));
+                || t instanceof SocketException || t instanceof SSLException
+                || (t instanceof SocketTimeoutException && request.getHttpMethod() == HttpMethodName.GET)
+                || (t instanceof RestClientResponseException && ((RestClientResponseException) t).getRawStatusCode() / 100 == 5)
+                || (t.getCause() != null && isRetriableSendException(t.getCause(), request));
     }
 }
