@@ -16,15 +16,33 @@
 
 package com.huaweicloud.dis;
 
+import java.util.concurrent.Future;
+
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import com.huaweicloud.dis.iface.data.request.*;
-import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
+import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutFilesRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
+import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutFilesResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
 import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
+import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
+import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
+import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
 import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
 
 /**
@@ -95,6 +113,24 @@ public interface DISAsync extends DIS
      */
     java.util.concurrent.Future<GetRecordsResult> getRecordsAsync(GetRecordsRequest getRecordsParam, AsyncHandler<GetRecordsResult> asyncHandler);
 
+    /**
+     * 创建流
+     * */
+    Future<CreateStreamResult> createStreamAsync(CreateStreamRequest createStreamRequest);
+    Future<CreateStreamResult> createStreamAsync(CreateStreamRequest createStreamRequest, AsyncHandler<CreateStreamResult> asyncHandler);
+    
+    /**
+     * 删除流
+     * */
+    Future<DeleteStreamResult> deleteStreamAsync(DeleteStreamRequest deleteStreamRequest);
+    Future<DeleteStreamResult> deleteStreamAsync(DeleteStreamRequest deleteStreamRequest, AsyncHandler<DeleteStreamResult> asyncHandler);
+    
+    /**
+     * 查询流清单
+     * */
+    Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest);
+    Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest, AsyncHandler<ListStreamsResult> asyncHandler);
+    
     /**
      * <p>
      * 查询指定通道详情。
@@ -275,7 +311,7 @@ public interface DISAsync extends DIS
      * @param listAppsRequest list app的参数
      * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息列表成功
      */
-    java.util.concurrent.Future<ListAppsResult> listAppAsync(ListAppsRequest listAppsRequest);
+    java.util.concurrent.Future<ListAppsResult> listAppsAsync(ListAppsRequest listAppsRequest);
 
     /**
      * <p>
@@ -286,7 +322,7 @@ public interface DISAsync extends DIS
      * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
      * @return 包含没有返回类型的 JAVA Future 对象，如果get不报错则表明获取APP信息列表成功
      */
-    java.util.concurrent.Future<ListAppsResult> listAppAsync(ListAppsRequest listAppsRequest, AsyncHandler<ListAppsResult> asyncHandler);
+    java.util.concurrent.Future<ListAppsResult> listAppsAsync(ListAppsRequest listAppsRequest, AsyncHandler<ListAppsResult> asyncHandler);
 
 
     /**

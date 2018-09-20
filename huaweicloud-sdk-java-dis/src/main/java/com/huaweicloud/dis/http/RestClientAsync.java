@@ -258,8 +258,8 @@ public class RestClientAsync extends AbstractRestClient{
                 .register("http", NoopIOSessionStrategy.INSTANCE)
                 .register("https", sslioSessionStrategy)
                 .build();
-        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(12000) // 设置请求响应超时时间
-                .setConnectTimeout(12000) // 设置请求连接超时时间
+        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(disConfig.getSocketTimeOut()) // 设置请求响应超时时间
+                .setConnectTimeout(disConfig.getConnectionTimeOut()) // 设置请求连接超时时间
                 .build();
 
         
@@ -273,8 +273,8 @@ public class RestClientAsync extends AbstractRestClient{
 		}
     	
     	PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(ioReactor, registry);
-    	connManager.setMaxTotal(1);
-    	connManager.setDefaultMaxPerRoute(1);
+    	connManager.setMaxTotal(disConfig.getMaxTotal());
+    	connManager.setDefaultMaxPerRoute(disConfig.getMaxPerRoute());
     	
     	CloseableHttpAsyncClient asyncClient = HttpAsyncClients.custom().setConnectionManager(connManager)
     			.setDefaultRequestConfig(requestConfig)

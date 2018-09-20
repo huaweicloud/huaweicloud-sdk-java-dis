@@ -330,7 +330,11 @@ public class DISClient extends AbstractDISClient implements DIS
     @Override
     public CreateStreamResult createStream(CreateStreamRequest createStreamRequest)
     {
-        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        return innerCreateStream(createStreamRequest);
+    }
+    
+    protected final CreateStreamResult innerCreateStream(CreateStreamRequest createStreamRequest) {
+    	Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
         request.setHttpMethod(HttpMethodName.POST);
         
         final String resourcePath =
@@ -345,7 +349,6 @@ public class DISClient extends AbstractDISClient implements DIS
         
         return result;
     }
-    
     
     @Override
     public DescribeStreamResult describeStream(DescribeStreamRequest describeStreamRequest)
@@ -398,6 +401,11 @@ public class DISClient extends AbstractDISClient implements DIS
     @Override
     public DeleteStreamResult deleteStream(DeleteStreamRequest deleteStreamRequest)
     {
+    	return innerDeleteStream(deleteStreamRequest);
+    }
+    
+    protected final DeleteStreamResult innerDeleteStream(DeleteStreamRequest deleteStreamRequest)
+    {
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
         request.setHttpMethod(HttpMethodName.DELETE);
         
@@ -417,6 +425,11 @@ public class DISClient extends AbstractDISClient implements DIS
     @Override
     public ListStreamsResult listStreams(ListStreamsRequest listStreamsRequest)
     {
+    	return innerListStreams(listStreamsRequest);
+    }
+ 
+    protected final ListStreamsResult innerListStreams(ListStreamsRequest listStreamsRequest)
+    {
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
         request.setHttpMethod(HttpMethodName.GET);
         
@@ -432,8 +445,6 @@ public class DISClient extends AbstractDISClient implements DIS
         ListStreamsResult result = request(listStreamsRequest, request, ListStreamsResult.class);
         return result;
     }
- 
-    
     
     
     
@@ -445,11 +456,6 @@ public class DISClient extends AbstractDISClient implements DIS
     @Override
     public PutRecordResult putRecord(PutRecordRequest putRecordParam)
     {
-        if (isEncrypt())
-        {
-            putRecordParam.setData(encrypt(putRecordParam.getData()));
-        }
-        
         return toPutRecordResult(putRecords(toPutRecordsRequest(putRecordParam)));
     }
 
