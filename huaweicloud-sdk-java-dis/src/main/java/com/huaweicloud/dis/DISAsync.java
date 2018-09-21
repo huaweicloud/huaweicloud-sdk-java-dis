@@ -20,20 +20,12 @@ import java.util.concurrent.Future;
 
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
-import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutFilesRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutFilesResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
@@ -215,7 +207,54 @@ public interface DISAsync extends DIS
      */
     java.util.concurrent.Future<CommitCheckpointResult> commitCheckpointAsync(
         CommitCheckpointRequest commitCheckpointRequest, AsyncHandler<CommitCheckpointResult> asyncHandler);
-    
+
+
+    /**
+     * <p>
+     * 刪除Checkpoint
+     * </p>
+     *
+     * @param deleteCheckpointRequest 刪除Checkpoint
+     * @return 包含提交Checkpoint结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<DeleteCheckpointResult> deleteCheckpointAsync(
+            DeleteCheckpointRequest deleteCheckpointRequest);
+
+    /**
+     * <p>
+     * 刪除Checkpoint
+     * </p>
+     *
+     * @param deleteCheckpointRequest 刪除Checkpoint
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含刪除Checkpoint结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<DeleteCheckpointResult> deleteCheckpointAsync(
+            DeleteCheckpointRequest deleteCheckpointRequest, AsyncHandler<DeleteCheckpointResult> asyncHandler);
+
+    /**
+     * <p>
+     * get stream consuming state
+     * </p>
+     *
+     * @param listStreamConsumingStateRequest
+     * @return 包含stream consuming state 结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(
+            ListStreamConsumingStateRequest listStreamConsumingStateRequest);
+
+    /**
+     * <p>
+     * get stream consuming state
+     * </p>
+     *
+     * @param listStreamConsumingStateRequest
+     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
+     * @return 包含stream consuming state 结果的 JAVA Future 对象
+     */
+    java.util.concurrent.Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(
+            ListStreamConsumingStateRequest listStreamConsumingStateRequest, AsyncHandler<ListStreamConsumingStateResult> asyncHandler);
+
     /**
      * <p>
      * 获取Checkpoint
