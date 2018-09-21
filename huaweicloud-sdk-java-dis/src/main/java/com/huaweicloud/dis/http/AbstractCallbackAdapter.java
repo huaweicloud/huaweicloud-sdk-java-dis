@@ -5,7 +5,7 @@ import com.huaweicloud.dis.core.handler.AsyncHandler;
 public abstract class AbstractCallbackAdapter<InnerT, T> implements AsyncHandler<InnerT>{
 	private AsyncHandler<T> innerAsyncHandler;
 	
-	private AbstractFutureAdapter<T, InnerT> futureAdapter;
+	protected AbstractFutureAdapter<T, InnerT> futureAdapter;
 	
 	public AbstractCallbackAdapter(AsyncHandler<T> innerAsyncHandler) {
 		this.innerAsyncHandler = innerAsyncHandler;

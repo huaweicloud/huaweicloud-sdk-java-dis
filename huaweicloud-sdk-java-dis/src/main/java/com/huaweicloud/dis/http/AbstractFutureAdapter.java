@@ -7,7 +7,7 @@ import java.util.concurrent.TimeoutException;
 
 public abstract class AbstractFutureAdapter<T, InnerT> implements Future<T>{
 	
-	protected Future<InnerT> innerFuture;
+	protected volatile Future<InnerT> innerFuture;
 	
 	protected T finalT;
 	

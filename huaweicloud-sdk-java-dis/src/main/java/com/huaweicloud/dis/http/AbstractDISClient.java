@@ -15,7 +15,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -391,10 +397,149 @@ public class AbstractDISClient {
 	private <T> Future<T> doRequestAsync(Request<HttpRequest> request, Object requestContent, String ak, String sk,
 			String region, Class<T> returnType, AsyncHandler<T> callback) {
 		String uri = buildURI(request);
+		request = SignUtil.sign(request, ak, sk, region);
 		
-        request = SignUtil.sign(request, ak, sk, region);
-        return RestClientAsync.getInstance(disConfig).exchangeAsync(uri
-            .toString(), request.getHttpMethod(), request.getHeaders(), requestContent, returnType, callback);
+		ConnectRetryFuture<T> connectRetryFuture = new ConnectRetryFuture<T>(request, ak, sk, requestContent, callback, uri, returnType);
+		
+		ConnectRetryCallback<T> connectRetryCallback = null;
+		if(callback != null){
+			connectRetryCallback = new ConnectRetryCallback<T>(callback, connectRetryFuture);
+		}
+		
+        Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri
+            .toString(), request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
+        
+        connectRetryFuture.setInnerFuture(restFuture);
+        
+        return connectRetryFuture;
+	}
+	
+	private static class ConnectRetryCallback<T> extends AbstractCallbackAdapter<T, T> implements AsyncHandler<T>{
+		public ConnectRetryCallback(AsyncHandler<T> innerAsyncHandler, AbstractFutureAdapter<T, T> futureAdapter) {
+			super(innerAsyncHandler, futureAdapter);
+		}
+
+		@Override
+		protected T toInnerT(T result) {
+			return result;
+		}
+		
+		@Override
+		public void onError(Exception exception) {
+			ConnectRetryFuture<T> connectRetryFuture = (ConnectRetryFuture<T>) futureAdapter;
+			try {
+				connectRetryFuture.retryHandle(exception);
+			} catch (Exception e) {
+				super.onError(e);
+			}
+		}
+		
+	}
+	
+	private class ConnectRetryFuture<T> extends AbstractFutureAdapter<T, T> implements Future<T> {
+		private AtomicInteger retryCount = new AtomicInteger();
+		
+		private ReentrantLock retryLock = new ReentrantLock();
+		private Condition condition = retryLock.newCondition();
+		
+		private volatile Request<HttpRequest> request;
+		private String ak;
+		private String sk;
+		private Object requestContent;
+		private AsyncHandler<T> callback;
+		private String uri;
+		private Class<T> returnType;
+
+		public ConnectRetryFuture(Request<HttpRequest> request,
+		        String ak,
+		        String sk,
+		        Object requestContent,
+		        AsyncHandler<T> callback,
+		        String uri,
+		        Class<T> returnType){
+		            super();
+		            this.request = request;
+		            this.ak = ak;
+		            this.sk = sk;
+		            this.requestContent = requestContent;
+		            this.uri = uri;
+		            this.returnType = returnType;
+		        }
+		
+		public void retryHandle(Throwable t) throws ExecutionException, InterruptedException{
+			String errorMsg = t.getMessage();
+            if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException)
+            {
+                errorMsg = ((RestClientResponseException)t).getRawStatusCode() + " : "
+                    + ((RestClientResponseException)t).getResponseBodyAsString();
+            }
+            
+            // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
+            if (!AbstractDISClient.this.isRetriableSendException(t) || retryCount.get() >= disConfig.getExceptionRetries())
+            {
+            	throw new DISClientException(errorMsg, t);
+            }
+            
+            if(!retryLock.tryLock()) {
+            	condition.await();
+            	return;
+            }
+            
+            try {
+            	retryCount.incrementAndGet();
+                
+                request.getHeaders().remove(SignerConstants.AUTHORIZATION);
+                request = SignUtil.sign(request, ak, sk, region);
+                
+                ConnectRetryCallback<T> connectRetryCallback = null;
+                if(callback != null){
+                	connectRetryCallback = new ConnectRetryCallback<T>(callback, this);
+                }
+                
+                Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri
+                    .toString(), request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
+                
+                this.setInnerFuture(restFuture);
+            }finally {
+            	condition.signalAll();
+            	retryLock.unlock();
+            }
+            
+        }
+
+		@Override
+		public T get() throws InterruptedException, ExecutionException {
+			try{
+				return super.get();
+			}catch(ExecutionException e) {
+				if(e.getCause() == null) {
+					throw e;
+				}
+				retryHandle(e.getCause());
+				return this.get();
+			}
+		}
+		
+		@Override
+		public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+			try{
+				return super.get(timeout, unit);
+			}catch(ExecutionException e) {
+				if(e.getCause() == null) {
+					throw e;
+				}				
+				retryHandle(e.getCause());
+				return this.get(timeout, unit);
+			}
+		}
+		
+		@Override
+		protected T toT(T innerT) {
+			return innerT;
+		}
+		
+		
+		
 	}
 	
 	private String buildURI(Request<HttpRequest> request){
