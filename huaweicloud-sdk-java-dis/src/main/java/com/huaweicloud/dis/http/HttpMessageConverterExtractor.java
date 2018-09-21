@@ -86,8 +86,7 @@ public class HttpMessageConverterExtractor<T> implements ResponseExtractor<T> {
 	@Override
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	public T extractData(HttpResponse response) throws IOException {
-	    long contentLength = response.getEntity().getContentLength();
-        if (contentLength == 0)
+        if (response.getEntity() == null || response.getEntity().getContentLength() == 0)
         {
             return null;
         }
