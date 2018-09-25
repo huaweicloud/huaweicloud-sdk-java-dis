@@ -11,6 +11,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
+import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,24 +40,6 @@ import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
-import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutFilesRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntryExtendedInfo;
-import com.huaweicloud.dis.iface.data.request.QueryFileState;
-import com.huaweicloud.dis.iface.data.request.StreamType;
-import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.FileUploadResult;
-import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutFilesResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
 import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
@@ -838,5 +824,37 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
                 .build());
         
         return requestAsync(listStreamsRequest, request, ListStreamsResult.class, asyncHandler);
-	}    
+	}
+
+    @Override
+    public Future<DeleteCheckpointResult> deleteCheckpointAsync(DeleteCheckpointRequest deleteCheckpointRequest) {
+        return deleteCheckpointAsync(deleteCheckpointRequest,null);
+    }
+
+    @Override
+    public Future<DeleteCheckpointResult> deleteCheckpointAsync(DeleteCheckpointRequest deleteCheckpointRequest, AsyncHandler<DeleteCheckpointResult> asyncHandler) {
+        Request<HttpRequest> request = buildRequest(HttpMethodName.DELETE, disConfig.getEndpoint(),
+                ResourcePathBuilder.standard()
+                        .withProjectId(disConfig.getProjectId())
+                        .withResource(new CheckPointResource(null))
+                        .build());
+        return requestAsync(deleteCheckpointRequest, request, DeleteCheckpointResult.class, asyncHandler);
+    }
+
+    @Override
+    public Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(ListStreamConsumingStateRequest listStreamConsumingStateRequest) {
+        return listStreamConsumingStateAsync(listStreamConsumingStateRequest,null);
+    }
+
+    @Override
+    public Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(ListStreamConsumingStateRequest listStreamConsumingStateRequest, AsyncHandler<ListStreamConsumingStateResult> asyncHandler) {
+        Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getEndpoint(),
+                ResourcePathBuilder.standard()
+                        .withProjectId(disConfig.getProjectId())
+                        .withResource(new AppsResource(listStreamConsumingStateRequest.getAppName()))
+                        .withResource(new StreamResource(listStreamConsumingStateRequest.getStreamName()))
+                        .build());
+        return requestAsync(listStreamConsumingStateRequest, request, ListStreamConsumingStateResult.class, asyncHandler);
+    }
+
 }
