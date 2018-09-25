@@ -2,3 +2,4 @@
 
 - Features
   * add describeApp and listApps features
+  * use NIO for DISClientAsync 
