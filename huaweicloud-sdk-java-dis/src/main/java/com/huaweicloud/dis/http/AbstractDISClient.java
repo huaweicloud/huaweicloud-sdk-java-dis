@@ -20,7 +20,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import javax.crypto.BadPaddingException;
@@ -403,11 +402,11 @@ public class AbstractDISClient {
 		
 		ConnectRetryCallback<T> connectRetryCallback = null;
 		if(callback != null){
-			connectRetryCallback = new ConnectRetryCallback<T>(callback, connectRetryFuture);
+			connectRetryCallback = new ConnectRetryCallback<T>(callback, connectRetryFuture, 0);
 		}
 		
-        Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri
-            .toString(), request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
+        Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri, 
+        		request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
         
         connectRetryFuture.setInnerFuture(restFuture);
         
@@ -415,8 +414,11 @@ public class AbstractDISClient {
 	}
 	
 	private static class ConnectRetryCallback<T> extends AbstractCallbackAdapter<T, T> implements AsyncHandler<T>{
-		public ConnectRetryCallback(AsyncHandler<T> innerAsyncHandler, AbstractFutureAdapter<T, T> futureAdapter) {
+		private final int retryIndex;
+		
+		public ConnectRetryCallback(AsyncHandler<T> innerAsyncHandler, AbstractFutureAdapter<T, T> futureAdapter, int retryIndex) {
 			super(innerAsyncHandler, futureAdapter);
+			this.retryIndex = retryIndex;
 		}
 
 		@Override
@@ -428,7 +430,7 @@ public class AbstractDISClient {
 		public void onError(Exception exception) {
 			ConnectRetryFuture<T> connectRetryFuture = (ConnectRetryFuture<T>) futureAdapter;
 			try {
-				connectRetryFuture.retryHandle(exception);
+				connectRetryFuture.retryHandle(exception, true, retryIndex);
 			} catch (Exception e) {
 				super.onError(e);
 			}
@@ -437,10 +439,9 @@ public class AbstractDISClient {
 	}
 	
 	private class ConnectRetryFuture<T> extends AbstractFutureAdapter<T, T> implements Future<T> {
+		//为了避免future.get和callback的各种并发情况下的重复重试，使用该锁和计数进行控制
 		private AtomicInteger retryCount = new AtomicInteger();
-		
 		private ReentrantLock retryLock = new ReentrantLock();
-		private Condition condition = retryLock.newCondition();
 		
 		private volatile Request<HttpRequest> request;
 		private String ak;
@@ -462,11 +463,12 @@ public class AbstractDISClient {
 		            this.ak = ak;
 		            this.sk = sk;
 		            this.requestContent = requestContent;
+		            this.callback = callback;
 		            this.uri = uri;
 		            this.returnType = returnType;
 		        }
 		
-		public void retryHandle(Throwable t) throws ExecutionException, InterruptedException{
+		public void retryHandle(Throwable t, boolean tryLock, int retryIndex) throws ExecutionException, InterruptedException{
 			String errorMsg = t.getMessage();
             if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException)
             {
@@ -475,33 +477,39 @@ public class AbstractDISClient {
             }
             
             // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
-            if (!AbstractDISClient.this.isRetriableSendException(t) || retryCount.get() >= disConfig.getExceptionRetries())
+            if (!AbstractDISClient.this.isRetriableSendException(t) || retryIndex >= disConfig.getExceptionRetries())
             {
             	throw new DISClientException(errorMsg, t);
             }
             
-            if(!retryLock.tryLock()) {
-            	condition.await();
-            	return;
+            if(tryLock) {
+            	if(!retryLock.tryLock()) {
+            		return;
+            	}
+            }else {
+            	retryLock.lock();
             }
             
             try {
-            	retryCount.incrementAndGet();
+            	if(retryIndex != retryCount.get()) {
+            		return;
+            	}
+            	
+            	int tmpRetryIndex = retryCount.incrementAndGet();
                 
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
                 request = SignUtil.sign(request, ak, sk, region);
                 
                 ConnectRetryCallback<T> connectRetryCallback = null;
                 if(callback != null){
-                	connectRetryCallback = new ConnectRetryCallback<T>(callback, this);
+                	connectRetryCallback = new ConnectRetryCallback<T>(callback, this, tmpRetryIndex);
                 }
                 
-                Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri
-                    .toString(), request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
+                Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri, 
+                		request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
                 
                 this.setInnerFuture(restFuture);
             }finally {
-            	condition.signalAll();
             	retryLock.unlock();
             }
             
@@ -509,37 +517,57 @@ public class AbstractDISClient {
 
 		@Override
 		public T get() throws InterruptedException, ExecutionException {
-			try{
-				return super.get();
-			}catch(ExecutionException e) {
-				if(e.getCause() == null) {
-					throw e;
-				}
-				retryHandle(e.getCause());
-				return this.get();
-			}
+			retryLock.lock();
+            
+            int getThreadRetryIndex = retryCount.get();
+            try
+            {
+                return super.get();
+            }
+            catch (ExecutionException e)
+            {
+                if (e.getCause() == null)
+                {
+                    throw e;
+                }
+                retryHandle(e.getCause(), false, getThreadRetryIndex);
+                return this.get();
+            }
+            finally
+            {
+                retryLock.unlock();
+            }
 		}
 		
 		@Override
 		public T get(long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
-			try{
-				return super.get(timeout, unit);
-			}catch(ExecutionException e) {
-				if(e.getCause() == null) {
-					throw e;
-				}				
-				retryHandle(e.getCause());
-				return this.get(timeout, unit);
-			}
+            retryLock.lock();
+            
+            int getThreadRetryIndex = retryCount.get();
+            try
+            {
+                return super.get(timeout, unit);
+            }
+            catch (ExecutionException e)
+            {
+                if (e.getCause() == null)
+                {
+                    throw e;
+                }
+                retryHandle(e.getCause(), false, getThreadRetryIndex);
+                return this.get(timeout, unit);
+            }
+            finally
+            {
+                retryLock.unlock();
+            }
+        
 		}
 		
 		@Override
 		protected T toT(T innerT) {
 			return innerT;
 		}
-		
-		
-		
 	}
 	
 	private String buildURI(Request<HttpRequest> request){
