@@ -39,7 +39,7 @@ public class PartitionConsumingState {
      * </p>
      */
     @JsonProperty("latest_offset")
-    private String latestOffset;
+    private Long latestOffset;
 
     /**
      * <p>
@@ -47,7 +47,7 @@ public class PartitionConsumingState {
      * </p>
      */
     @JsonProperty("earliest_offset")
-    private String earliestOffset;
+    private Long earliestOffset;
 
     @JsonProperty("checkpoint_type")
     private String checkpointType;
@@ -76,13 +76,6 @@ public class PartitionConsumingState {
         this.metadata = metadata;
     }
 
-    public String getLatestOffset() {
-        return latestOffset;
-    }
-
-    public void setLatestOffset(String latestOffset) {
-        this.latestOffset = latestOffset;
-    }
 
     public String getCheckpointType() {
         return checkpointType;
@@ -92,11 +85,19 @@ public class PartitionConsumingState {
         this.checkpointType = checkpointType;
     }
 
-    public String getEarliestOffset() {
+    public Long getLatestOffset() {
+        return latestOffset;
+    }
+
+    public void setLatestOffset(Long latestOffset) {
+        this.latestOffset = latestOffset;
+    }
+
+    public Long getEarliestOffset() {
         return earliestOffset;
     }
 
-    public void setEarliestOffset(String earliestOffset) {
+    public void setEarliestOffset(Long earliestOffset) {
         this.earliestOffset = earliestOffset;
     }
 }
