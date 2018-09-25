@@ -20,6 +20,14 @@ public class ListStreamConsumingStateResult {
 
     /**
      * <p>
+     * app名称。
+     * </p>
+     */
+    @JsonProperty("app_name")
+    private String appName;
+
+    /**
+     * <p>
      * partition consuming state list
      * </p>
      */
@@ -40,5 +48,13 @@ public class ListStreamConsumingStateResult {
 
     public void setPartitionConsumingStates(List<PartitionConsumingState> partitionConsumingStates) {
         this.partitionConsumingStates = partitionConsumingStates;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 }
