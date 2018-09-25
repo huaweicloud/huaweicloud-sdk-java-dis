@@ -2,5 +2,6 @@
 
 - Features
   * add describeApp and listApps features
+  * use NIO for DISClientAsync 
   * add delete checkpoint
   * add describe consumer state
