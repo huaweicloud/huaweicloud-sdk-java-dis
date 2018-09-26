@@ -17,8 +17,10 @@
 package com.huaweicloud.dis.iface.app;
 
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
+import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
 
 public interface IAppService
 {
@@ -53,4 +55,14 @@ public interface IAppService
      * @return app的描述信息列表
      */
     ListAppsResult listApps(ListAppsRequest listAppsRequest);
+
+    /**
+     * <p>
+     * 获取Stream consuming state。
+     * </p>
+     *
+     * @param listStreamConsumingStateRequest
+     * @return Stream consuming state
+     */
+    ListStreamConsumingStateResult listStreamConsumingState(ListStreamConsumingStateRequest listStreamConsumingStateRequest);
 }

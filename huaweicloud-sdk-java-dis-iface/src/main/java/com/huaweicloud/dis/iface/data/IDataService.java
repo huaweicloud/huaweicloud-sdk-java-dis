@@ -79,4 +79,13 @@ public interface IDataService
      * @return Checkpoint获取结果
      */
     GetCheckpointResult getCheckpoint(GetCheckpointRequest getCheckpointRequest);
+
+    /**
+     * <p>
+     * 刪除Checkpoint
+     * </p>
+     *
+     * @param deleteCheckpointRequest 刪除Checkpoint请求体
+     */
+    DeleteCheckpointResult deleteCheckpoint(DeleteCheckpointRequest deleteCheckpointRequest);
 }
