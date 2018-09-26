@@ -13,7 +13,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.client.AuthenticationStrategy;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
@@ -22,7 +21,6 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager;
@@ -205,11 +203,11 @@ public class RestClientAsync extends AbstractRestClient{
      */
     protected <T> Future<T> executeAsync(final HttpUriRequest request, ResponseExtractor<T> responseExtractor, AsyncHandler<T> callback)
     {
-    	HttpFutureAdapter<T> futureAdapter = new HttpFutureAdapter<>(responseExtractor);
+    	HttpFutureAdapter<T> futureAdapter = new HttpFutureAdapter<>(responseExtractor, errorHandler);
     	
     	HttpFutureCallbackAdapter<T> httpFutureCallbackAdapter = null;
     	if(callback != null) {
-    		httpFutureCallbackAdapter = new HttpFutureCallbackAdapter<>(callback, responseExtractor, futureAdapter);
+    		httpFutureCallbackAdapter = new HttpFutureCallbackAdapter<>(callback, responseExtractor, futureAdapter, errorHandler);
     	}
     	
     	Future<HttpResponse> httpFuture = httpAsyncClient.execute(request, httpFutureCallbackAdapter);

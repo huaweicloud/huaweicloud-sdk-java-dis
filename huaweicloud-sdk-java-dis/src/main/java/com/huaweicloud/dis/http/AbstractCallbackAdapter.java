@@ -24,12 +24,18 @@ public abstract class AbstractCallbackAdapter<InnerT, T> implements AsyncHandler
 	@Override
 	public void onSuccess(InnerT result) {
 		T t = null;
-		if(futureAdapter != null) {
-			t = futureAdapter.getT(result);
-		}else {
-			t = toInnerT(result);
+		try {
+			if(futureAdapter != null) {
+				t = futureAdapter.getT(result);
+			}else {
+				t = toInnerT(result);
+			}
+		}catch(Exception e) {
+			this.onError(e);
+			return;
 		}
-		innerAsyncHandler.onSuccess(t);
+		
+		innerAsyncHandler.onSuccess(t);	
 	}
 
 	protected abstract T toInnerT(InnerT result);
