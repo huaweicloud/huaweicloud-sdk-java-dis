@@ -622,7 +622,7 @@ public class DISClient extends AbstractDISClient implements DIS
                 .build();
         request.setResourcePath(resourcePath);
         setEndpoint(request, disConfig.getManagerEndpoint());
-        return request(null, request, ListStreamConsumingStateResult.class);
+        return request(listStreamConsumingStateRequest, request, ListStreamConsumingStateResult.class);
     }
 
 }
