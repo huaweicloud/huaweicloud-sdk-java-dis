@@ -95,6 +95,7 @@ public class DISClient extends AbstractDISClient implements DIS
         
         int retryCount = -1;
         int currentFailed = 0;
+        int noRetryRecordsCount = 0;
         ExponentialBackOff backOff = null;
         try
         {
@@ -182,11 +183,19 @@ public class DISClient extends AbstractDISClient implements DIS
                         // 获取重试数据在原始数据中的下标位置
                         int originalIndex = retryIndex == null ? i : retryIndex[i];
                         PutRecordsResultEntry putRecordsResultEntry = putRecordsResult.getRecords().get(i);
-                        // 对所有异常进行重试 && "DIS.4303".equals(putRecordsResultEntry.getErrorCode())
+
                         if (!StringUtils.isNullOrEmpty(putRecordsResultEntry.getErrorCode()))
                         {
-                            retryIndexTemp.add(originalIndex);
-                            retryPutRecordsRequest.getRecords().add(putRecordsParam.getRecords().get(originalIndex));
+                            // 只对指定异常(如流控与服务端内核异常)进行重试
+                            if (isRecordsRetriableErrorCode(putRecordsResultEntry.getErrorCode()))
+                            {
+                                retryIndexTemp.add(originalIndex);
+                                retryPutRecordsRequest.getRecords().add(putRecordsParam.getRecords().get(originalIndex));
+                            }
+                            else
+                            {
+                                noRetryRecordsCount++;
+                            }
                         }
                         putRecordsResultEntryList[originalIndex] = putRecordsResultEntry;
                     }
@@ -211,7 +220,7 @@ public class DISClient extends AbstractDISClient implements DIS
         }
         else
         {
-            putRecordsResult.setFailedRecordCount(new AtomicInteger(retryIndex.length));
+            putRecordsResult.setFailedRecordCount(new AtomicInteger(retryIndex.length + noRetryRecordsCount));
             putRecordsResult.setRecords(Arrays.asList(putRecordsResultEntryList));
         }
         
@@ -624,5 +633,4 @@ public class DISClient extends AbstractDISClient implements DIS
         setEndpoint(request, disConfig.getManagerEndpoint());
         return request(null, request, ListStreamConsumingStateResult.class);
     }
-
 }

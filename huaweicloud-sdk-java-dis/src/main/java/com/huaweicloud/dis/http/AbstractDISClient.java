@@ -3,6 +3,7 @@ package com.huaweicloud.dis.http;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
@@ -477,7 +478,7 @@ public class AbstractDISClient {
             }
             
             // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
-            if (!AbstractDISClient.this.isRetriableSendException(t) || retryIndex >= disConfig.getExceptionRetries())
+            if (!AbstractDISClient.this.isRetriableSendException(t, request) || retryIndex >= disConfig.getExceptionRetries())
             {
             	throw new DISClientException(errorMsg, t);
             }
@@ -631,7 +632,7 @@ public class AbstractDISClient {
                 }
                 
                 // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
-                if (!isRetriableSendException(t) || retryCount >= disConfig.getExceptionRetries())
+                if (!isRetriableSendException(t, request) || retryCount >= disConfig.getExceptionRetries())
                 {
                     throw new DISClientException(errorMsg, t);
                 }
@@ -651,18 +652,19 @@ public class AbstractDISClient {
 	 *
 	 * @param t
 	 *            throwable exception
-	 * @return {@code true} retriable {@code false} not retriable
+	 * @param request
+     * @return {@code true} retriable {@code false} not retriable
 	 */
-    protected boolean isRetriableSendException(Throwable t)
+    protected boolean isRetriableSendException(Throwable t, Request<HttpRequest> request)
     {
         // 对于连接超时/网络闪断/Socket异常/服务端5xx错误进行重试
         return t instanceof ConnectTimeoutException || t instanceof NoHttpResponseException
-            || t instanceof SocketException || t instanceof SSLException
-            || (t instanceof RestClientResponseException
-                && ((RestClientResponseException)t).getRawStatusCode() / 100 == 5)
-            || (t.getCause() != null && isRetriableSendException(t.getCause()));
+                || t instanceof SocketException || t instanceof SSLException
+                || (t instanceof SocketTimeoutException && request.getHttpMethod() == HttpMethodName.GET)
+                || (t instanceof RestClientResponseException && ((RestClientResponseException) t).getRawStatusCode() / 100 == 5)
+                || (t.getCause() != null && isRetriableSendException(t.getCause(), request));
     }
-    
+
     protected void check()
     {
         if (credentials == null)
@@ -770,5 +772,17 @@ public class AbstractDISClient {
                     + "], error [" + e.toString() + "]", e);
             }
         }
+    }
+
+    protected boolean isRecordsRetriableErrorCode(String errorCode)
+    {
+        for (String item : disConfig.getRecordsRetriesErrorCode())
+        {
+            if (errorCode.contains(item))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }
