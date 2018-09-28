@@ -10,6 +10,8 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ListStreamConsumingStateResult {
 
+    @JsonProperty("has_more")
+    private Boolean hasMore;
     /**
      * <p>
      * 流名称。
@@ -56,5 +58,13 @@ public class ListStreamConsumingStateResult {
 
     public void setAppName(String appName) {
         this.appName = appName;
+    }
+
+    public Boolean getHasMore() {
+        return hasMore;
+    }
+
+    public void setHasMore(Boolean hasMore) {
+        this.hasMore = hasMore;
     }
 }
