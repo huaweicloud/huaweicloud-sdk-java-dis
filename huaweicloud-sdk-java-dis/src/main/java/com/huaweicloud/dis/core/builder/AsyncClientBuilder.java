@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 import com.huaweicloud.dis.core.AsyncClientParams;
 
 
-public abstract class AsyncClientBuilder<Subclass extends AsyncClientBuilder, TypeToBuild> extends ClientBuilder<Subclass, TypeToBuild>
+public abstract class AsyncClientBuilder<Subclass extends AsyncClientBuilder, TypeToBuild> extends AbstractDISClientBuilder<Subclass, TypeToBuild>
 {
     
     protected ExecutorFactory executorFactory;

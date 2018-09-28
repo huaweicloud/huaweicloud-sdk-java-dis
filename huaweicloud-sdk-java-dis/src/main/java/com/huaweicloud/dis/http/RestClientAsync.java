@@ -47,7 +47,7 @@ public class RestClientAsync extends AbstractRestClient{
     
     private static RestClientAsync restAsyncClient;
     
-    private static CloseableHttpAsyncClient httpAsyncClient;
+    private CloseableHttpAsyncClient httpAsyncClient;
     
     
     private RestClientAsync(DISConfig disConfig)
@@ -261,7 +261,7 @@ public class RestClientAsync extends AbstractRestClient{
                 .build();
 
         
-    	IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setIoThreadCount(Runtime.getRuntime().availableProcessors())
+    	IOReactorConfig ioReactorConfig = IOReactorConfig.custom().setIoThreadCount(disConfig.getNIOIOThreads())
     			.setSoKeepAlive(true).build();
     	ConnectingIOReactor ioReactor = null;
     	try {

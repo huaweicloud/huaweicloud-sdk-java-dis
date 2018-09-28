@@ -17,64 +17,17 @@
 package com.huaweicloud.dis;
 
 import java.util.Enumeration;
-import java.util.Properties;
 
-import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.core.ClientParams;
 import com.huaweicloud.dis.core.builder.SyncClientBuilder;
+import com.huaweicloud.dis.core.util.StringUtils;
 
 /**
  * Fluent builder for {@link com.huaweicloud.dis.DIS}.
  */
 public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, DIS>
 {
-    private Properties extendProperties = new Properties();
     
-    private boolean dataEncryptEnabled;
-    
-    private boolean defaultClientCertAuthEnabled;
-    
-    private boolean dataCompressEnabled;
-    
-    public final DISClientBuilder withProperty(String key, String value)
-    {
-        extendProperties.put(key, value);
-        return getSubclass();
-    }
-    
-    public final DISClientBuilder withDataEncryptEnabled(boolean dataEncryptEnabled)
-    {
-        this.dataEncryptEnabled = dataEncryptEnabled;
-        return getSubclass();
-    }
-    
-    public final DISClientBuilder withDefaultClientCertAuthEnabled(boolean defaultClientCertAuthEnabled)
-    {
-        this.defaultClientCertAuthEnabled = defaultClientCertAuthEnabled;
-        return getSubclass();
-    }
-    
-    public final DISClientBuilder withDataCompressEnabled(boolean dataCompressEnabled)
-    {
-        this.dataCompressEnabled = dataCompressEnabled;
-        return getSubclass();
-    }
-    
-    public final boolean isDataEncryptEnabled()
-    {
-        return this.dataEncryptEnabled;
-    }
-
-    public final boolean isDefaultClientCertAuthEnabled()
-    {
-        return this.defaultClientCertAuthEnabled;
-    }
-    
-    public final boolean isDataCompressEnabled()
-    {
-        return this.dataCompressEnabled;
-    }
-
     /**
      * @return Create new instance of builder with all defaults set.
      */
@@ -95,37 +48,6 @@ public final class DISClientBuilder extends SyncClientBuilder<DISClientBuilder, 
     public DIS build()
     {
         return build(new DISConfig());
-    }
-    
-    private DISConfig configDISConfig(DISConfig disConfig){
-        if (null != credentials)
-        {
-            disConfig.setCredentials(credentials);
-        }
-        if (!StringUtils.isNullOrEmpty(ak))
-            disConfig.setAK(ak);
-        if (!StringUtils.isNullOrEmpty(sk))
-            disConfig.setSK(sk);
-        if (!StringUtils.isNullOrEmpty(projectId))
-            disConfig.setProjectId(projectId);
-        if (!StringUtils.isNullOrEmpty(region))
-            disConfig.setRegion(region);
-        if (!StringUtils.isNullOrEmpty(endpoint))
-            disConfig.setEndpoint(endpoint);
-        disConfig.setDataEncryptEnabled(dataEncryptEnabled);
-        disConfig.setDefaultClientCertAuthEnabled(defaultClientCertAuthEnabled);
-        disConfig.setDataCompressEnabled(dataCompressEnabled);
-        
-        Enumeration iter = extendProperties.propertyNames();// 得到配置文件的名字
-        while (iter.hasMoreElements())
-        {
-            String strKey = (String)iter.nextElement();
-            String strValue = extendProperties.getProperty(strKey);
-            
-            disConfig.set(strKey, strValue);
-        }
-        
-        return disConfig;
     }
     
 	/**

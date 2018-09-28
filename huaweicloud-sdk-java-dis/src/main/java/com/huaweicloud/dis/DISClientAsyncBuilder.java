@@ -19,7 +19,6 @@ package com.huaweicloud.dis;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.core.AsyncClientParams;
 import com.huaweicloud.dis.core.builder.AsyncClientBuilder;
 import com.huaweicloud.dis.core.builder.ExecutorFactory;
@@ -30,42 +29,6 @@ import com.huaweicloud.dis.core.builder.ExecutorFactory;
  */
 public class DISClientAsyncBuilder extends AsyncClientBuilder<DISClientAsyncBuilder, DISAsync>
 {
-    
-    private boolean dataEncryptEnabled;
-    
-    private boolean defaultClientCertAuthEnabled;
-    
-    public final DISClientAsyncBuilder withDataEncryptEnabled(boolean dataEncryptEnabled)
-    {
-        setDataEncryptEnabled(dataEncryptEnabled);
-        return getSubclass();
-    }
-    
-    public final DISClientAsyncBuilder withDefaultClientCertAuthEnabled(boolean defaultClientCertAuthEnabled)
-    {
-        setDefaultClientCertAuthEnabled(defaultClientCertAuthEnabled);
-        return getSubclass();
-    }
-    
-    public final boolean isDataEncryptEnabled()
-    {
-        return dataEncryptEnabled;
-    }
-
-    public final void setDataEncryptEnabled(boolean dataEncryptEnabled)
-    {
-        this.dataEncryptEnabled = dataEncryptEnabled;
-    }
-    
-    public final boolean isDefaultClientCertAuthEnabled()
-    {
-        return defaultClientCertAuthEnabled;
-    }
-
-    public final void setDefaultClientCertAuthEnabled(boolean defaultClientCertAuthEnabled)
-    {
-        this.defaultClientCertAuthEnabled = defaultClientCertAuthEnabled;
-    }
 
     /**
      * @return Create new instance of builder with all defaults set.
@@ -83,29 +46,7 @@ public class DISClientAsyncBuilder extends AsyncClientBuilder<DISClientAsyncBuil
     
     @Override
     public DISAsync build() {
-        DISConfig disConfig = new DISConfig();
-        
-        if (null != credentials)
-        {
-            disConfig.setCredentials(credentials);
-        }
-        if (!StringUtils.isNullOrEmpty(ak))
-            disConfig.setAK(ak);
-        if (!StringUtils.isNullOrEmpty(sk))
-            disConfig.setSK(sk);
-        if (!StringUtils.isNullOrEmpty(projectId))
-            disConfig.setProjectId(projectId);
-        if (!StringUtils.isNullOrEmpty(region))
-            disConfig.setRegion(region);
-        if (!StringUtils.isNullOrEmpty(endpoint))
-            disConfig.setEndpoint(endpoint);
-        disConfig.setDataEncryptEnabled(dataEncryptEnabled);
-        disConfig.setDefaultClientCertAuthEnabled(defaultClientCertAuthEnabled);
-        
-        if(executorFactory == null){
-            executorFactory = new DefaultExecutorFactory();
-        }
-        return new DISClientAsync(disConfig, executorFactory.newExecutor());
+    	return build(null);
     }
 
 	/**
@@ -119,8 +60,11 @@ public class DISClientAsyncBuilder extends AsyncClientBuilder<DISClientAsyncBuil
     @Override
     protected DISAsync build(AsyncClientParams asyncClientParams)
     {
-        // TODO 待完善
-        return null;
+    	DISConfig disConfig = configDISConfig(null);
+    	if(executorFactory == null){
+            executorFactory = new DefaultExecutorFactory();
+        }
+    	return new DISClientAsync(disConfig, executorFactory.newExecutor());
     }
     
     private static class DefaultExecutorFactory implements ExecutorFactory{

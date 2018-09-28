@@ -99,6 +99,8 @@ public class DISConfig extends Properties implements ClientParams
 
     public static final String PROPERTY_PRODUCER_RECORDS_RETRIABLE_ERROR_CODE = "records.retriable.error.code";
 
+    public static final String PROPERTY_NIO_IO_THREADS = "nio.io.threads";
+    
     public String[] producerRecordsRetriableErrorCode;
 
     private Credentials credentials;
@@ -225,6 +227,10 @@ public class DISConfig extends Properties implements ClientParams
     public String[] getRecordsRetriesErrorCode()
     {
         return producerRecordsRetriableErrorCode;
+    }
+    
+    public int getNIOIOThreads() {
+    	return getInt(PROPERTY_NIO_IO_THREADS, Runtime.getRuntime().availableProcessors());
     }
 
     /**
@@ -544,6 +550,10 @@ public class DISConfig extends Properties implements ClientParams
     public DISConfig setRecordsRetries(int retries)
     {
         return set(PROPERTY_PRODUCER_RECORDS_RETRIES, String.valueOf(retries));
+    }
+    
+    public DISConfig setNIOIOThreads(int ioThreads) {
+    	return set(PROPERTY_NIO_IO_THREADS, String.valueOf(ioThreads));
     }
     
     public DISConfig set(String key, String value){

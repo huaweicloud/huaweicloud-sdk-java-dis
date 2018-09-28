@@ -18,7 +18,7 @@ package com.huaweicloud.dis.core.builder;
 
 import com.huaweicloud.dis.core.ClientParams;
 
-public abstract class SyncClientBuilder<Subclass extends SyncClientBuilder, TypeToBuild> extends ClientBuilder<Subclass, TypeToBuild>
+public abstract class SyncClientBuilder<Subclass extends SyncClientBuilder, TypeToBuild> extends AbstractDISClientBuilder<Subclass, TypeToBuild>
 {
     
 	/**
