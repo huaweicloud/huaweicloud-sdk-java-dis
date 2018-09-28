@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.huaweicloud.dis.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -95,7 +96,11 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_BACK_OFF_MAX_INTERVAL_MS = "backoff.max.interval.ms";
 
     public static final String PROPERTY_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION = "max.in.flight.requests.per.connection";
-    
+
+    public static final String PROPERTY_PRODUCER_RECORDS_RETRIABLE_ERROR_CODE = "records.retriable.error.code";
+
+    public String[] producerRecordsRetriableErrorCode;
+
     private Credentials credentials;
     
     public Credentials getCredentials()
@@ -212,6 +217,14 @@ public class DISConfig extends Properties implements ClientParams
             return Integer.MAX_VALUE;
         }
         return recordsRetry;
+    }
+
+    /**
+     * @return 记录重试的错误码集合(多个之间以,分隔)
+     */
+    public String[] getRecordsRetriesErrorCode()
+    {
+        return producerRecordsRetriableErrorCode;
     }
 
     /**
@@ -457,7 +470,23 @@ public class DISConfig extends Properties implements ClientParams
                 LOG.warn("load config from default file {} failed. {}", FILE_NAME, e.getMessage());
             }
         }
-        
+
+        // 默认只对流控与服务端错误重试
+        String recordsRetriableErrorCode = disConfig.get(PROPERTY_PRODUCER_RECORDS_RETRIABLE_ERROR_CODE, "DIS.4303,DIS.5");
+        if (StringUtils.isNullOrEmpty(recordsRetriableErrorCode))
+        {
+            disConfig.producerRecordsRetriableErrorCode = new String[0];
+        }
+        else
+        {
+            String[] items = recordsRetriableErrorCode.split(",");
+            for (int i = 0; i < items.length; i++)
+            {
+                items[i] = items[i].trim();
+            }
+            disConfig.producerRecordsRetriableErrorCode = items;
+        }
+
         return disConfig;
     }
 
@@ -512,7 +541,7 @@ public class DISConfig extends Properties implements ClientParams
         return set(PROPERTY_SECURITY_TOKEN, securityToken);
     }
 
-    public DISConfig setRetries(int retries)
+    public DISConfig setRecordsRetries(int retries)
     {
         return set(PROPERTY_PRODUCER_RECORDS_RETRIES, String.valueOf(retries));
     }

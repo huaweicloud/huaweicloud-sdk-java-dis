@@ -1,7 +1,5 @@
 package com.huaweicloud.dis.http;
 
-import java.io.IOException;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.concurrent.FutureCallback;
 
@@ -10,26 +8,35 @@ import com.huaweicloud.dis.core.handler.AsyncHandler;
 public class HttpFutureCallbackAdapter<T> implements FutureCallback<HttpResponse>{
 
 	private AsyncHandler<T> asyncHandler;
-	private ResponseExtractor<T> responseExtractor;
 	private HttpFutureAdapter<T> httpFutureAdapter;
 	
-	public HttpFutureCallbackAdapter(AsyncHandler<T> asyncHandler, ResponseExtractor<T> responseExtractor, HttpFutureAdapter<T> httpFutureAdapter) {
+	private ResponseExtractor<T> responseExtractor;
+	private ResponseErrorHandler errorHandler;
+	
+	public HttpFutureCallbackAdapter(AsyncHandler<T> asyncHandler, ResponseExtractor<T> responseExtractor, HttpFutureAdapter<T> httpFutureAdapter, ResponseErrorHandler errorHandler) {
 		this.asyncHandler = asyncHandler;
 		this.responseExtractor = responseExtractor;
 		this.httpFutureAdapter = httpFutureAdapter;
+		this.errorHandler = errorHandler;
 	}
 	
 	@Override
 	public void completed(HttpResponse result) {
 		T t = null;
-		if(httpFutureAdapter != null) {
-			t = httpFutureAdapter.getT(result);
-		}else {
-			try {
+		try {
+			if (errorHandler.hasError(result))
+	        {
+	            errorHandler.handleError(result);
+	        }
+			
+			if(httpFutureAdapter != null) {
+				t = httpFutureAdapter.getT(result);
+			}else {
 				t = responseExtractor.extractData(result);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
 			}
+		}catch(Exception e) {
+			failed(e);
+			return;
 		}
 		
 		asyncHandler.onSuccess(t);
