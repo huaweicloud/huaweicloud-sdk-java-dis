@@ -115,18 +115,6 @@ public class AbstractDISClient {
         return request;
     }
     
-//    protected <T> T request1(Object param, HttpMethodName httpMethod, String endpoint, String resourcePath, Class<T> clazz)
-//    {
-//        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
-//        request.setHttpMethod(httpMethod);
-//        
-//        request.setResourcePath(resourcePath);
-//        setEndpoint(request, endpoint);
-//        
-//        T result = request(param, request, clazz);
-//        return result;
-//    }
-    
     /**
      * Decorate {@link PutRecordsRequest} before sending HTTP Request.
      * 

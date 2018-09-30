@@ -1,7 +1,6 @@
 package com.huaweicloud.dis;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.AbstractDISClient;
@@ -10,8 +9,20 @@ import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.*;
-import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
+import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
+import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
 import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
@@ -28,12 +39,14 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public AbstractDISClientAsync(DISConfig disConfig) {
 		super(disConfig);
 	}
-
+	
 	@Override
 	public PutRecordsResult putRecords(PutRecordsRequest putRecordsParam) {
 		try {
 			return putRecordsAsync(putRecordsParam).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -42,7 +55,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public GetPartitionCursorResult getPartitionCursor(GetPartitionCursorRequest getShardIteratorParam) {
 		try {
 			return getPartitionCursorAsync(getShardIteratorParam).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -51,7 +66,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public GetRecordsResult getRecords(GetRecordsRequest getRecordsParam) {
 		try {
 			return getRecordsAsync(getRecordsParam).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -60,7 +77,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public CommitCheckpointResult commitCheckpoint(CommitCheckpointRequest commitCheckpointRequest) {
 		try {
 			return commitCheckpointAsync(commitCheckpointRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -69,7 +88,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public GetCheckpointResult getCheckpoint(GetCheckpointRequest getCheckpointRequest) {
 		try {
 			return getCheckpointAsync(getCheckpointRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -78,7 +99,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public CreateStreamResult createStream(CreateStreamRequest createStreamRequest) {
 		try {
 			return createStreamAsync(createStreamRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -87,7 +110,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public DeleteStreamResult deleteStream(DeleteStreamRequest deleteStreamRequest) {
 		try {
 			return deleteStreamAsync(deleteStreamRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -96,7 +121,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public ListStreamsResult listStreams(ListStreamsRequest listStreamsRequest) {
 		try {
 			return listStreamsAsync(listStreamsRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -105,7 +132,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public DescribeStreamResult describeStream(DescribeStreamRequest describeStreamRequest) {
 		try {
 			return describeStreamAsync(describeStreamRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -114,7 +143,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public UpdatePartitionCountResult updatePartitionCount(UpdatePartitionCountRequest updatePartitionCountRequest) {
 		try {
 			return updatePartitionCountAsync(updatePartitionCountRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -123,7 +154,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public void createApp(String appName) {
 		try {
 			createAppAsync(appName).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -132,7 +165,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public void deleteApp(String appName) {
 		try {
 			deleteAppAsync(appName).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -141,7 +176,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public DescribeAppResult describeApp(String appName) {
 		try {
 			return describeAppAsync(appName).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -150,7 +187,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public ListAppsResult listApps(ListAppsRequest listAppsRequest) {
 		try {
 			return listAppsAsync(listAppsRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -159,7 +198,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public PutRecordResult putRecord(PutRecordRequest putRecordParam) {
 		try {
 			return toPutRecordResult(putRecordsAsync(toPutRecordsRequest(putRecordParam)).get());
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -168,7 +209,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public DeleteCheckpointResult deleteCheckpoint(DeleteCheckpointRequest deleteCheckpointRequest) {
 		try {
 			return deleteCheckpointAsync(deleteCheckpointRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
@@ -177,7 +220,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public ListStreamConsumingStateResult listStreamConsumingState(ListStreamConsumingStateRequest listStreamConsumingStateRequest) {
 		try {
 			return listStreamConsumingStateAsync(listStreamConsumingStateRequest).get();
-		} catch (InterruptedException | ExecutionException e) {
+		} catch (ExecutionException e) {			
+			throw new DISClientException(e.getCause() == null ? e : e.getCause());
+		}catch(InterruptedException e) {
 			throw new DISClientException(e);
 		}
 	}
