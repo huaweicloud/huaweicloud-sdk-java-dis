@@ -47,6 +47,13 @@ import java.util.*;
  */
 public abstract class AbstractSigner implements Signer {
 
+    private String hmacSha256Provider;
+
+    protected void setHmacSha256Provider(String provider)
+    {
+        this.hmacSha256Provider = provider;
+    }
+
     /**
      * Computes an RFC 2104-compliant HMAC signature and returns the result as a
      * Base64 encoded string.
@@ -79,7 +86,15 @@ public abstract class AbstractSigner implements Signer {
 
     protected byte[] sign(byte[] data, byte[] key, SigningAlgorithm algorithm) throws ClientException {
         try {
-            Mac mac = Mac.getInstance(algorithm.toString());
+            Mac mac;
+            if(hmacSha256Provider == null || hmacSha256Provider.isEmpty())
+            {
+                mac = Mac.getInstance(algorithm.toString());
+            }
+            else
+            {
+                mac = Mac.getInstance(algorithm.toString(),hmacSha256Provider);
+            }
             mac.init(new SecretKeySpec(key, algorithm.toString()));
             return mac.doFinal(data);
         } catch (Exception e) {

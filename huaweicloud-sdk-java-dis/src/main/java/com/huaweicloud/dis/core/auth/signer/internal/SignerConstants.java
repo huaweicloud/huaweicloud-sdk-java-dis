@@ -48,4 +48,6 @@ public final class SignerConstants {
     public static final String AUTHORIZATION = "Authorization";
 
     public static final String HOST = "Host";
+
+    public static final String HMAC_SHA256_PROVIDER = "HmacSHA256.provider";
 }
