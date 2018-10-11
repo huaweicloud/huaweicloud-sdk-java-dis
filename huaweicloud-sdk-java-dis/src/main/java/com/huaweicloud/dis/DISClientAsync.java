@@ -5,16 +5,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
-import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.*;
-import com.huaweicloud.dis.iface.data.response.*;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,30 @@ import com.huaweicloud.dis.http.AbstractFutureAdapter;
 import com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils;
 import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
+import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
+import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
+import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutFilesRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntryExtendedInfo;
+import com.huaweicloud.dis.iface.data.request.QueryFileState;
+import com.huaweicloud.dis.iface.data.request.StreamType;
+import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.FileUploadResult;
+import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
+import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutFilesResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
 import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
@@ -202,7 +225,24 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
                 .withResource(new RecordResource(null))
                 .build());
 		
-        if(BodySerializeType.protobuf.equals(disConfig.getBodySerializeType())){            
+    	PutRecordsTrafficLimitRetryFuture trafficLimitRetryFuture = new PutRecordsTrafficLimitRetryFuture(request, asyncHandler, putRecordsParam);
+    	
+		PutRecordsTrafficLimitRetryCallback trafficLimitRetryCallback = null;
+    	if(asyncHandler != null) {
+    		trafficLimitRetryCallback = new PutRecordsTrafficLimitRetryCallback(asyncHandler, trafficLimitRetryFuture, 0);
+    	}
+    	
+    	Future<PutRecordsResult> putRecordsFuture = innerPutRecordsAsync(putRecordsParam, request, trafficLimitRetryCallback);
+    	trafficLimitRetryFuture.setInnerFuture(putRecordsFuture);
+    	
+    	return trafficLimitRetryFuture;
+	}
+	
+	private Future<PutRecordsResult> innerPutRecordsAsync(PutRecordsRequest putRecordsParam,
+			Request<HttpRequest> request, PutRecordsTrafficLimitRetryCallback trafficLimitRetryCallback){
+    	
+    	if(BodySerializeType.protobuf.equals(disConfig.getBodySerializeType())){
+    		request.getHeaders().remove("Content-Type");
             request.addHeader("Content-Type", "application/x-protobuf; charset=utf-8");
             
             com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest protoRequest = ProtobufUtils.toProtobufPutRecordsRequest(putRecordsParam);
@@ -210,8 +250,8 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
             PutRecordsFuture putRecordsFuture = new PutRecordsFuture();
             
             PutRecordsCallback putRecordsCallback = null;
-            if(asyncHandler != null) {
-            	putRecordsCallback = new PutRecordsCallback(asyncHandler, putRecordsFuture);
+            if(trafficLimitRetryCallback != null) {
+            	putRecordsCallback = new PutRecordsCallback(trafficLimitRetryCallback, putRecordsFuture);
             }
             
             Future<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult> putRecordsProtobufFuture = requestAsync(protoRequest.toByteArray(), request, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult.class, putRecordsCallback);            
@@ -219,10 +259,246 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
             
             return putRecordsFuture;
         }else{
-            return requestAsync(putRecordsParam, request, PutRecordsResult.class, asyncHandler);
+            Future<PutRecordsResult> putRecordsFuture = requestAsync(putRecordsParam, request, PutRecordsResult.class, trafficLimitRetryCallback);
+            return putRecordsFuture;
         }
+    	
 	}
 
+	private static class PutRecordsTrafficLimitRetryCallback extends AbstractCallbackAdapter<PutRecordsResult, PutRecordsResult> implements AsyncHandler<PutRecordsResult>{
+		private final int retryIndex;
+		
+		public PutRecordsTrafficLimitRetryCallback(AsyncHandler<PutRecordsResult> innerAsyncHandler,
+				AbstractFutureAdapter<PutRecordsResult, PutRecordsResult> futureAdapter, int retryIndex) {
+			super(innerAsyncHandler, futureAdapter);
+			this.retryIndex = retryIndex;
+		}
+
+		@Override
+		public void onSuccess(PutRecordsResult result) {
+			PutRecordsTrafficLimitRetryFuture future = (PutRecordsTrafficLimitRetryFuture) this.futureAdapter;
+			
+			try {
+				PutRecordsResult mergedResult = future.mergeRetryHandle(result, true, retryIndex);
+				if(mergedResult == null) {
+					return;
+				}else {
+					super.onSuccess(mergedResult);
+				}	
+			}catch(Exception e) {
+				onError(e);
+			}
+			
+		}
+		
+		@Override
+		public void onError(Exception exception) {
+			PutRecordsTrafficLimitRetryFuture future = (PutRecordsTrafficLimitRetryFuture) this.futureAdapter;
+			
+			PutRecordsResult exRes = future.mergeException(exception, retryIndex);
+			if(exRes == null) {
+				super.onError(exception);
+			}else {
+				super.onSuccess(exRes);
+			}
+		}
+		
+		@Override
+		protected PutRecordsResult toInnerT(PutRecordsResult result) {
+			return result;
+		}
+	}
+	
+	private class PutRecordsTrafficLimitRetryFuture extends AbstractFutureAdapter<PutRecordsResult, PutRecordsResult> implements Future<PutRecordsResult> {
+		//为了避免future.get和callback的各种并发情况下的重复重试，使用该锁和计数进行控制
+		private AtomicInteger retryCount = new AtomicInteger();
+		private ReentrantLock retryLock = new ReentrantLock();
+		
+		private AtomicBoolean finished = new AtomicBoolean();
+		
+		private AtomicInteger retryMergeIndex = new AtomicInteger(-1);
+		
+		private final AsyncHandler<PutRecordsResult> asyncHandler;
+		private final Request<HttpRequest> request;
+		private final PutRecordsRequest putRecordsParam;
+		
+		private AtomicReference<PutRecordsResult> putRecordsResultRef = new AtomicReference<>();
+		
+		private volatile Integer[] retryRecordIndex = null;
+		
+		public PutRecordsTrafficLimitRetryFuture(Request<HttpRequest> request,
+				AsyncHandler<PutRecordsResult> asyncHandler, PutRecordsRequest putRecordsParam) {
+			this.request = request;
+			this.asyncHandler = asyncHandler;
+			this.putRecordsParam = putRecordsParam;
+		}
+
+		public PutRecordsResult getNewestResult() {
+			return this.putRecordsResultRef.get();
+		}
+		
+		public PutRecordsResult mergeException(Exception exception, int retryIndex) {
+			retryMergeIndex.compareAndSet(retryIndex-1, retryIndex);
+			finished.set(true);
+			return getNewestResult();
+		}
+		
+		public PutRecordsResult mergeRetryHandle(PutRecordsResult putRecordsResult, boolean tryLock, int retryIndex) {
+			//处理重试的数据合并
+			List<Integer> retryIndexTemp = new ArrayList<>();
+            List<PutRecordsRequestEntry> retryRecordEntrys = new ArrayList<>();
+			synchronized (this) {
+				if(retryMergeIndex.compareAndSet(retryIndex-1, retryIndex)) {
+					mergeResult(putRecordsResult, retryIndex, retryRecordEntrys, retryIndexTemp);
+				}
+				
+				if(finished.get()) {
+					return getNewestResult();
+				}
+			}
+            
+			
+			if(tryLock) {
+				if(!retryLock.tryLock()) {
+					return null;
+				}
+			}else {
+				retryLock.lock();
+			}
+			
+			if(retryIndex != retryCount.get()){
+				return null;
+			}
+            
+			try {
+				retryRecordIndex = retryIndexTemp.size() > 0 ? retryIndexTemp.toArray(new Integer[retryIndexTemp.size()])
+	                    : new Integer[0];
+	            
+	            int tmpRetryIndex = retryCount.incrementAndGet();
+	            
+	            PutRecordsRequest retryPutRecordsRequest = new PutRecordsRequest();
+	            retryPutRecordsRequest.setStreamName(putRecordsParam.getStreamName());
+	            retryPutRecordsRequest.setRecords(retryRecordEntrys);
+	            
+	    		PutRecordsTrafficLimitRetryCallback trafficLimitRetryCallback = null;
+	        	if(asyncHandler != null) {
+	        		trafficLimitRetryCallback = new PutRecordsTrafficLimitRetryCallback(asyncHandler, this, tmpRetryIndex);
+	        	}
+	            Future<PutRecordsResult> recordRetryFuture = innerPutRecordsAsync(retryPutRecordsRequest, request, trafficLimitRetryCallback);
+	            this.setInnerFuture(recordRetryFuture);
+	            
+	            return null;
+			}finally {
+				retryLock.unlock();
+			}
+		}
+		
+		
+		private void mergeResult(PutRecordsResult putRecordsResult, int retryIndex,
+				List<PutRecordsRequestEntry> retryRecordEntrys, List<Integer> retryIndexTemp) {
+			this.putRecordsResultRef.compareAndSet(null, putRecordsResult);
+			
+			int currentFailed = putRecordsResult.getFailedRecordCount().get();
+			if(retryIndex == 0 && currentFailed == 0 || disConfig.getRecordsRetries() == 0) {
+				finished.set(true);
+				return;
+			}
+			
+			boolean isCanRetry = retryIndex < disConfig.getRecordsRetries();
+            
+            // 对每条结果分析，更新结果数据
+            for (int i = 0; i < putRecordsResult.getRecords().size(); i++)
+            {
+            	PutRecordsResultEntry putRecordsResultEntry = putRecordsResult.getRecords().get(i);
+            	
+            	// 获取重试数据在原始数据中的下标位置
+                int originalIndex = retryRecordIndex == null ? i : retryRecordIndex[i];
+                 
+                if (isCanRetry && !StringUtils.isNullOrEmpty(putRecordsResultEntry.getErrorCode()))
+                {
+                    // 只对指定异常(如流控与服务端内核异常)进行重试
+                    if (isRecordsRetriableErrorCode(putRecordsResultEntry.getErrorCode()))
+                    {
+                        retryIndexTemp.add(originalIndex);
+                        retryRecordEntrys.add(putRecordsParam.getRecords().get(originalIndex));
+                    }
+                }
+                
+                if(retryIndex != 0) {
+                	this.putRecordsResultRef.get().getRecords().set(originalIndex, putRecordsResultEntry);
+                }
+            }
+            
+            if(retryRecordEntrys.isEmpty()) {
+            	finished.set(true);
+            }
+		}
+
+		@Override
+		public PutRecordsResult get() throws InterruptedException, ExecutionException {
+			retryLock.lock();
+			int getThreadRetryIndex = retryCount.get();
+			
+			try {
+				PutRecordsResult putRecordsResult = super.get();
+				
+				PutRecordsResult mergedPutRecordsResult = mergeRetryHandle(putRecordsResult, false, getThreadRetryIndex);
+				
+				if(mergedPutRecordsResult == null) {
+					return this.get();
+				}else {
+					return mergedPutRecordsResult;
+				}
+			}catch(InterruptedException | ExecutionException e) {
+				if(getThreadRetryIndex == 0) {
+					PutRecordsResult exRes = mergeException(e, getThreadRetryIndex);
+					if(exRes != null) {
+						return exRes;
+					}
+				}
+				
+				throw e;
+			}
+			finally {
+				retryLock.unlock();
+			}
+		}
+		
+		@Override
+		public PutRecordsResult get(long timeout, TimeUnit unit)
+				throws InterruptedException, ExecutionException, TimeoutException {
+			retryLock.lock();
+			int getThreadRetryIndex = retryCount.get();
+			
+			try {
+				PutRecordsResult putRecordsResult = super.get(timeout, unit);
+				
+				PutRecordsResult mergedPutRecordsResult = mergeRetryHandle(putRecordsResult, false, getThreadRetryIndex);
+				
+				if(mergedPutRecordsResult == null) {
+					return this.get(timeout, unit);
+				}else {
+					return mergedPutRecordsResult;
+				}
+			}catch(InterruptedException | ExecutionException e) {
+				if(getThreadRetryIndex == 0 && this.putRecordsResultRef.get() != null) {
+					return this.putRecordsResultRef.get();
+				}else {
+					throw e;
+				}
+			}
+			finally {
+				retryLock.unlock();
+			}
+		}
+		
+		@Override
+		protected PutRecordsResult toT(PutRecordsResult innerT) {
+			return innerT;
+		}
+		
+	}
+	
 	@Override
 	public Future<GetPartitionCursorResult> getPartitionCursorAsync(GetPartitionCursorRequest getPartitionCursorParam) {
 		return getPartitionCursorAsync(getPartitionCursorParam, null);
