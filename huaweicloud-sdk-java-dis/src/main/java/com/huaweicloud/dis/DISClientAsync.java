@@ -365,12 +365,12 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 			}else {
 				retryLock.lock();
 			}
-			
-			if(retryIndex != retryCount.get()){
-				return null;
-			}
             
 			try {
+				if(retryIndex != retryCount.get()){
+					return null;
+				}
+				
 				retryRecordIndex = retryIndexTemp.size() > 0 ? retryIndexTemp.toArray(new Integer[retryIndexTemp.size()])
 	                    : new Integer[0];
 	            
@@ -481,11 +481,14 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 					return mergedPutRecordsResult;
 				}
 			}catch(InterruptedException | ExecutionException e) {
-				if(getThreadRetryIndex == 0 && this.putRecordsResultRef.get() != null) {
-					return this.putRecordsResultRef.get();
-				}else {
-					throw e;
+				if(getThreadRetryIndex == 0) {
+					PutRecordsResult exRes = mergeException(e, getThreadRetryIndex);
+					if(exRes != null) {
+						return exRes;
+					}
 				}
+				
+				throw e;
 			}
 			finally {
 				retryLock.unlock();
