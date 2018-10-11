@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.huaweicloud.dis.iface.data.request.StreamType;
+import com.huaweicloud.dis.iface.stream.request.Tag;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -164,6 +165,14 @@ public class DescribeStreamResult
     
     @JsonProperty("update_partition_counts")
     private List<UpdatePartitionCount> updatePartitionCounts;
+    
+    /**
+     * <p>
+     * 通道的标签列表
+     * </p>
+     */
+    @JsonProperty("tags")
+    private List<Tag> tags;
     
     public String getStreamId()
     {
@@ -323,7 +332,15 @@ public class DescribeStreamResult
         this.dataSchema = dataSchema;
     }
 
-    @Override
+    public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	@Override
     public String toString()
     {
         return "DescribeStreamResult [streamId=" + streamId + ", streamName=" + streamName + ", createTime="
