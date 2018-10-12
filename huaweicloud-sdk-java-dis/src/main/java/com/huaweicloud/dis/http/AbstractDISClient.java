@@ -496,7 +496,7 @@ public class AbstractDISClient {
                 	connectRetryCallback = new ConnectRetryCallback<T>(callback, this, tmpRetryIndex);
                 }
                 
-                LOG.warn("connect or system error retry {} {} {}", this.hashCode(), retryIndex, errorMsg);
+                LOG.warn("connect or system error retry [{}] [{}] [{}]", this.hashCode(), retryIndex, errorMsg);
                 Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri, 
                 		request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
                 

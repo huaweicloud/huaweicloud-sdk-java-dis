@@ -387,7 +387,7 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 	        	if(asyncHandler != null) {
 	        		trafficLimitRetryCallback = new PutRecordsTrafficLimitRetryCallback(asyncHandler, this, tmpRetryIndex);
 	        	}
-	        	LOG.warn("traffic limit retry {} {} {}", putRecordsParam.getStreamName(), this.hashCode(), retryIndex);
+	        	LOG.warn("traffic limit retry [{}] [{}] [{}]", putRecordsParam.getStreamName(), this.hashCode(), retryIndex);
 	            Future<PutRecordsResult> recordRetryFuture = innerPutRecordsAsync(retryPutRecordsRequest, request, trafficLimitRetryCallback);
 	            this.setInnerFuture(recordRetryFuture);
 	            
