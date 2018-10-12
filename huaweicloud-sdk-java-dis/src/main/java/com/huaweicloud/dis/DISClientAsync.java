@@ -265,12 +265,15 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
     	
 	}
 
-	private static class PutRecordsTrafficLimitRetryCallback extends AbstractCallbackAdapter<PutRecordsResult, PutRecordsResult> implements AsyncHandler<PutRecordsResult>{
+	private static class PutRecordsTrafficLimitRetryCallback implements AsyncHandler<PutRecordsResult>{
 		private final int retryIndex;
+		private final AsyncHandler<PutRecordsResult> innerAsyncHandler;
+		protected final Future<PutRecordsResult> futureAdapter;
 		
 		public PutRecordsTrafficLimitRetryCallback(AsyncHandler<PutRecordsResult> innerAsyncHandler,
-				AbstractFutureAdapter<PutRecordsResult, PutRecordsResult> futureAdapter, int retryIndex) {
-			super(innerAsyncHandler, futureAdapter);
+				Future<PutRecordsResult> futureAdapter, int retryIndex) {
+			this.innerAsyncHandler = innerAsyncHandler;
+			this.futureAdapter = futureAdapter;
 			this.retryIndex = retryIndex;
 		}
 
@@ -283,12 +286,11 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 				if(mergedResult == null) {
 					return;
 				}else {
-					super.onSuccess(mergedResult);
+					innerAsyncHandler.onSuccess(result);
 				}	
 			}catch(Exception e) {
 				onError(e);
 			}
-			
 		}
 		
 		@Override
@@ -297,19 +299,16 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 			
 			PutRecordsResult exRes = future.mergeException(exception, retryIndex);
 			if(exRes == null) {
-				super.onError(exception);
+				innerAsyncHandler.onError(exception);
 			}else {
-				super.onSuccess(exRes);
+				innerAsyncHandler.onSuccess(exRes);
 			}
-		}
-		
-		@Override
-		protected PutRecordsResult toInnerT(PutRecordsResult result) {
-			return result;
 		}
 	}
 	
-	private class PutRecordsTrafficLimitRetryFuture extends AbstractFutureAdapter<PutRecordsResult, PutRecordsResult> implements Future<PutRecordsResult> {
+	private class PutRecordsTrafficLimitRetryFuture implements Future<PutRecordsResult> {
+		protected volatile Future<PutRecordsResult> innerFuture;
+		
 		//为了避免future.get和callback的各种并发情况下的重复重试，使用该锁和计数进行控制
 		private AtomicInteger retryCount = new AtomicInteger();
 		private ReentrantLock retryLock = new ReentrantLock();
@@ -325,6 +324,10 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 		private AtomicReference<PutRecordsResult> putRecordsResultRef = new AtomicReference<>();
 		
 		private volatile Integer[] retryRecordIndex = null;
+		
+		public void setInnerFuture(Future<PutRecordsResult> innerFuture) {
+			this.innerFuture = innerFuture;
+		}
 		
 		public PutRecordsTrafficLimitRetryFuture(Request<HttpRequest> request,
 				AsyncHandler<PutRecordsResult> asyncHandler, PutRecordsRequest putRecordsParam) {
@@ -393,7 +396,6 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 			}
 		}
 		
-		
 		private void mergeResult(PutRecordsResult putRecordsResult, int retryIndex,
 				List<PutRecordsRequestEntry> retryRecordEntrys, List<Integer> retryIndexTemp) {
 			this.putRecordsResultRef.compareAndSet(null, putRecordsResult);
@@ -406,6 +408,7 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 			
 			boolean isCanRetry = retryIndex < disConfig.getRecordsRetries();
             
+			int curSuccessCount = 0;
             // 对每条结果分析，更新结果数据
             for (int i = 0; i < putRecordsResult.getRecords().size(); i++)
             {
@@ -414,19 +417,25 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
             	// 获取重试数据在原始数据中的下标位置
                 int originalIndex = retryRecordIndex == null ? i : retryRecordIndex[i];
                  
-                if (isCanRetry && !StringUtils.isNullOrEmpty(putRecordsResultEntry.getErrorCode()))
+                if (!StringUtils.isNullOrEmpty(putRecordsResultEntry.getErrorCode()))
                 {
                     // 只对指定异常(如流控与服务端内核异常)进行重试
-                    if (isRecordsRetriableErrorCode(putRecordsResultEntry.getErrorCode()))
+                    if (isCanRetry && isRecordsRetriableErrorCode(putRecordsResultEntry.getErrorCode()))
                     {
                         retryIndexTemp.add(originalIndex);
                         retryRecordEntrys.add(putRecordsParam.getRecords().get(originalIndex));
                     }
+                }else {
+                	curSuccessCount++;
                 }
                 
                 if(retryIndex != 0) {
                 	this.putRecordsResultRef.get().getRecords().set(originalIndex, putRecordsResultEntry);
                 }
+            }
+            
+            if(retryIndex != 0 && curSuccessCount > 0) {
+            	this.putRecordsResultRef.get().getFailedRecordCount().addAndGet(-currentFailed);
             }
             
             if(retryRecordEntrys.isEmpty()) {
@@ -440,7 +449,7 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 			int getThreadRetryIndex = retryCount.get();
 			
 			try {
-				PutRecordsResult putRecordsResult = super.get();
+				PutRecordsResult putRecordsResult = innerFuture.get();
 				
 				PutRecordsResult mergedPutRecordsResult = mergeRetryHandle(putRecordsResult, false, getThreadRetryIndex);
 				
@@ -471,7 +480,7 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 			int getThreadRetryIndex = retryCount.get();
 			
 			try {
-				PutRecordsResult putRecordsResult = super.get(timeout, unit);
+				PutRecordsResult putRecordsResult = innerFuture.get(timeout, unit);
 				
 				PutRecordsResult mergedPutRecordsResult = mergeRetryHandle(putRecordsResult, false, getThreadRetryIndex);
 				
@@ -494,10 +503,19 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
 				retryLock.unlock();
 			}
 		}
-		
 		@Override
-		protected PutRecordsResult toT(PutRecordsResult innerT) {
-			return innerT;
+		public boolean cancel(boolean mayInterruptIfRunning) {
+			return innerFuture.cancel(mayInterruptIfRunning);
+		}
+
+		@Override
+		public boolean isCancelled() {
+			return innerFuture.isCancelled();
+		}
+
+		@Override
+		public boolean isDone() {
+			return innerFuture.isDone();
 		}
 		
 	}
