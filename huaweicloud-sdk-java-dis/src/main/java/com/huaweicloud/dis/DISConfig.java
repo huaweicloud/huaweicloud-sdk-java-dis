@@ -49,6 +49,8 @@ public class DISConfig extends Properties implements ClientParams
     
     private static final BodySerializeType DEFAULT_VALUE_BODY_SERIALIZE_TYPE = BodySerializeType.json;
     
+    private static final int DEFAULT_NIO_IO_THREADS = Runtime.getRuntime().availableProcessors();
+    
     public static final String PROPERTY_REGION_ID = "region";
     public static final String PROPERTY_ENDPOINT = "endpoint";
     public static final String PROPERTY_MANAGER_ENDPOINT = "manager.endpoint";
@@ -230,7 +232,7 @@ public class DISConfig extends Properties implements ClientParams
     }
     
     public int getNIOIOThreads() {
-    	return getInt(PROPERTY_NIO_IO_THREADS, Runtime.getRuntime().availableProcessors());
+    	return getInt(PROPERTY_NIO_IO_THREADS, DEFAULT_NIO_IO_THREADS);
     }
 
     /**
