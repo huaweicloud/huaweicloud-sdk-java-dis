@@ -435,7 +435,7 @@ public class DISClientAsync extends AbstractDISClientAsync implements DISAsync{
             }
             
             if(retryIndex != 0 && curSuccessCount > 0) {
-            	this.putRecordsResultRef.get().getFailedRecordCount().addAndGet(-currentFailed);
+            	this.putRecordsResultRef.get().getFailedRecordCount().addAndGet(-curSuccessCount);
             }
             
             if(retryRecordEntrys.isEmpty()) {
