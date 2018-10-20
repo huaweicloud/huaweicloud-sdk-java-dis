@@ -128,6 +128,14 @@ public class OBSDestinationDescriptorRequest
      */
     @JsonProperty("carbon_properties")
     private Map<String, String> carbonProperties;
+
+    /**
+     * <p>
+     * 数据转换的schema配置:如支持parquet按照指定timestamp生成分区目录
+     * </p>
+     */
+    @JsonProperty("processing_schema")
+    private ProcessingSchema processingSchema;
     
     /**
      * <p>
@@ -271,5 +279,13 @@ public class OBSDestinationDescriptorRequest
 
     public void setCarbonProperties(Map<String, String> carbonProperties) {
         this.carbonProperties = carbonProperties;
+    }
+
+    public ProcessingSchema getProcessingSchema() {
+        return processingSchema;
+    }
+
+    public void setProcessingSchema(ProcessingSchema processingSchema) {
+        this.processingSchema = processingSchema;
     }
 }

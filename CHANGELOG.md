@@ -5,3 +5,4 @@
   * use NIO for DISClientAsync 
   * add delete checkpoint
   * add describe consumer state
+  * support tags in stream apis

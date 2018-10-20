@@ -385,8 +385,10 @@ public class AbstractDISClient {
 	private <T> Future<T> doRequestAsync(Request<HttpRequest> request, Object requestContent, String ak, String sk,
 			String region, Class<T> returnType, AsyncHandler<T> callback) {
 		String uri = buildURI(request);
-		request = SignUtil.sign(request, ak, sk, region, disConfig);
-		
+
+		request.getHeaders().remove(SignerConstants.AUTHORIZATION);
+        request = SignUtil.sign(request, ak, sk, region, disConfig);
+
 		ConnectRetryFuture<T> connectRetryFuture = new ConnectRetryFuture<T>(request, ak, sk, requestContent, callback, uri, returnType);
 		
 		ConnectRetryCallback<T> connectRetryCallback = null;
@@ -494,7 +496,8 @@ public class AbstractDISClient {
                 	connectRetryCallback = new ConnectRetryCallback<T>(callback, this, tmpRetryIndex);
                 }
                 
-                Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri, 
+                LOG.warn("connect or system error retry [{}] [{}] [{}]", this.hashCode(), retryIndex, errorMsg);
+                Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri,
                 		request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
                 
                 this.setInnerFuture(restFuture);

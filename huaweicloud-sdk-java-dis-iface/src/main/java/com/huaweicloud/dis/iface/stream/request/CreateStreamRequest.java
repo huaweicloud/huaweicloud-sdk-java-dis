@@ -106,6 +106,14 @@ public class CreateStreamRequest
     @JsonProperty("data_duration")
     private Integer dataDuration;
     
+    /**
+     * <p>
+     * 通道标签列表
+     * </p>
+     */
+    @JsonProperty("tags")
+    private List<Tag> tags;
+    
     public void setStreamName(String streamName)
     {
         this.streamName = streamName;
@@ -237,7 +245,15 @@ public class CreateStreamRequest
         this.dataSchema = dataSchema;
     }
 
-    @Override
+    public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	@Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();

@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.huaweicloud.dis.iface.data.request.StreamType;
+import com.huaweicloud.dis.iface.stream.request.Tag;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -150,7 +151,23 @@ public class DescribeStreamResult
      */
     @JsonProperty("data_schema")
     private String dataSchema;
-    
+
+    /**
+     * <p>
+     * 可写分区(即ACTIVE状态)数量
+     * </p>
+     */
+    @JsonProperty("writable_partition_count")
+    private int writablePartitionCount;
+
+    /**
+     * <p>
+     * 可读分区(即ACTIVE与DELETE状态)数量
+     * </p>
+     */
+    @JsonProperty("readable_partition_count")
+    private int readablePartitionCount;
+
     /**
      * <p>
      * 通道的分区列表。
@@ -164,6 +181,14 @@ public class DescribeStreamResult
     
     @JsonProperty("update_partition_counts")
     private List<UpdatePartitionCount> updatePartitionCounts;
+    
+    /**
+     * <p>
+     * 通道的标签列表
+     * </p>
+     */
+    @JsonProperty("tags")
+    private List<Tag> tags;
     
     public String getStreamId()
     {
@@ -309,7 +334,27 @@ public class DescribeStreamResult
     {
         return dataType;
     }
-    
+
+    public int getWritablePartitionCount()
+    {
+        return writablePartitionCount;
+    }
+
+    public void setWritablePartitionCount(int writablePartitionCount)
+    {
+        this.writablePartitionCount = writablePartitionCount;
+    }
+
+    public int getReadablePartitionCount()
+    {
+        return readablePartitionCount;
+    }
+
+    public void setReadablePartitionCount(int readablePartitionCount)
+    {
+        this.readablePartitionCount = readablePartitionCount;
+    }
+
     public void setDataType(String dataType)
     {
         this.dataType = dataType;
@@ -323,13 +368,22 @@ public class DescribeStreamResult
         this.dataSchema = dataSchema;
     }
 
-    @Override
+    public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void setTags(List<Tag> tags) {
+		this.tags = tags;
+	}
+
+	@Override
     public String toString()
     {
         return "DescribeStreamResult [streamId=" + streamId + ", streamName=" + streamName + ", createTime="
             + createTime + ", lastModifiedTime=" + lastModifiedTime + ", retentionPeriod=" + retentionPeriod
-            + ", status=" + status + ", streamType=" + streamType + ", dataType=" + dataType + ", partitions="
-            + partitions + ", hasMorePartitions=" + hasMorePartitions + ", updatePartitionCounts="
+            + ", status=" + status + ", streamType=" + streamType + ", dataType=" + dataType
+            + ", writablePartitionCount=" + writablePartitionCount + ", readablePartitionCount=" + readablePartitionCount
+            + ", partitions=" + partitions + ", hasMorePartitions=" + hasMorePartitions + ", updatePartitionCounts="
             + updatePartitionCounts + "]";
     }
     
