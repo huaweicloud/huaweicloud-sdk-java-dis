@@ -155,7 +155,7 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
 
     @Override
     public void sign(Request<?> request, Credentials credentials, Properties prop) {
-        setProvider(prop.getProperty(SignerConstants.HMAC_SHA256_PROVIDER));
+        setProvider(prop.getProperty(SignerConstants.SIGN_PROVIDER));
         sign(request,credentials);
     }
 
@@ -415,7 +415,7 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
 
     @Override
     public boolean verify(Request<?> request, Credentials credentials, Properties prop) {
-        setProvider(prop.getProperty(SignerConstants.HMAC_SHA256_PROVIDER));
+        setProvider(prop.getProperty(SignerConstants.SIGN_PROVIDER));
         return verify(request,credentials);
     }
 
