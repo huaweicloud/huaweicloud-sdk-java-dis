@@ -385,7 +385,7 @@ public class AbstractDISClient {
 	private <T> Future<T> doRequestAsync(Request<HttpRequest> request, Object requestContent, String ak, String sk,
 			String region, Class<T> returnType, AsyncHandler<T> callback) {
 		String uri = buildURI(request);
-		request = SignUtil.sign(request, ak, sk, region);
+		request = SignUtil.sign(request, ak, sk, region, disConfig);
 		
 		ConnectRetryFuture<T> connectRetryFuture = new ConnectRetryFuture<T>(request, ak, sk, requestContent, callback, uri, returnType);
 		
@@ -487,7 +487,7 @@ public class AbstractDISClient {
             	int tmpRetryIndex = retryCount.incrementAndGet();
                 
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
-                request = SignUtil.sign(request, ak, sk, region);
+                request = SignUtil.sign(request, ak, sk, region,disConfig);
                 
                 ConnectRetryCallback<T> connectRetryCallback = null;
                 if(callback != null){
@@ -606,7 +606,7 @@ public class AbstractDISClient {
             {
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
                 // 每次重传需要重新签名
-                request = SignUtil.sign(request, ak, sk, region);
+                request = SignUtil.sign(request, ak, sk, region,disConfig);
                 return RestClient.getInstance(disConfig).exchange(uri, 
                 		request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
             }
