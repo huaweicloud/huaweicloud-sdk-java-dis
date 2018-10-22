@@ -19,6 +19,8 @@ package com.huaweicloud.dis.core.auth.signer;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.auth.credentials.Credentials;
 
+import java.util.Properties;
+
 /**
  * A strategy for applying cryptographic signatures to a request, proving
  * that the request was made by someone in posession of the given set of
@@ -33,4 +35,14 @@ public interface Signer {
      * @param credentials The credentials to sign the request with.
      */
     void sign(Request<?> request, Credentials credentials);
+
+    /**
+     * Sign the given request with the given set of credentials. Modifies the
+     * passed-in request to apply the signature.
+     *
+     * @param request     The request to sign.
+     * @param credentials The credentials to sign the request with.
+     * @param prop Some config
+     */
+    void sign(Request<?> request, Credentials credentials, Properties prop);
 }

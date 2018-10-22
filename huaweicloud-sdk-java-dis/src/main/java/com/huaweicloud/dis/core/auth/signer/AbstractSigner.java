@@ -21,13 +21,13 @@ import javax.crypto.spec.SecretKeySpec;
 
 import com.huaweicloud.dis.core.ClientException;
 import com.huaweicloud.dis.core.Request;
-import com.huaweicloud.dis.core.SDKGlobalConfiguration;
 import com.huaweicloud.dis.core.WebServiceRequest;
 import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
 import com.huaweicloud.dis.core.auth.credentials.Credentials;
 import com.huaweicloud.dis.core.internal.SdkDigestInputStream;
 import com.huaweicloud.dis.core.util.Base64;
 import com.huaweicloud.dis.core.util.HttpUtils;
+import com.huaweicloud.dis.core.util.StringUtils;
 
 import static com.huaweicloud.dis.core.util.StringUtils.UTF8;
 
@@ -46,6 +46,13 @@ import java.util.*;
  * canonicalized host names, query string parameters, etc.
  */
 public abstract class AbstractSigner implements Signer {
+
+    private String provider;
+
+    protected void setProvider(String provider)
+    {
+        this.provider = provider;
+    }
 
     /**
      * Computes an RFC 2104-compliant HMAC signature and returns the result as a
@@ -79,7 +86,15 @@ public abstract class AbstractSigner implements Signer {
 
     protected byte[] sign(byte[] data, byte[] key, SigningAlgorithm algorithm) throws ClientException {
         try {
-            Mac mac = Mac.getInstance(algorithm.toString());
+            Mac mac;
+            if(provider == null || provider.isEmpty())
+            {
+                mac = Mac.getInstance(algorithm.toString());
+            }
+            else
+            {
+                mac = Mac.getInstance(algorithm.toString(), provider);
+            }
             mac.init(new SecretKeySpec(key, algorithm.toString()));
             return mac.doFinal(data);
         } catch (Exception e) {
@@ -97,7 +112,13 @@ public abstract class AbstractSigner implements Signer {
      */
     public byte[] hash(String text) throws ClientException {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md;
+            if(!StringUtils.isNullOrEmpty(provider)) {
+                md = MessageDigest.getInstance("SHA-256",provider);
+            }
+            else {
+                md = MessageDigest.getInstance("SHA-256");
+            }
             md.update(text.getBytes(UTF8));
             return md.digest();
         } catch (Exception e) {
@@ -107,7 +128,13 @@ public abstract class AbstractSigner implements Signer {
 
     protected byte[] hash(InputStream input) throws ClientException {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md;
+            if(!StringUtils.isNullOrEmpty(provider)) {
+                md = MessageDigest.getInstance("SHA-256",provider);
+            }
+            else {
+                md = MessageDigest.getInstance("SHA-256");
+            }
             @SuppressWarnings("resource")
             DigestInputStream digestInputStream = new SdkDigestInputStream(input, md);
             byte[] buffer = new byte[1024];
@@ -128,7 +155,13 @@ public abstract class AbstractSigner implements Signer {
      */
     public byte[] hash(byte[] data) throws ClientException {
         try {
-            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            MessageDigest md;
+            if(!StringUtils.isNullOrEmpty(provider)) {
+                md = MessageDigest.getInstance("SHA-256",provider);
+            }
+            else {
+                md = MessageDigest.getInstance("SHA-256");
+            }
             md.update(data);
             return md.digest();
         } catch (Exception e) {
