@@ -25,8 +25,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class CommitCheckpointRequestEntry
 {
 
-    @JsonProperty("app_id")
-    private String appId;
+    @JsonProperty("app_name")
+    private String appName;
 
     @JsonProperty("checkpoint_type")
     private String checkpointType;
@@ -63,14 +63,14 @@ public class CommitCheckpointRequestEntry
     @JsonProperty("metadata")
     private String metadata;
 
-    public String getAppId()
+    public String getAppName()
     {
-        return appId;
+        return appName;
     }
 
-    public void setAppId(String appId)
+    public void setAppName(String appName)
     {
-        this.appId = appId;
+        this.appName = appName;
     }
 
     public String getCheckpointType()
@@ -126,7 +126,7 @@ public class CommitCheckpointRequestEntry
     @Override
     public String toString()
     {
-        return "GetRecordsParam [appId=" + appId + ", checkpointType=" + checkpointType + ", streamName="
+        return "GetRecordsParam [appName=" + appName + ", checkpointType=" + checkpointType + ", streamName="
             + streamName + ", partitionId=" + partitionId + ", sequenceNumber=" + sequenceNumber + ", metadata="
             + metadata + "]";
     }

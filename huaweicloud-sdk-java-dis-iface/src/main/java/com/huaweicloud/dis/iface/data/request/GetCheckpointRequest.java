@@ -74,9 +74,9 @@ public class GetCheckpointRequest
         return appName;
     }
 
-    public void setAppId(String appId)
+    public void setAppName(String appName)
     {
-        this.appName = appId;
+        this.appName = appName;
     }
 
     public Long getTimeStamp()
@@ -93,6 +93,6 @@ public class GetCheckpointRequest
     public String toString()
     {
         return "GetCheckpointParam [streamName=" + streamName + ", shardId=" + partitionId + ", checkpointType="
-                + checkpointType + ", appId=" + appName  + ", timeStamp=" + timeStamp +  "]";
+                + checkpointType + ", appName=" + appName  + ", timeStamp=" + timeStamp +  "]";
     }
 }
