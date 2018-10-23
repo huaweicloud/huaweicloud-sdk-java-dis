@@ -328,8 +328,8 @@ public class DISConfig extends Properties implements ClientParams
         }
         
         //根据区域，域名，端口拼接
-        String endpointFormat = "https://dis.%s.%s:%s";
-        return String.format(endpointFormat, getRegion(), "myhuaweicloud.com", "20004");
+        String endpointFormat = "https://dis.%s.%s";
+        return String.format(endpointFormat, getRegion(), "myhuaweicloud.com");
     }
     
     public String getManagerEndpoint(){
