@@ -643,7 +643,7 @@ public class AbstractDISClient {
 	 *
 	 * @param t
 	 *            throwable exception
-	 * @param request
+	 * @param request HttpReuest
      * @return {@code true} retriable {@code false} not retriable
 	 */
     protected boolean isRetriableSendException(Throwable t, Request<HttpRequest> request)

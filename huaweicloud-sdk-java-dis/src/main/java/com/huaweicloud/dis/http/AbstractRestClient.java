@@ -172,6 +172,7 @@ public abstract class AbstractRestClient
      * 
      * @param request 请求体
      * @param headers 需要添加到请求体重的头域
+     * @param <T> Generic Type
      * @return 修改后的请求体
      */
     protected <T> T setHeaders(T request, Map<String, String> headers)

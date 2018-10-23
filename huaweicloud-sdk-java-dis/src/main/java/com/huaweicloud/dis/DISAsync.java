@@ -106,20 +106,35 @@ public interface DISAsync extends DIS
     java.util.concurrent.Future<GetRecordsResult> getRecordsAsync(GetRecordsRequest getRecordsParam, AsyncHandler<GetRecordsResult> asyncHandler);
 
     /**
-     * 创建流
-     * */
+     * <p>
+     * 创建流。
+     * </p>
+     * 
+     * @param createStreamRequest 创建流的请求参数
+     * @return 包含创建流响应结果的 JAVA Future 对象
+     */
     Future<CreateStreamResult> createStreamAsync(CreateStreamRequest createStreamRequest);
     Future<CreateStreamResult> createStreamAsync(CreateStreamRequest createStreamRequest, AsyncHandler<CreateStreamResult> asyncHandler);
     
     /**
+     * <p>
      * 删除流
-     * */
+     * </p>
+     * 
+     * @param deleteStreamRequest 删除流的请求参数
+     * @return 包含删除流响应结果的 JAVA Future 对象
+     */
     Future<DeleteStreamResult> deleteStreamAsync(DeleteStreamRequest deleteStreamRequest);
     Future<DeleteStreamResult> deleteStreamAsync(DeleteStreamRequest deleteStreamRequest, AsyncHandler<DeleteStreamResult> asyncHandler);
     
     /**
-     * 查询流清单
-     * */
+     * <p>
+     * 查询流列表
+     * </p>
+     * 
+     * @param listStreamsRequest 查询流列表的请求参数
+     * @return 包含流列表响应结果的 JAVA Future 对象
+     */
     Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest);
     Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest, AsyncHandler<ListStreamsResult> asyncHandler);
     
@@ -237,7 +252,7 @@ public interface DISAsync extends DIS
      * get stream consuming state
      * </p>
      *
-     * @param listStreamConsumingStateRequest
+     * @param listStreamConsumingStateRequest 请求参数
      * @return 包含stream consuming state 结果的 JAVA Future 对象
      */
     java.util.concurrent.Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(
@@ -248,7 +263,7 @@ public interface DISAsync extends DIS
      * get stream consuming state
      * </p>
      *
-     * @param listStreamConsumingStateRequest
+     * @param listStreamConsumingStateRequest 请求参数
      * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
      * @return 包含stream consuming state 结果的 JAVA Future 对象
      */
