@@ -55,9 +55,9 @@ public class DeleteCheckpointRequest {
         return appName;
     }
 
-    public void setAppId(String appId)
+    public void setAppName(String appName)
     {
-        this.appName = appId;
+        this.appName = appName;
     }
 
 
@@ -65,6 +65,6 @@ public class DeleteCheckpointRequest {
     public String toString()
     {
         return "DeleteCheckpointParam [streamName=" + streamName + ", shardId=" + partitionId + ", checkpointType="
-                + checkpointType + ", appId=" + appName  +  "]";
+                + checkpointType + ", appName=" + appName  +  "]";
     }
 }
