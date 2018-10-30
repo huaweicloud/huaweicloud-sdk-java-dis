@@ -5,6 +5,7 @@ import java.util.Properties;
 
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.http.Protocol;
 
 public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, TypeToBuild> extends ClientBuilder<Subclass, TypeToBuild>{
 	
@@ -15,6 +16,26 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
 	protected boolean defaultClientCertAuthEnabled;
     
 	protected boolean dataCompressEnabled;
+	
+	protected boolean dataCacheEnabled;
+	
+	protected String dataCacheDir;
+	
+	protected String dataCacheDiskMaxSize;
+	
+	protected String dataCacheArchiveMaxSize;
+	
+	protected String proxyHost;
+	
+	protected String proxyPort;
+	
+	protected Protocol proxyProtocol;
+	
+	protected String proxyUsername;
+	
+	protected String proxyPassword;
+	
+	protected String proxyDomain;
 	
 
 	protected DISConfig configDISConfig(DISConfig disConfig){
@@ -38,6 +59,43 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
         disConfig.setDataEncryptEnabled(dataEncryptEnabled);
         disConfig.setDefaultClientCertAuthEnabled(defaultClientCertAuthEnabled);
         disConfig.setDataCompressEnabled(dataCompressEnabled);
+        disConfig.setDataCacheEnabled(dataCacheEnabled);
+        if (!StringUtils.isNullOrEmpty(dataCacheDir))
+        {
+            disConfig.setDataCacheDir(dataCacheDir);
+        }
+        if (!StringUtils.isNullOrEmpty(dataCacheDiskMaxSize))
+        {
+            disConfig.setDataCacheDiskMaxSize(dataCacheDiskMaxSize);
+        }
+        if (!StringUtils.isNullOrEmpty(dataCacheArchiveMaxSize))
+        {
+            disConfig.setDataCacheArchiveMaxSize(dataCacheArchiveMaxSize);
+        }
+        if (!StringUtils.isNullOrEmpty(proxyHost))
+        {
+            disConfig.setProxyHost(proxyHost);
+        }
+        if (!StringUtils.isNullOrEmpty(proxyPort))
+        {
+            disConfig.setProxyPort(proxyPort);
+        }
+        if (proxyProtocol != null)
+        {
+            disConfig.setProxyProtocol(proxyProtocol);
+        }
+        if (!StringUtils.isNullOrEmpty(proxyUsername))
+        {
+            disConfig.setProxyUsername(proxyUsername);
+        }
+        if (!StringUtils.isNullOrEmpty(proxyPassword))
+        {
+            disConfig.setProxyPassword(proxyPassword);
+        }
+        if (!StringUtils.isNullOrEmpty(proxyDomain))
+        {
+            disConfig.setProxyDomain(proxyDomain);
+        }
         
         Enumeration iter = extendProperties.propertyNames();// 得到配置文件的名字
         while (iter.hasMoreElements())
@@ -73,6 +131,66 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
     public final Subclass withDataCompressEnabled(boolean dataCompressEnabled)
     {
         this.dataCompressEnabled = dataCompressEnabled;
+        return getSubclass();
+    }
+    
+    public final Subclass withDataCacheEnabled(boolean dataCacheEnabled)
+    {
+        this.dataCacheEnabled = dataCacheEnabled;
+        return getSubclass();
+    }
+    
+    public final Subclass withDataCacheDir(String dataCacheDir)
+    {
+        this.dataCacheDir = dataCacheDir;
+        return getSubclass();
+    }
+    
+    public final Subclass withDataCacheDiskMaxSize(String dataCacheDiskMaxSize)
+    {
+        this.dataCacheDiskMaxSize = dataCacheDiskMaxSize;
+        return getSubclass();
+    }
+    
+    public final Subclass withDataCacheArchiveMaxSize(String dataCacheArchiveMaxSize)
+    {
+        this.dataCacheArchiveMaxSize = dataCacheArchiveMaxSize;
+        return getSubclass();
+    }
+    
+    public final Subclass withProxyHost(String proxyHost)
+    {
+        this.proxyHost = proxyHost;
+        return getSubclass();
+    }
+    
+    public final Subclass withProxyPort(String proxyPort)
+    {
+        this.proxyPort = proxyPort;
+        return getSubclass();
+    }
+    
+    public final Subclass withProxyProtocol(Protocol proxyProtocol)
+    {
+        this.proxyProtocol = proxyProtocol;
+        return getSubclass();
+    }
+    
+    public final Subclass withProxyUsername(String proxyUsername)
+    {
+        this.proxyUsername = proxyUsername;
+        return getSubclass();
+    }
+    
+    public final Subclass withProxyPassword(String proxyPassword)
+    {
+        this.proxyPassword = proxyPassword;
+        return getSubclass();
+    }
+    
+    public final Subclass withProxyDomain(String proxyDomain)
+    {
+        this.proxyDomain = proxyDomain;
         return getSubclass();
     }
 }
