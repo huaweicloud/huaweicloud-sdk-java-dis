@@ -52,6 +52,7 @@ public class DISConfig extends Properties implements ClientParams
     private static final String DEFAULT_VALUE_DATA_CACHE_DIR = "/data/dis";
     private static final int DEFAULT_VALUE_DATA_CACHE_DIR_MAX_SIZE = 2048;
     private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_MAX_SIZE = 512;
+    private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_LIFE_CYCLE = 24 * 3600;
     
     private static final BodySerializeType DEFAULT_VALUE_BODY_SERIALIZE_TYPE = BodySerializeType.json;
     
@@ -94,6 +95,8 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_DATA_CACHE_DISK_MAX_SIZE = "data.cache.disk.max.size";
     
     public static final String PROPERTY_DATA_CACHE_ARCHIVE_MAX_SIZE = "data.cache.archive.max.size";
+    
+    public static final String PROPERTY_DATA_CACHE_ARCHIVE_LIFE_CYCLE = "data.cache.archive.life.cycle";
 
     public static final String PROPERTY_BODY_SERIALIZE_TYPE = "body.serialize.type";
     
@@ -174,6 +177,11 @@ public class DISConfig extends Properties implements ClientParams
     public int getDataCacheArchiveMaxSize()
     {
         return getInt(PROPERTY_DATA_CACHE_ARCHIVE_MAX_SIZE, DEFAULT_VALUE_DATA_CACHE_ARCHIVE_MAX_SIZE);
+    }
+    
+    public int getDataCacheArchiveLifeCycle()
+    {
+        return getInt(PROPERTY_DATA_CACHE_ARCHIVE_LIFE_CYCLE, DEFAULT_VALUE_DATA_CACHE_ARCHIVE_LIFE_CYCLE);
     }
     
     public BodySerializeType getBodySerializeType(){
@@ -656,6 +664,10 @@ public class DISConfig extends Properties implements ClientParams
     
     public DISConfig setDataCacheArchiveMaxSize(String dataCacheArchiveMaxSize){
         return set(PROPERTY_DATA_CACHE_ARCHIVE_MAX_SIZE, String.valueOf(dataCacheArchiveMaxSize));
+    }
+    
+    public DISConfig setDataCacheArchiveLifeCycle(String dataCacheArchiveLifeCycle){
+        return set(PROPERTY_DATA_CACHE_ARCHIVE_LIFE_CYCLE, String.valueOf(dataCacheArchiveLifeCycle));
     }
     
     public DISConfig setBodySerializeType(BodySerializeType bodySerializeType){

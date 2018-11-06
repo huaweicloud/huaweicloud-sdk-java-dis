@@ -43,7 +43,9 @@ import com.huaweicloud.dis.core.restresource.ResourcePathBuilder;
 import com.huaweicloud.dis.core.restresource.StateResource;
 import com.huaweicloud.dis.core.restresource.StreamResource;
 import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.AbstractDISClient;
+import com.huaweicloud.dis.http.exception.HttpClientErrorException;
 import com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils;
 import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
@@ -113,13 +115,21 @@ public class DISClient extends AbstractDISClient implements DIS
                         index++;
                     }
                     putRecordsParam.setRecords(failedPutRecordsRequestEntries);
+                    
+                    LOG.info("Local data cache is enabled, try to put failed records to local.");
+                    
                     CacheUtils.putToCache(putRecordsParam, disConfig); // 写入本地缓存
                 }
             }
             catch (Exception e)
             {
-                // 网络异常
-                CacheUtils.putToCache(putRecordsParam, disConfig); // 写入本地缓存
+                if (!(e.getCause() instanceof HttpClientErrorException))
+                {
+                    // 网络异常
+                    LOG.info("Local data cache is enabled, try to put failed records to local.");
+                    
+                    CacheUtils.putToCache(putRecordsParam, disConfig); // 写入本地缓存
+                }
                 throw e;
             }
             return putRecordsResult;

@@ -25,6 +25,8 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
 	
 	protected String dataCacheArchiveMaxSize;
 	
+	protected String dataCacheArchiveLifeCycle;
+	
 	protected String proxyHost;
 	
 	protected String proxyPort;
@@ -71,6 +73,10 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
         if (!StringUtils.isNullOrEmpty(dataCacheArchiveMaxSize))
         {
             disConfig.setDataCacheArchiveMaxSize(dataCacheArchiveMaxSize);
+        }
+        if (!StringUtils.isNullOrEmpty(dataCacheArchiveLifeCycle))
+        {
+            disConfig.setDataCacheArchiveLifeCycle(dataCacheArchiveLifeCycle);
         }
         if (!StringUtils.isNullOrEmpty(proxyHost))
         {
@@ -155,6 +161,12 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
     public final Subclass withDataCacheArchiveMaxSize(String dataCacheArchiveMaxSize)
     {
         this.dataCacheArchiveMaxSize = dataCacheArchiveMaxSize;
+        return getSubclass();
+    }
+    
+    public final Subclass withDataCacheArchiveLifeCycle(String dataCacheArchiveLifeCycle)
+    {
+        this.dataCacheArchiveLifeCycle = dataCacheArchiveLifeCycle;
         return getSubclass();
     }
     

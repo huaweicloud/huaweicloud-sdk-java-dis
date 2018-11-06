@@ -18,6 +18,7 @@ package com.huaweicloud.dis.util.cache;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,16 @@ public class CacheUtils
     
     private static final int DEFAULT_THREAD_POOL_SIZE = 100;
     
-    private static final ExecutorService executorService = Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE);
+    private static final ExecutorService executorService =
+        Executors.newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE, new ThreadFactory()
+        {
+            public Thread newThread(Runnable r)
+            {
+                Thread t = Executors.defaultThreadFactory().newThread(r);
+                t.setDaemon(true);
+                return t;
+            }
+        });
     
     public static void putToCache(PutRecordsRequest putRecordsRequest, DISConfig disConfig)
     {

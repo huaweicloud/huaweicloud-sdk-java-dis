@@ -66,6 +66,8 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     
     private String dataTmpFileName; // 临时缓存数据文件名
     
+    private long tmpFileCreateTime; // 临时缓存文件创建时间
+    
     private CacheManager()
     {
     }
@@ -88,7 +90,9 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     @Override
     public void putToCache(PutRecordsRequest putRecordsRequest)
     {
-        LOGGER.debug("Put records to cache, record size: {}.", putRecordsRequest.getRecords().size());
+        LOGGER.info("Put records to cache, record size: {}, cache dir: {}.",
+            putRecordsRequest.getRecords().size(),
+            disConfig.getDataCacheDir());
         String data = JsonUtils.objToJson(putRecordsRequest);
         
         synchronized (this)
@@ -127,7 +131,8 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     private boolean needToArchive(String data)
     {
         long dataSize = getDataSize(data);
-        if ((dataSize + FileUtils.sizeOf(dataTmpFile)) / 1024 / 1024 > disConfig.getDataCacheArchiveMaxSize())
+        if (((dataSize + FileUtils.sizeOf(dataTmpFile)) / 1024 / 1024 > disConfig.getDataCacheArchiveMaxSize())
+            || (System.currentTimeMillis() - tmpFileCreateTime > disConfig.getDataCacheArchiveLifeCycle() * 1000))
         {
             return true;
         }
@@ -201,6 +206,7 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
                 dataTmpFileName = getCacheDir() + File.separator + cacheTmpDataFileName;
                 dataTmpFile = new File(dataTmpFileName);
                 dataTmpFile.createNewFile();
+                tmpFileCreateTime = System.currentTimeMillis();
             }
             catch (IOException e)
             {
