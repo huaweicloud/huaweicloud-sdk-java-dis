@@ -16,12 +16,12 @@
 
 package com.huaweicloud.dis.iface.stream.request;
 
+import java.util.Map;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-import java.util.Map;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -115,12 +115,20 @@ public class OBSDestinationDescriptorRequest
     
     /**
      * <p>
+     * 转储目标文件的压缩类型，目前支持：不压缩, gzip
+     * </p>
+     */
+    @JsonProperty("compression_format")
+    private String compressionFormat;
+    
+    /**
+     * <p>
      * 用户JOSN格式数据schema的地址: 暂时限定obs路径.
      * </p>
      */
     @JsonProperty("data_schema_path")
     private String dataSchemaPath;
-
+    
     /**
      * <p>
      * CarbonWriter.builder.withTableProperties(tablePropertiesMap)
@@ -128,7 +136,7 @@ public class OBSDestinationDescriptorRequest
      */
     @JsonProperty("carbon_properties")
     private Map<String, String> carbonProperties;
-
+    
     /**
      * <p>
      * 数据转换的schema配置:如支持parquet按照指定timestamp生成分区目录
@@ -264,28 +272,44 @@ public class OBSDestinationDescriptorRequest
     {
         this.dataSchemaPath = dataSchemaPath;
     }
-
-    public String getConsumerStrategy() {
+    
+    public String getConsumerStrategy()
+    {
         return consumerStrategy;
     }
-
-    public void setConsumerStrategy(String consumerStrategy) {
+    
+    public void setConsumerStrategy(String consumerStrategy)
+    {
         this.consumerStrategy = consumerStrategy;
     }
-
-    public Map<String, String> getCarbonProperties() {
+    
+    public Map<String, String> getCarbonProperties()
+    {
         return carbonProperties;
     }
-
-    public void setCarbonProperties(Map<String, String> carbonProperties) {
+    
+    public void setCarbonProperties(Map<String, String> carbonProperties)
+    {
         this.carbonProperties = carbonProperties;
     }
-
-    public ProcessingSchema getProcessingSchema() {
+    
+    public ProcessingSchema getProcessingSchema()
+    {
         return processingSchema;
     }
-
-    public void setProcessingSchema(ProcessingSchema processingSchema) {
+    
+    public void setProcessingSchema(ProcessingSchema processingSchema)
+    {
         this.processingSchema = processingSchema;
+    }
+    
+    public String getCompressionFormat()
+    {
+        return compressionFormat;
+    }
+    
+    public void setCompressionFormat(String compressionFormat)
+    {
+        this.compressionFormat = compressionFormat;
     }
 }
