@@ -51,6 +51,15 @@ public class CreateStreamRequest
     @JsonProperty("partition_count")
     private Integer partitionCount;
     
+    @JsonProperty("auto_scale_enabled")
+    private Boolean autoScaleEnabled;
+    
+    @JsonProperty("auto_scale_min_partition_count")
+    private Integer autoScaleMinPartitionCount;
+    
+    @JsonProperty("auto_scale_max_partition_count")
+    private Integer autoScaleMaxPartitionCount;
+    
     /** -------------------- DIS属性 ------------------- **/
     
     /** OBS目的对象描述 */
