@@ -123,6 +123,37 @@ public class CreateStreamRequest
     @JsonProperty("tags")
     private List<Tag> tags;
     
+    
+    public Boolean getAutoScaleEnabled()
+    {
+        return autoScaleEnabled;
+    }
+
+    public void setAutoScaleEnabled(Boolean autoScaleEnabled)
+    {
+        this.autoScaleEnabled = autoScaleEnabled;
+    }
+
+    public Integer getAutoScaleMinPartitionCount()
+    {
+        return autoScaleMinPartitionCount;
+    }
+
+    public void setAutoScaleMinPartitionCount(Integer autoScaleMinPartitionCount)
+    {
+        this.autoScaleMinPartitionCount = autoScaleMinPartitionCount;
+    }
+
+    public Integer getAutoScaleMaxPartitionCount()
+    {
+        return autoScaleMaxPartitionCount;
+    }
+
+    public void setAutoScaleMaxPartitionCount(Integer autoScaleMaxPartitionCount)
+    {
+        this.autoScaleMaxPartitionCount = autoScaleMaxPartitionCount;
+    }
+
     public void setStreamName(String streamName)
     {
         this.streamName = streamName;
