@@ -21,7 +21,6 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.huaweicloud.dis.iface.data.request.StreamType;
 import com.huaweicloud.dis.iface.stream.request.Tag;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -190,6 +189,45 @@ public class DescribeStreamResult
     @JsonProperty("tags")
     private List<Tag> tags;
     
+    @JsonProperty("auto_scale_enabled")
+    private Boolean autoScaleEnabled;
+    
+    @JsonProperty("auto_scale_min_partition_count")
+    private Integer autoScaleMinPartitionCount;
+    
+    @JsonProperty("auto_scale_max_partition_count")
+    private Integer autoScaleMaxPartitionCount;
+    
+    public Boolean getAutoScaleEnabled()
+    {
+        return autoScaleEnabled;
+    }
+
+    public void setAutoScaleEnabled(Boolean autoScaleEnabled)
+    {
+        this.autoScaleEnabled = autoScaleEnabled;
+    }
+
+    public Integer getAutoScaleMinPartitionCount()
+    {
+        return autoScaleMinPartitionCount;
+    }
+
+    public void setAutoScaleMinPartitionCount(Integer autoScaleMinPartitionCount)
+    {
+        this.autoScaleMinPartitionCount = autoScaleMinPartitionCount;
+    }
+
+    public Integer getAutoScaleMaxPartitionCount()
+    {
+        return autoScaleMaxPartitionCount;
+    }
+
+    public void setAutoScaleMaxPartitionCount(Integer autoScaleMaxPartitionCount)
+    {
+        this.autoScaleMaxPartitionCount = autoScaleMaxPartitionCount;
+    }
+
     public String getStreamId()
     {
         return streamId;
