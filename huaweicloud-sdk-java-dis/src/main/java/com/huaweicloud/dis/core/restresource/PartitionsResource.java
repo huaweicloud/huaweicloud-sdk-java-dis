@@ -18,9 +18,6 @@ package com.huaweicloud.dis.core.restresource;
 
 import com.huaweicloud.dis.core.util.StringUtils;
 
-/**
- * Created by z00382129 on 2017/11/8.
- */
 public class PartitionsResource extends RestResource{
 
     private static final String DEFAULT_RESOURCE_NAME = "partitions";

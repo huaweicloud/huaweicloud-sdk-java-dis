@@ -22,9 +22,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.huaweicloud.dis.iface.stream.request.ForceStringDeserializer;
 
-/**
- * Created by z00382129 on 2017/10/9.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class FileUploadResult
