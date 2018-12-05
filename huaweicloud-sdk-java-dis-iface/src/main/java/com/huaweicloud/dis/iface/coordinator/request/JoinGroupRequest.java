@@ -6,9 +6,6 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import java.util.List;
 import java.util.regex.Pattern;
 
-/**
- * Created by z00382129 on 2017/10/17.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class JoinGroupRequest {

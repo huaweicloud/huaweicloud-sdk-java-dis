@@ -28,6 +28,15 @@ public class CloudtableSchema
 {
     /**
      * <p>
+     * HBase table Schema used by the CloudTable cluster to put JSON data into different HBase table.
+     Value range: 1 to 64
+     * </p>
+     */
+    @JsonProperty("table_name")
+    private String tableSchema;
+
+    /**
+     * <p>
      * HBase rowkey Schema used by the CloudTable cluster to convert JSON data into HBase rowkeys.
      Value range: 1 to 64
      * </p>
@@ -57,5 +66,13 @@ public class CloudtableSchema
 
     public void setColumnsSchema(List<SchemaField> columnsSchema) {
         this.columnsSchema = columnsSchema;
+    }
+
+    public String getTableSchema() {
+        return tableSchema;
+    }
+
+    public void setTableSchema(String tableSchema) {
+        this.tableSchema = tableSchema;
     }
 }
