@@ -34,16 +34,16 @@ public class UpdatePartitionCount
     private int resultCode;
     @JsonProperty("result_msg")
     private String resultMsg;
-    @JsonProperty("is_auto_scale")
-    private boolean isAutoScale;
+    @JsonProperty("auto_scale")
+    private boolean autoScale;
     
     public boolean isAutoScale()
     {
-        return isAutoScale;
+        return autoScale;
     }
-    public void setAutoScale(boolean isAutoScale)
+    public void setAutoScale(boolean autoScale)
     {
-        this.isAutoScale = isAutoScale;
+        this.autoScale = autoScale;
     }
     public long getCreateTimestamp()
     {
@@ -91,7 +91,9 @@ public class UpdatePartitionCount
     {
         return "UpdatePartitionCount [createTimestamp=" + createTimestamp + ", srcPartitionCount=" + srcPartitionCount
             + ", targetPartitionCount=" + targetPartitionCount + ", resultCode=" + resultCode + ", resultMsg="
-            + resultMsg + ", isAutoScale=" + isAutoScale + "]";
+            + resultMsg + ", autoScale=" + autoScale + "]";
     }
+
+    
     
 }
