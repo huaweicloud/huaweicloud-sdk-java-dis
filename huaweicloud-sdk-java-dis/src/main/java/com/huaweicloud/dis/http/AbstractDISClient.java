@@ -306,7 +306,7 @@ public class AbstractDISClient {
     
     private void setParameters(Request<HttpRequest> request, Object requestContent)
     {
-        if (request.getHttpMethod().equals(HttpMethodName.GET))
+        if (request.getHttpMethod().equals(HttpMethodName.GET) || request.getHttpMethod().equals(HttpMethodName.DELETE))
         {
             if (requestContent != null)
             {
