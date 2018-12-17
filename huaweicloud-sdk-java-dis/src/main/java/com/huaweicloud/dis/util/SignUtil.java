@@ -24,6 +24,8 @@ import com.huaweicloud.dis.core.auth.signer.Signer;
 import com.huaweicloud.dis.core.auth.signer.SignerFactory;
 import com.huaweicloud.dis.Constants;
 
+import java.util.Properties;
+
 public class SignUtil
 {
     public static Request<HttpRequest> sign(Request<HttpRequest> request, String ak, String sk, String region)
@@ -31,6 +33,14 @@ public class SignUtil
         // sign request
         Signer signer = SignerFactory.getSigner(Constants.SERVICENAME, region);
         signer.sign(request, new BasicCredentials(ak, sk));
+        return request;
+    }
+
+    public static Request<HttpRequest> sign(Request<HttpRequest> request, String ak, String sk, String region, Properties prop)
+    {
+        // sign request
+        Signer signer = SignerFactory.getSigner(Constants.SERVICENAME, region);
+        signer.sign(request, new BasicCredentials(ak, sk),prop);
         return request;
     }
 }

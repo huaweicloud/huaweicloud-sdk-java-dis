@@ -21,6 +21,8 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.http.Protocol;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +48,11 @@ public class DISConfig extends Properties implements ClientParams
     private static final boolean DEFAULT_VALUE_IS_DEFAULT_TRUSTED_JKS_ENABLED = false;
     private static final boolean DEFAULT_VALUE_IS_DEFAULT_DATA_ENCRYPT_ENABLED = false;
     private static final boolean DEFAULT_VALUE_DATA_COMPRESS_ENABLED = false;
+    private static final boolean DEFAULT_VALUE_DATA_CACHE_ENABLED = false;
+    private static final String DEFAULT_VALUE_DATA_CACHE_DIR = "/data/dis";
+    private static final int DEFAULT_VALUE_DATA_CACHE_DIR_MAX_SIZE = 2048;
+    private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_MAX_SIZE = 512;
+    private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_LIFE_CYCLE = 24 * 3600;
     
     private static final BodySerializeType DEFAULT_VALUE_BODY_SERIALIZE_TYPE = BodySerializeType.json;
     
@@ -61,6 +68,16 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_SOCKET_TIMEOUT = "SOCKET_TIME_OUT";
     public static final String PROPERTY_MAX_PER_ROUTE = "DEFAULT_MAX_PER_ROUTE";
     public static final String PROPERTY_MAX_TOTAL = "DEFAULT_MAX_TOTAL";
+    public static final String PROPERTY_PROXY_HOST = "PROXY_HOST";
+    public static final String PROPERTY_PROXY_PORT = "PROXY_PORT";
+    public static final int DEFAULT_PORT_PROXY_PORT = 80;
+    public static final String PROPERTY_PROXY_PROTOCOL = "PROXY_PROTOCOL";
+    public static final String DEFAULT_PROPERTY_PROXY_PROTOCOL = "http";
+    public static final String PROPERTY_PROXY_USERNAME = "PROXY_USERNAME";
+    public static final String PROPERTY_PROXY_PASSWORD = "PROXY_PASSWORD";
+    public static final String PROPERTY_PROXY_WORKSTATION = "PROXY_WORKSTATION";
+    public static final String PROPERTY_PROXY_DOMAIN = "PROXY_DOMAIN";
+    public static final String PROPERTY_NON_PROXY_HOSTS = "NON_PROXY_HOSTS";
 
     public static final String PROPERTY_AK = "ak";
     public static final String PROPERTY_SK = "sk";
@@ -70,6 +87,16 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_IS_DEFAULT_DATA_ENCRYPT_ENABLED = "data.encrypt.enabled";
     
     public static final String PROPERTY_DATA_COMPRESS_ENABLED = "data.compress.enabled";
+    
+    public static final String PROPERTY_DATA_CACHE_ENABLED = "data.cache.enabled";
+    
+    public static final String PROPERTY_DATA_CACHE_DIR = "data.cache.dir";
+    
+    public static final String PROPERTY_DATA_CACHE_DISK_MAX_SIZE = "data.cache.disk.max.size";
+    
+    public static final String PROPERTY_DATA_CACHE_ARCHIVE_MAX_SIZE = "data.cache.archive.max.size";
+    
+    public static final String PROPERTY_DATA_CACHE_ARCHIVE_LIFE_CYCLE = "data.cache.archive.life.cycle";
 
     public static final String PROPERTY_BODY_SERIALIZE_TYPE = "body.serialize.type";
     
@@ -132,6 +159,31 @@ public class DISConfig extends Properties implements ClientParams
         return getBoolean(PROPERTY_DATA_COMPRESS_ENABLED, DEFAULT_VALUE_DATA_COMPRESS_ENABLED);
     }
     
+    public boolean isDataCacheEnabled()
+    {
+        return getBoolean(PROPERTY_DATA_CACHE_ENABLED, DEFAULT_VALUE_DATA_CACHE_ENABLED);
+    }
+    
+    public String getDataCacheDir()
+    {
+        return get(PROPERTY_DATA_CACHE_DIR, DEFAULT_VALUE_DATA_CACHE_DIR);
+    }
+    
+    public int getDataCacheDiskMaxSize()
+    {
+        return getInt(PROPERTY_DATA_CACHE_DISK_MAX_SIZE, DEFAULT_VALUE_DATA_CACHE_DIR_MAX_SIZE);
+    }
+    
+    public int getDataCacheArchiveMaxSize()
+    {
+        return getInt(PROPERTY_DATA_CACHE_ARCHIVE_MAX_SIZE, DEFAULT_VALUE_DATA_CACHE_ARCHIVE_MAX_SIZE);
+    }
+    
+    public int getDataCacheArchiveLifeCycle()
+    {
+        return getInt(PROPERTY_DATA_CACHE_ARCHIVE_LIFE_CYCLE, DEFAULT_VALUE_DATA_CACHE_ARCHIVE_LIFE_CYCLE);
+    }
+    
     public BodySerializeType getBodySerializeType(){
         String tmp = get(PROPERTY_BODY_SERIALIZE_TYPE, "");
         if(tmp == null || "".equals(tmp.trim())){
@@ -185,6 +237,64 @@ public class DISConfig extends Properties implements ClientParams
     public int getMaxTotal()
     {
         return getInt(PROPERTY_MAX_TOTAL, DEFAULT_VALUE_MAX_TOTAL);
+    }
+    
+    public String getProxyHost()
+    {
+        return get(PROPERTY_PROXY_HOST, null);
+    }
+    
+    public int getProxyPort()
+    {
+        return getInt(PROPERTY_PROXY_PORT, DEFAULT_PORT_PROXY_PORT);
+    }
+    
+    public Protocol getProxyProtocol()
+    {
+        String proxyProtocol = get(PROPERTY_PROXY_PROTOCOL, DEFAULT_PROPERTY_PROXY_PROTOCOL);
+        Protocol protocol = null;
+        try
+        {
+            protocol = Protocol.valueOf(proxyProtocol);
+        }
+        catch (IllegalArgumentException e)
+        {
+            protocol = Protocol.HTTP;
+        }
+        return protocol;
+    }
+    
+    public boolean isProxyEnabled() {
+        return getProxyHost() != null && getProxyPort() > 0;
+    }
+    
+    public String getProxyUsername()
+    {
+        return get(PROPERTY_PROXY_USERNAME, null);
+    }
+    
+    public String getProxyPassword()
+    {
+        return get(PROPERTY_PROXY_PASSWORD, null);
+    }
+    
+    public String getProxyWorkstation()
+    {
+        return get(PROPERTY_PROXY_WORKSTATION, null);
+    }
+    
+    public String getProxyDomain()
+    {
+        return get(PROPERTY_PROXY_DOMAIN, null);
+    }
+    
+    public String getNonProxyHosts()
+    {
+        return get(PROPERTY_NON_PROXY_HOSTS, null);
+    }
+    
+    public boolean isAuthenticatedProxy() {
+        return getProxyUsername() != null && getProxyPassword() != null;
     }
     
     public String getRegionId()
@@ -328,8 +438,8 @@ public class DISConfig extends Properties implements ClientParams
         }
         
         //根据区域，域名，端口拼接
-        String endpointFormat = "https://dis.%s.%s:%s";
-        return String.format(endpointFormat, getRegion(), "myhuaweicloud.com", "20004");
+        String endpointFormat = "https://dis.%s.%s";
+        return String.format(endpointFormat, getRegion(), "myhuaweicloud.com");
     }
     
     public String getManagerEndpoint(){
@@ -540,6 +650,26 @@ public class DISConfig extends Properties implements ClientParams
         return set(PROPERTY_DATA_COMPRESS_ENABLED, String.valueOf(dataCompressEnabled));
     }
     
+    public DISConfig setDataCacheEnabled(boolean dataCacheEnabled){
+        return set(PROPERTY_DATA_CACHE_ENABLED, String.valueOf(dataCacheEnabled));
+    }
+    
+    public DISConfig setDataCacheDir(String dataCacheDir){
+        return set(PROPERTY_DATA_CACHE_DIR, String.valueOf(dataCacheDir));
+    }
+    
+    public DISConfig setDataCacheDiskMaxSize(String dataCacheDiskMaxSize){
+        return set(PROPERTY_DATA_CACHE_DISK_MAX_SIZE, String.valueOf(dataCacheDiskMaxSize));
+    }
+    
+    public DISConfig setDataCacheArchiveMaxSize(String dataCacheArchiveMaxSize){
+        return set(PROPERTY_DATA_CACHE_ARCHIVE_MAX_SIZE, String.valueOf(dataCacheArchiveMaxSize));
+    }
+    
+    public DISConfig setDataCacheArchiveLifeCycle(String dataCacheArchiveLifeCycle){
+        return set(PROPERTY_DATA_CACHE_ARCHIVE_LIFE_CYCLE, String.valueOf(dataCacheArchiveLifeCycle));
+    }
+    
     public DISConfig setBodySerializeType(BodySerializeType bodySerializeType){
         return set(PROPERTY_BODY_SERIALIZE_TYPE, String.valueOf(bodySerializeType));
     }
@@ -556,6 +686,38 @@ public class DISConfig extends Properties implements ClientParams
     
     public DISConfig setNIOIOThreads(int ioThreads) {
     	return set(PROPERTY_NIO_IO_THREADS, String.valueOf(ioThreads));
+    }
+    
+    public DISConfig setProxyHost(String proxyHost) {
+        return set(PROPERTY_PROXY_HOST, proxyHost);
+    }
+    
+    public DISConfig setProxyPort(String proxyPort) {
+        return set(PROPERTY_PROXY_PORT, proxyPort);
+    }
+    
+    public DISConfig setProxyProtocol(Protocol proxyProtocol) {
+        return set(PROPERTY_PROXY_PROTOCOL, proxyProtocol.toString());
+    }
+    
+    public DISConfig setProxyUsername(String proxyUsername) {
+        return set(PROPERTY_PROXY_USERNAME, proxyUsername);
+    }
+    
+    public DISConfig setProxyPassword(String proxyPassword) {
+        return set(PROPERTY_PROXY_PASSWORD, proxyPassword);
+    }
+    
+    public DISConfig setProxyWorkstation(String proxyPassword) {
+        return set(PROPERTY_PROXY_WORKSTATION, proxyPassword);
+    }
+    
+    public DISConfig setProxyDomain(String proxyDomain) {
+        return set(PROPERTY_PROXY_DOMAIN, proxyDomain);
+    }
+    
+    public DISConfig setNonProxyHosts(String nonProxyHosts) {
+        return set(PROPERTY_NON_PROXY_HOSTS, nonProxyHosts);
     }
     
     public DISConfig set(String key, String value){

@@ -18,7 +18,7 @@ The recommended way to use the DIS SDK for Java in your project is to consume it
     <dependency>
         <groupId>com.huaweicloud.dis</groupId>
         <artifactId>huaweicloud-sdk-java-dis</artifactId>
-        <version>1.3.0-SNAPSHOT</version>
+        <version>1.3.1</version>
         <scope>compile</scope>
     </dependency>
 
@@ -26,7 +26,7 @@ The recommended way to use the DIS SDK for Java in your project is to consume it
 ## Building From Source
 Once you check out the code from GitHub, you can build it using Maven:
 
-    mvn clean install -Dgpg.skip=true
+    mvn clean install
 
 ## License
 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0.html)

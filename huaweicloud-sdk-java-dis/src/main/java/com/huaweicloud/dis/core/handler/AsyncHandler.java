@@ -22,7 +22,7 @@ public interface AsyncHandler<RESULT> {
 
 	/**
 	 * Invoked after an asynchronous request 
-	 * @param exception
+	 * @param exception 异常对象
 	 */
 	public void onError(Exception exception);
 
@@ -31,8 +31,6 @@ public interface AsyncHandler<RESULT> {
 	 * have access to the original request object and the returned response
 	 * object.
 	 *
-	 * @param request
-	 *            The initial request created by the caller
 	 * @param result
 	 *            The successful result of the executed operation.
 	 */

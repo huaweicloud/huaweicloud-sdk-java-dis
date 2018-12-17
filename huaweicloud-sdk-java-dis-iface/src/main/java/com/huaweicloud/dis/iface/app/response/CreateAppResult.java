@@ -1,5 +1,5 @@
 /*
- * Copyright 2002-2016 the original author or authors.
+ * Copyright 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,26 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.huaweicloud.dis.iface.coordinator.response;
+
+package com.huaweicloud.dis.iface.app.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class HeartbeatResponse
+public class CreateAppResult
 {
-     private HeartBeatResponseState state;
-
-    public HeartBeatResponseState getState() {
-        return state;
-    }
-
-    public void setState(HeartBeatResponseState state) {
-        this.state = state;
-    }
-
-    public enum HeartBeatResponseState {
-        JOINING,SYNCING,STABLE,GROUP_NOT_EXIST;
-    }
 }

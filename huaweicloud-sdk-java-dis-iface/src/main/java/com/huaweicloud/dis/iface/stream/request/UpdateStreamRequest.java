@@ -25,6 +25,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class UpdateStreamRequest
 {
     /**
+     * 更新类别 UpdateStreamTypeEnum
+     * 
+     * "DATA_TYPE"
+     * "AUTO_SCALE"
+     * */
+    @JsonProperty("update_type")
+    private String updateType; 
+    
+    /**
      * <p>
      * 通道名称.
      * </p>
@@ -37,16 +46,28 @@ public class UpdateStreamRequest
      * 指定修改后的源数据类型.
      * </p>
      */
-    @JsonProperty("target_data_type")
-    private String targetDataType;
+    @JsonProperty("data_type")
+    private String dataType;
 
     /**
      * <p>
      * 指定修改后的源数据schema.
      * </p>
      */
-    @JsonProperty("target_data_schema")
-    private String targetDataSchema;
+    @JsonProperty("data_schema")
+    private String dataSchema;
+    
+    /**
+     * 设置是否自动扩缩容
+     * */
+    @JsonProperty("auto_scale_enabled")
+    private Boolean autoScaleEnabled;
+    
+    @JsonProperty("auto_scale_min_partition_count")
+    private Integer autoScaleMinPartitionCount;
+    
+    @JsonProperty("auto_scale_max_partition_count")
+    private Integer autoScaleMaxPartitionCount;
     
     public String getStreamName()
     {
@@ -57,28 +78,77 @@ public class UpdateStreamRequest
     {
         this.streamName = streamName;
     }
-    
-    public String getTargetDataType()
+
+    public String getUpdateType()
     {
-        return targetDataType;
-    }
-    
-    public void setTargetDataType(String targetDataType)
-    {
-        this.targetDataType = targetDataType;
+        return updateType;
     }
 
-    public String getTargetDataSchema() {
-        return targetDataSchema;
+    public void setUpdateType(String updateType)
+    {
+        this.updateType = updateType;
     }
 
-    public void setTargetDataSchema(String targetDataSchema) {
-        this.targetDataSchema = targetDataSchema;
+    public String getDataType()
+    {
+        return dataType;
+    }
+
+    public void setDataType(String dataType)
+    {
+        this.dataType = dataType;
+    }
+
+    public String getDataSchema()
+    {
+        return dataSchema;
+    }
+
+    public void setDataSchema(String dataSchema)
+    {
+        this.dataSchema = dataSchema;
+    }
+
+    public Boolean getAutoScaleEnabled()
+    {
+        return autoScaleEnabled;
+    }
+
+    public void setAutoScaleEnabled(Boolean autoScaleEnabled)
+    {
+        this.autoScaleEnabled = autoScaleEnabled;
+    }
+
+    public Integer getAutoScaleMinPartitionCount()
+    {
+        return autoScaleMinPartitionCount;
+    }
+
+    public void setAutoScaleMinPartitionCount(Integer autoScaleMinPartitionCount)
+    {
+        this.autoScaleMinPartitionCount = autoScaleMinPartitionCount;
+    }
+
+    public Integer getAutoScaleMaxPartitionCount()
+    {
+        return autoScaleMaxPartitionCount;
+    }
+
+    public void setAutoScaleMaxPartitionCount(Integer autoScaleMaxPartitionCount)
+    {
+        this.autoScaleMaxPartitionCount = autoScaleMaxPartitionCount;
     }
 
     @Override
     public String toString()
     {
-        return "UpdateStreamRequest [streamName=" + streamName + ", targetDataType=" + targetDataType + "]";
+        return "UpdateStreamRequest [updateType=" + updateType + ", streamName=" + streamName + ", dataType="
+            + dataType + ", dataSchema=" + dataSchema + ", autoScaleEnabled=" + autoScaleEnabled
+            + ", autoScaleMinPartitionCount=" + autoScaleMinPartitionCount + ", autoScaleMaxPartitionCount="
+            + autoScaleMaxPartitionCount + "]";
+    }
+    
+    public static enum UpdateStreamTypeEnum{
+        DATA_TYPE, AUTO_SCALE
     }
 }

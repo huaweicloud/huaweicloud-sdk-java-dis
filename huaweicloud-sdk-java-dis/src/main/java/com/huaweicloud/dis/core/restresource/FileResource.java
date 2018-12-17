@@ -18,9 +18,6 @@ package com.huaweicloud.dis.core.restresource;
 
 import com.huaweicloud.dis.core.util.StringUtils;
 
-/**
- * Created by z00382129 on 2017/10/11.
- */
 public class FileResource extends RestResource
 {
     private static final String DEFAULT_RESOURCE_NAME = "files";

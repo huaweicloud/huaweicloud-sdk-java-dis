@@ -51,6 +51,15 @@ public class CreateStreamRequest
     @JsonProperty("partition_count")
     private Integer partitionCount;
     
+    @JsonProperty("auto_scale_enabled")
+    private Boolean autoScaleEnabled;
+    
+    @JsonProperty("auto_scale_min_partition_count")
+    private Integer autoScaleMinPartitionCount;
+    
+    @JsonProperty("auto_scale_max_partition_count")
+    private Integer autoScaleMaxPartitionCount;
+    
     /** -------------------- DIS属性 ------------------- **/
     
     /** OBS目的对象描述 */
@@ -100,12 +109,29 @@ public class CreateStreamRequest
     private String dataSchema;
 
     /**
+     * <p>
+     * 数据的压缩类型，目前支持：不压缩, snappy, gzip, zip
+     * </p>
+     */
+    @JsonProperty("compression_format")
+    private String compressionFormat;
+
+
+    /**
      * 数据保留时长，单位为小时，默认为24小时
      */
     // @JsonDeserialize(using = ForceIntegerDeserializer.class)
     @JsonProperty("data_duration")
     private Integer dataDuration;
-    
+
+    /**
+     * <p>
+     * CSV格式数据的描述，如delimiter
+     * </p>
+     */
+    @JsonProperty("csv_properties")
+    private CSVProperties csvProperties;
+
     /**
      * <p>
      * 通道标签列表
@@ -114,6 +140,37 @@ public class CreateStreamRequest
     @JsonProperty("tags")
     private List<Tag> tags;
     
+    
+    public Boolean getAutoScaleEnabled()
+    {
+        return autoScaleEnabled;
+    }
+
+    public void setAutoScaleEnabled(Boolean autoScaleEnabled)
+    {
+        this.autoScaleEnabled = autoScaleEnabled;
+    }
+
+    public Integer getAutoScaleMinPartitionCount()
+    {
+        return autoScaleMinPartitionCount;
+    }
+
+    public void setAutoScaleMinPartitionCount(Integer autoScaleMinPartitionCount)
+    {
+        this.autoScaleMinPartitionCount = autoScaleMinPartitionCount;
+    }
+
+    public Integer getAutoScaleMaxPartitionCount()
+    {
+        return autoScaleMaxPartitionCount;
+    }
+
+    public void setAutoScaleMaxPartitionCount(Integer autoScaleMaxPartitionCount)
+    {
+        this.autoScaleMaxPartitionCount = autoScaleMaxPartitionCount;
+    }
+
     public void setStreamName(String streamName)
     {
         this.streamName = streamName;
@@ -253,7 +310,23 @@ public class CreateStreamRequest
 		this.tags = tags;
 	}
 
-	@Override
+    public String getCompressionFormat() {
+        return compressionFormat;
+    }
+
+    public void setCompressionFormat(String compressionFormat) {
+        this.compressionFormat = compressionFormat;
+    }
+
+    public CSVProperties getCsvProperties() {
+        return csvProperties;
+    }
+
+    public void setCsvProperties(CSVProperties csvProperties) {
+        this.csvProperties = csvProperties;
+    }
+
+    @Override
     public String toString()
     {
         StringBuilder sb = new StringBuilder();

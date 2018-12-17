@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.huaweicloud.dis.iface.data.request.StreamType;
+import com.huaweicloud.dis.iface.stream.request.CSVProperties;
 import com.huaweicloud.dis.iface.stream.request.Tag;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -154,6 +155,22 @@ public class DescribeStreamResult
 
     /**
      * <p>
+     * 数据的压缩类型，目前支持：不压缩, snappy, gzip, zip
+     * </p>
+     */
+    @JsonProperty("compression_format")
+    private String compressionFormat;
+
+    /**
+     * <p>
+     * CSV格式数据的描述，如delimiter
+     * </p>
+     */
+    @JsonProperty("csv_properties")
+    private CSVProperties csvProperties;
+
+    /**
+     * <p>
      * 可写分区(即ACTIVE状态)数量
      * </p>
      */
@@ -190,6 +207,45 @@ public class DescribeStreamResult
     @JsonProperty("tags")
     private List<Tag> tags;
     
+    @JsonProperty("auto_scale_enabled")
+    private Boolean autoScaleEnabled;
+
+    @JsonProperty("auto_scale_min_partition_count")
+    private Integer autoScaleMinPartitionCount;
+
+    @JsonProperty("auto_scale_max_partition_count")
+    private Integer autoScaleMaxPartitionCount;
+
+    public Boolean getAutoScaleEnabled()
+    {
+        return autoScaleEnabled;
+    }
+
+    public void setAutoScaleEnabled(Boolean autoScaleEnabled)
+    {
+        this.autoScaleEnabled = autoScaleEnabled;
+    }
+
+    public Integer getAutoScaleMinPartitionCount()
+    {
+        return autoScaleMinPartitionCount;
+    }
+
+    public void setAutoScaleMinPartitionCount(Integer autoScaleMinPartitionCount)
+    {
+        this.autoScaleMinPartitionCount = autoScaleMinPartitionCount;
+    }
+
+    public Integer getAutoScaleMaxPartitionCount()
+    {
+        return autoScaleMaxPartitionCount;
+    }
+
+    public void setAutoScaleMaxPartitionCount(Integer autoScaleMaxPartitionCount)
+    {
+        this.autoScaleMaxPartitionCount = autoScaleMaxPartitionCount;
+    }
+
     public String getStreamId()
     {
         return streamId;
@@ -376,7 +432,23 @@ public class DescribeStreamResult
 		this.tags = tags;
 	}
 
-	@Override
+    public String getCompressionFormat() {
+        return compressionFormat;
+    }
+
+    public void setCompressionFormat(String compressionFormat) {
+        this.compressionFormat = compressionFormat;
+    }
+
+    public CSVProperties getCsvProperties() {
+        return csvProperties;
+    }
+
+    public void setCsvProperties(CSVProperties csvProperties) {
+        this.csvProperties = csvProperties;
+    }
+
+    @Override
     public String toString()
     {
         return "DescribeStreamResult [streamId=" + streamId + ", streamName=" + streamName + ", createTime="

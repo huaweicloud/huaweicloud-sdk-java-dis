@@ -16,25 +16,30 @@
 
 package com.huaweicloud.dis.util;
 
-import com.huaweicloud.dis.DISConfig;
-import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.exception.DISClientException;
-import com.huaweicloud.dis.http.DefaultResponseErrorHandler;
-import com.huaweicloud.dis.http.HttpMessageConverterExtractor;
-import com.huaweicloud.dis.http.ResponseErrorHandler;
-import com.huaweicloud.dis.http.ResponseExtractor;
-import com.huaweicloud.dis.http.converter.ByteArrayHttpMessageConverter;
-import com.huaweicloud.dis.http.converter.HttpMessageConverter;
-import com.huaweicloud.dis.http.converter.StringHttpMessageConverter;
-import com.huaweicloud.dis.http.converter.json.JsonHttpMessageConverter;
-import com.huaweicloud.dis.http.converter.protobuf.ProtobufHttpMessageConverter;
-import com.huaweicloud.dis.http.exception.ResourceAccessException;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import javax.net.ssl.SSLContext;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -53,18 +58,20 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLContext;
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.http.HttpMethodName;
+import com.huaweicloud.dis.exception.DISClientException;
+import com.huaweicloud.dis.http.DefaultResponseErrorHandler;
+import com.huaweicloud.dis.http.HttpMessageConverterExtractor;
+import com.huaweicloud.dis.http.ResponseErrorHandler;
+import com.huaweicloud.dis.http.ResponseExtractor;
+import com.huaweicloud.dis.http.SdkProxyRoutePlanner;
+import com.huaweicloud.dis.http.converter.ByteArrayHttpMessageConverter;
+import com.huaweicloud.dis.http.converter.HttpMessageConverter;
+import com.huaweicloud.dis.http.converter.StringHttpMessageConverter;
+import com.huaweicloud.dis.http.converter.json.JsonHttpMessageConverter;
+import com.huaweicloud.dis.http.converter.protobuf.ProtobufHttpMessageConverter;
+import com.huaweicloud.dis.http.exception.ResourceAccessException;
 
 /**
  * Rest Client for RESTful API
@@ -415,7 +422,17 @@ public class RestClient
             // }
             // }
         }
-        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(disConfig.getSocketTimeOut()).setConnectTimeout(disConfig.getConnectionTimeOut()).build();
+        RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
+//        if (disConfig.isProxyEnabled() && disConfig.isAuthenticatedProxy())
+//        {
+//            List<String> apacheAuthenticationSchemes = new ArrayList<>();
+//            apacheAuthenticationSchemes.add(AuthSchemes.NTLM);
+//            apacheAuthenticationSchemes.add(AuthSchemes.BASIC);
+//            apacheAuthenticationSchemes.add(AuthSchemes.DIGEST);
+//            
+//            requestConfigBuilder.setProxyPreferredAuthSchemes(apacheAuthenticationSchemes);
+//        }
+        RequestConfig requestConfig = requestConfigBuilder.setSocketTimeout(disConfig.getSocketTimeOut()).setConnectTimeout(disConfig.getConnectionTimeOut()).build();
         Registry<ConnectionSocketFactory> registry = registryBuilder.build();
         // 设置连接管理器
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(registry);
@@ -425,8 +442,32 @@ public class RestClient
         // connManager.setDefaultSocketConfig(socketConfig);
         
         // 构建客户端
-        return HttpClientBuilder.create()
-            .setConnectionManager(connManager)
+        HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+        if (disConfig.isProxyEnabled())
+        {
+            logger.info("Configuring Proxy. Proxy Host: {}, Proxy Port: {}.",
+                disConfig.getProxyHost(),
+                disConfig.getProxyPort());
+            
+            httpClientBuilder.setRoutePlanner(new SdkProxyRoutePlanner(disConfig.getProxyHost(),
+                disConfig.getProxyPort(), disConfig.getProxyProtocol(), disConfig.getNonProxyHosts()));
+            
+            if (disConfig.isAuthenticatedProxy())
+            {
+                httpClientBuilder.setDefaultCredentialsProvider(ApacheUtils.newProxyCredentialsProvider(disConfig));
+            }
+        }
+//        Registry<AuthSchemeProvider> authSchemeRegistry =
+//            RegistryBuilder.<AuthSchemeProvider> create()
+//                .register(AuthSchemes.NTLM, new NTLMSchemeFactory())
+//                .register(AuthSchemes.BASIC, new BasicSchemeFactory())
+//                .register(AuthSchemes.DIGEST, new DigestSchemeFactory())
+//                .register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory())
+//                .register(AuthSchemes.KERBEROS, new KerberosSchemeFactory())
+//                .build();
+//        httpClientBuilder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
+        
+        return httpClientBuilder.setConnectionManager(connManager)
             .setRetryHandler(new HttpRequestRetryHandler(3, true))
             .setDefaultRequestConfig(requestConfig)
             .build();

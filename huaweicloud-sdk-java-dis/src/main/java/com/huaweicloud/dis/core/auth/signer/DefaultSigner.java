@@ -19,11 +19,7 @@ package com.huaweicloud.dis.core.auth.signer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.huaweicloud.dis.core.ClientException;
 import com.huaweicloud.dis.core.Request;
@@ -156,7 +152,13 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
         request.addHeader(SignerConstants.AUTHORIZATION,
             buildAuthorizationHeader(request, signature, sanitizedCredentials, signerParams));
     }
-    
+
+    @Override
+    public void sign(Request<?> request, Credentials credentials, Properties prop) {
+        setProvider(prop.getProperty(SignerConstants.SIGN_PROVIDER));
+        sign(request,credentials);
+    }
+
     @Override
     public void presignRequest(Request< ? > request, Credentials credentials, Date userSpecifiedExpirationDate) {
         long expirationInSeconds = generateExpirationDate(userSpecifiedExpirationDate);
@@ -410,7 +412,13 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
         byte[] kService = sign(serviceName, kRegion, SigningAlgorithm.HmacSHA256);
         return sign(SignerConstants.SDK_TERMINATOR, kService, SigningAlgorithm.HmacSHA256);
     }
-    
+
+    @Override
+    public boolean verify(Request<?> request, Credentials credentials, Properties prop) {
+        setProvider(prop.getProperty(SignerConstants.SIGN_PROVIDER));
+        return verify(request,credentials);
+    }
+
     @Override
     public boolean verify(Request< ? > request, Credentials credentials) {
         //AK、SK

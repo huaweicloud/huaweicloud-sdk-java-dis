@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package com.huaweicloud.dis.iface.app.request;
+package com.huaweicloud.dis.util.cache;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateAppRequest {
-
-    @JsonProperty("app_name")
-    private String appName;
-
-    public String getAppName() {
-        return appName;
-    }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
-    }
+/**
+ * 缓存管理接口
+ *
+ */
+public interface ICacheManager<T>
+{
+    
+    /**
+     * 加入缓存
+     * 
+     * @param t 缓存内容
+     */
+    public void putToCache(T t);
+    
+    /**
+     * 是否还有足够的缓存空间
+     * 
+     * @param data 待缓存的数据
+     * @return <code>true</code> 空间足够
+     *          <code>false</code> 空间不足
+     */
+    public boolean hasEnoughSpace(String data);
+    
 }

@@ -107,7 +107,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         return submit(putRecordsParam, asyncHandler, new InnerExecutor<PutRecordsRequest, PutRecordsResult>()
         {
             public PutRecordsResult innerExecute(PutRecordsRequest putRecordsParam) {
-                return innerPutRecordsWithRetry(putRecordsParam);
+                return innerPutRecordsSupportingCache(putRecordsParam);
             };
         });
     }
@@ -482,7 +482,7 @@ public class DISClientAsync extends DISClient implements DISAsync
             @Override
             public void doWithRetry(PutRecordsRequest request, int maxRetries, long maxDelay)
             {
-                PutRecordsResult putRecordsResult = innerPutRecordsWithRetry(putRecordsRequest);
+                PutRecordsResult putRecordsResult = innerPutRecordsSupportingCache(putRecordsRequest);
                 
                 if (putRecordsResult.getFailedRecordCount().intValue() > 0)
                 {

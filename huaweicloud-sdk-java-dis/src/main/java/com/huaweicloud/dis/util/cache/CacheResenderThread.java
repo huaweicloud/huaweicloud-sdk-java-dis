@@ -14,24 +14,33 @@
  * limitations under the License.
  */
 
-package com.huaweicloud.dis.iface.app.request;
+package com.huaweicloud.dis.util.cache;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class CreateAppRequest {
-
-    @JsonProperty("app_name")
-    private String appName;
-
-    public String getAppName() {
-        return appName;
+/**
+ * 缓存重发线程
+ *
+ */
+public class CacheResenderThread extends Thread
+{
+    private static final Logger LOGGER = LoggerFactory.getLogger(CacheUtils.class);
+    
+    public CacheResenderThread(String name)
+    {
+        setDaemon(true);
+        setName("Cache-ResenderThread-" + name);
     }
-
-    public void setAppName(String appName) {
-        this.appName = appName;
+    
+    @Override
+    public void run()
+    {
+        LOGGER.info("Starting cache resender thread.");
+        
+        // TODO 归档缓存数据重传
+        
+        
+        LOGGER.info("Terminate cache resender thread.");
     }
 }

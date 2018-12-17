@@ -42,6 +42,14 @@ public class ListAppsRequest
      */
     @JsonProperty("start_app_name")
     private String exclusiveStartAppName;
+    
+    /**
+     * <p>
+     * Specific stream name of apps to list.
+     * </p>
+     */
+    @JsonProperty("stream_name")
+    private String streamName;
 
     public Integer getLimit()
     {
@@ -61,5 +69,15 @@ public class ListAppsRequest
     public void setExclusiveStartAppName(String exclusiveStartAppName)
     {
         this.exclusiveStartAppName = exclusiveStartAppName;
+    }
+
+    public String getStreamName()
+    {
+        return streamName;
+    }
+
+    public void setStreamName(String streamName)
+    {
+        this.streamName = streamName;
     }
 }

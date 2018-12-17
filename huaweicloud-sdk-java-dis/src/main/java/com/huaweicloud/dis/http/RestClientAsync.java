@@ -197,7 +197,7 @@ public class RestClientAsync extends AbstractRestClient{
      * 
      * @param request 请求体
      * @param responseExtractor 响应解析器
-     * @param callback 
+     * @param callback 回调
      * @param <T> Generic type
      * @return 响应体
      */

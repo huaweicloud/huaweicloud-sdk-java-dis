@@ -44,6 +44,14 @@ public class DescribeTransferTaskResult {
 
     /**
      * <p>
+     * The ID of the delivery task.
+     * </p>
+     */
+    @JsonProperty("task_id")
+    private String transferTaskId;
+
+    /**
+     * <p>
      * The destination type of the delivery task. For Example, OBS.
      * </p>
      */
@@ -136,6 +144,14 @@ public class DescribeTransferTaskResult {
 
     public void setTransferTaskName(String transferTaskName) {
         this.transferTaskName = transferTaskName;
+    }
+
+    public String getTransferTaskId() {
+        return transferTaskId;
+    }
+
+    public void setTransferTaskId(String transferTaskId) {
+        this.transferTaskId = transferTaskId;
     }
 
     public long getCreateTime() {

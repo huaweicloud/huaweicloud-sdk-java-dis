@@ -3,9 +3,6 @@ package com.huaweicloud.dis.iface.coordinator.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-/**
- * Created by z00382129 on 2017/10/17.
- */
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class LeaveGroupRequest {

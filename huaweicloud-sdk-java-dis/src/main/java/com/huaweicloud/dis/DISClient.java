@@ -43,7 +43,9 @@ import com.huaweicloud.dis.core.restresource.ResourcePathBuilder;
 import com.huaweicloud.dis.core.restresource.StateResource;
 import com.huaweicloud.dis.core.restresource.StreamResource;
 import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.AbstractDISClient;
+import com.huaweicloud.dis.http.exception.HttpClientErrorException;
 import com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils;
 import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
@@ -60,6 +62,8 @@ import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
 import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
 import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
 import com.huaweicloud.dis.util.ExponentialBackOff;
+import com.huaweicloud.dis.util.cache.CacheManager;
+import com.huaweicloud.dis.util.cache.CacheUtils;
 
 public class DISClient extends AbstractDISClient implements DIS
 {
@@ -83,7 +87,57 @@ public class DISClient extends AbstractDISClient implements DIS
     @Override
     public PutRecordsResult putRecords(PutRecordsRequest putRecordsParam)
     {
-        return innerPutRecordsWithRetry(putRecordsParam);
+        return innerPutRecordsSupportingCache(putRecordsParam);
+    }
+    
+    protected PutRecordsResult innerPutRecordsSupportingCache(PutRecordsRequest putRecordsParam)
+    {
+        if (disConfig.isDataCacheEnabled())
+        {
+            // 开启本地缓存
+            PutRecordsResult putRecordsResult = null;
+            try
+            {
+                putRecordsResult = innerPutRecordsWithRetry(putRecordsParam);
+                // 部分记录上传失败
+                if (putRecordsResult.getFailedRecordCount().get() > 0)
+                {
+                    // 过滤出上传失败的记录
+                    List<PutRecordsResultEntry> putRecordsResultEntries = putRecordsResult.getRecords();
+                    List<PutRecordsRequestEntry> failedPutRecordsRequestEntries = new ArrayList<>();
+                    int index = 0;
+                    for (PutRecordsResultEntry putRecordsResultEntry : putRecordsResultEntries)
+                    {
+                        if (!StringUtils.isNullOrEmpty(putRecordsResultEntry.getErrorCode()))
+                        {
+                            failedPutRecordsRequestEntries.add(putRecordsParam.getRecords().get(index));
+                        }
+                        index++;
+                    }
+                    putRecordsParam.setRecords(failedPutRecordsRequestEntries);
+                    
+                    LOG.info("Local data cache is enabled, try to put failed records to local.");
+                    
+                    CacheUtils.putToCache(putRecordsParam, disConfig); // 写入本地缓存
+                }
+            }
+            catch (Exception e)
+            {
+                if (!(e.getCause() instanceof HttpClientErrorException))
+                {
+                    // 网络异常
+                    LOG.info("Local data cache is enabled, try to put failed records to local.");
+                    
+                    CacheUtils.putToCache(putRecordsParam, disConfig); // 写入本地缓存
+                }
+                throw e;
+            }
+            return putRecordsResult;
+        }
+        else
+        {
+            return innerPutRecordsWithRetry(putRecordsParam);
+        }
     }
 
     protected PutRecordsResult innerPutRecordsWithRetry(PutRecordsRequest putRecordsParam)
