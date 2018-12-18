@@ -6,6 +6,7 @@ import com.huaweicloud.dis.iface.data.IDataService;
 import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
 import com.huaweicloud.dis.iface.data.response.PutRecordResult;
 import com.huaweicloud.dis.iface.stream.IStreamService;
+import com.huaweicloud.dis.iface.transfertask.ITransferTaskService;
 
 /**
  * SDK定义的API，可以理解为对RESTAPI的高层次封装
@@ -15,7 +16,7 @@ import com.huaweicloud.dis.iface.stream.IStreamService;
  * 
  * 
  */
-public interface DIS extends IDataService, IStreamService, IAppService
+public interface DIS extends IDataService, IStreamService, IAppService, ITransferTaskService
 {
     
 	/**

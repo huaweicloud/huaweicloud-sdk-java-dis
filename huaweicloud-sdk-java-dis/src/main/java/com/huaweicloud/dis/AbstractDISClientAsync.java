@@ -10,32 +10,12 @@ import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
-import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
-import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
-import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
-import com.huaweicloud.dis.iface.stream.request.UpdateStreamRequest;
-import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
-import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
-import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
-import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.iface.stream.request.*;
+import com.huaweicloud.dis.iface.stream.response.*;
+import com.huaweicloud.dis.iface.transfertask.request.*;
+import com.huaweicloud.dis.iface.transfertask.response.*;
 
 public abstract class AbstractDISClientAsync extends AbstractDISClient implements DIS, DISAsync{
 	
@@ -235,7 +215,7 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	{
 	    try {
             return updateStreamAsync(updateStreamRequest).get();
-        } catch (ExecutionException e) {            
+        } catch (ExecutionException e) {
             throw new DISClientException(e.getCause() == null ? e : e.getCause());
         }catch(InterruptedException e) {
             throw new DISClientException(e);
@@ -246,5 +226,59 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
     {
         throw new UnsupportedOperationException();
     }
-	
+    
+    @Override
+    public CreateTransferTaskResult createTransferTask(CreateTransferTaskRequest createTransferTaskRequest) {
+        try {
+            return createTransferTaskAsync(createTransferTaskRequest).get();
+        } catch (ExecutionException e) {
+            throw new DISClientException(e.getCause() == null ? e : e.getCause());
+        }catch(InterruptedException e) {
+            throw new DISClientException(e);
+        }
+    }
+    
+    @Override
+    public UpdateTransferTaskResult updateTransferTask(UpdateTransferTaskRequest updateTransferTaskRequest) {
+        try {
+            return updateTransferTaskAsync(updateTransferTaskRequest).get();
+        } catch (ExecutionException e) {
+            throw new DISClientException(e.getCause() == null ? e : e.getCause());
+        }catch(InterruptedException e) {
+            throw new DISClientException(e);
+        }
+    }
+    
+    @Override
+    public DeleteTransferTaskResult deleteTransferTask(DeleteTransferTaskRequest deleteTransferTaskRequest) {
+        try {
+            return deleteTransferTaskAsync(deleteTransferTaskRequest).get();
+        } catch (ExecutionException e) {
+            throw new DISClientException(e.getCause() == null ? e : e.getCause());
+        }catch(InterruptedException e) {
+            throw new DISClientException(e);
+        }
+    }
+    
+    @Override
+    public ListTransferTasksResult listTransferTasks(ListTransferTasksRquest listTransferTasksRequest) {
+        try {
+            return listTransferTasksAsync(listTransferTasksRequest).get();
+        } catch (ExecutionException e) {
+            throw new DISClientException(e.getCause() == null ? e : e.getCause());
+        }catch(InterruptedException e) {
+            throw new DISClientException(e);
+        }
+    }
+    
+    @Override
+    public DescribeTransferTaskResult describeTransferTask(DescribeTransferTaskRequest describeTransferTaskRequest) {
+        try {
+            return describeTransferTaskAsync(describeTransferTaskRequest).get();
+        } catch (ExecutionException e) {
+            throw new DISClientException(e.getCause() == null ? e : e.getCause());
+        }catch(InterruptedException e) {
+            throw new DISClientException(e);
+        }
+    }
 }
