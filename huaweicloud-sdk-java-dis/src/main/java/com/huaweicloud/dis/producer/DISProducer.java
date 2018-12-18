@@ -16,13 +16,6 @@
 
 package com.huaweicloud.dis.producer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.huaweicloud.dis.DISAsync;
 import com.huaweicloud.dis.DISClientAsync;
 import com.huaweicloud.dis.DISConfig;
@@ -34,6 +27,12 @@ import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
 import com.huaweicloud.dis.producer.internals.RecordAccumulator;
 import com.huaweicloud.dis.producer.internals.Sender;
 import com.huaweicloud.dis.producer.internals.StreamPartition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 
 /**
@@ -50,21 +49,30 @@ public class DISProducer
 
     // 发送前等待的最长时间(ms)
     private long lingerMs = 0;
-    
-    private ExecutorService executorService;
 
     private RecordAccumulator accumulator;
     
     private Sender sender;
-    
+
+    private DISAsync disAsync;
+
     public DISProducer(DISConfig disConfig)
     {
         this(disConfig, Executors.newFixedThreadPool(disConfig.getMaxInFlightRequestsPerConnection()));
     }
-    
+
+    public DISProducer(DISConfig disConfig, DISAsync disAsync)
+    {
+        this(disConfig, disAsync, null);
+    }
+
     public DISProducer(DISConfig disConfig, ExecutorService executorService)
     {
-        this.executorService = executorService;
+        this(disConfig, null, executorService);
+    }
+
+    private DISProducer(DISConfig disConfig, DISAsync disAsync, ExecutorService executorService)
+    {
         DISConfig config = DISConfig.buildConfig(disConfig);
         this.lingerMs = config.getLingerMs();
         this.maxBlockMs = config.getMaxBlockMs();
@@ -72,9 +80,16 @@ public class DISProducer
         int batchCount = config.getBatchCount();
         long bufferSize = config.getBufferMemory();
         int bufferCount = config.getBufferCount();
-        DISAsync client = new DISClientAsync(config, this.executorService);
+        if (disAsync != null)
+        {
+            this.disAsync = disAsync;
+        }
+        else
+        {
+            this.disAsync = new DISClientAsync(config, executorService);
+        }
         this.accumulator = new RecordAccumulator(batchSize, batchCount, bufferSize, bufferCount, this.lingerMs);
-        this.sender = new Sender(client, accumulator, this.lingerMs);
+        this.sender = new Sender(this.disAsync, accumulator, this.lingerMs);
 
         sender.start();
     }
@@ -124,9 +139,7 @@ public class DISProducer
     {
         accumulator.close();
         sender.close();
-        if(executorService != null){
-            executorService.shutdown();
-        }
+        disAsync.close();
     }
     
     private static class PutRecordsResultEntryFuture implements Future<PutRecordsResultEntry>{

@@ -1,38 +1,11 @@
 package com.huaweicloud.dis;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
-
-import org.apache.http.HttpRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.huaweicloud.dis.DISConfig.BodySerializeType;
 import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.core.restresource.AppsResource;
-import com.huaweicloud.dis.core.restresource.CheckPointResource;
-import com.huaweicloud.dis.core.restresource.CursorResource;
-import com.huaweicloud.dis.core.restresource.FileResource;
-import com.huaweicloud.dis.core.restresource.RecordResource;
-import com.huaweicloud.dis.core.restresource.ResourcePathBuilder;
-import com.huaweicloud.dis.core.restresource.StateResource;
-import com.huaweicloud.dis.core.restresource.StreamResource;
+import com.huaweicloud.dis.core.restresource.*;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.AbstractCallbackAdapter;
 import com.huaweicloud.dis.http.AbstractFutureAdapter;
@@ -43,38 +16,26 @@ import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
-import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutFilesRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntryExtendedInfo;
-import com.huaweicloud.dis.iface.data.request.QueryFileState;
-import com.huaweicloud.dis.iface.data.request.StreamType;
-import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.FileUploadResult;
-import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutFilesResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
-import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
-import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
-import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
-import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
-import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.iface.stream.request.*;
+import com.huaweicloud.dis.iface.stream.response.*;
 import com.huaweicloud.dis.util.ExponentialBackOff;
 import com.huaweicloud.dis.util.IOUtils;
+import org.apache.http.HttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 	
@@ -1163,4 +1124,13 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         return requestAsync(listStreamConsumingStateRequest, request, ListStreamConsumingStateResult.class, asyncHandler);
     }
 
+
+	@Override
+	public void close()
+	{
+        if (executorService != null)
+        {
+            executorService.shutdown();
+        }
+	}
 }

@@ -16,8 +16,6 @@
 
 package com.huaweicloud.dis;
 
-import java.util.concurrent.Future;
-
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
 import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
@@ -26,16 +24,10 @@ import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
 import com.huaweicloud.dis.iface.data.request.*;
 import com.huaweicloud.dis.iface.data.response.*;
-import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
-import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
-import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
-import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
-import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
+import com.huaweicloud.dis.iface.stream.request.*;
+import com.huaweicloud.dis.iface.stream.response.*;
+
+import java.util.concurrent.Future;
 
 /**
  * DIS服务的数据面异步接口
@@ -401,4 +393,11 @@ public interface DISAsync extends DIS
      */
     java.util.concurrent.Future<UpdatePartitionCountResult> updatePartitionCountAsync(
         UpdatePartitionCountRequest updatePartitionCountRequest, AsyncHandler<UpdatePartitionCountResult> asyncHandler);
+
+    /**
+     * <p>
+     * 关闭线程池
+     * </p>
+     */
+    public void close();
 }

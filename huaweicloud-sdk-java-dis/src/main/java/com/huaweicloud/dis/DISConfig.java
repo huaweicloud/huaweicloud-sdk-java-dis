@@ -16,19 +16,18 @@
 
 package com.huaweicloud.dis;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
+import com.huaweicloud.dis.core.ClientParams;
+import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
+import com.huaweicloud.dis.core.auth.credentials.Credentials;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.Protocol;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
-import com.huaweicloud.dis.core.auth.credentials.Credentials;
-import com.huaweicloud.dis.core.ClientParams;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class DISConfig extends Properties implements ClientParams
 {
@@ -465,7 +464,7 @@ public class DISConfig extends Properties implements ClientParams
                 inputStream = classLoader.getResourceAsStream(fileName);
                 LOG.debug("get from classLoader");
                 if(inputStream == null){
-                    throw new IOException("config file "+fileName+" not exist.");
+                    throw new FileNotFoundException("config file "+fileName+" not exist.");
                 }
             }
             
@@ -573,19 +572,34 @@ public class DISConfig extends Properties implements ClientParams
             }
             catch (IOException e)
             {
+                if (e instanceof FileNotFoundException)
+                {
+                    LOG.trace("load config from file {} failed. {}", configFile, e.getMessage());
+                }
+                else
+                {
+                    LOG.warn("load config from file {} failed. {}", configFile, e.getMessage());
+                }
                 needLoadFromDefault = true;
-                LOG.warn("load config from file {} failed. {}", configFile, e.getMessage());
             }
         }
-        
-        if(!configFileDefined || needLoadFromDefault){
+
+        if (!configFileDefined || needLoadFromDefault)
+        {
             try
             {
                 disConfig.load(FILE_NAME);
             }
             catch (IOException e)
             {
-                LOG.warn("load config from default file {} failed. {}", FILE_NAME, e.getMessage());
+                if (e instanceof FileNotFoundException)
+                {
+                    LOG.trace("load config from default file {} failed. {}", FILE_NAME, e.getMessage());
+                }
+                else
+                {
+                    LOG.warn("load config from default file {} failed. {}", FILE_NAME, e.getMessage());
+                }
             }
         }
 

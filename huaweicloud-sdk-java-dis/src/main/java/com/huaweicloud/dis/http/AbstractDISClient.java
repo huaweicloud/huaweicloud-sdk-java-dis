@@ -1,5 +1,37 @@
 package com.huaweicloud.dis.http;
 
+import com.huaweicloud.dis.Constants;
+import com.huaweicloud.dis.DISClientBuilder;
+import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.DISCredentials;
+import com.huaweicloud.dis.core.DefaultRequest;
+import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
+import com.huaweicloud.dis.core.handler.AsyncHandler;
+import com.huaweicloud.dis.core.http.HttpMethodName;
+import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
+import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
+import com.huaweicloud.dis.http.exception.RestClientResponseException;
+import com.huaweicloud.dis.http.exception.UnknownHttpStatusCodeException;
+import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
+import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.util.*;
+import com.huaweicloud.dis.util.config.ICredentialsProvider;
+import com.huaweicloud.dis.util.encrypt.EncryptUtils;
+import org.apache.http.HttpRequest;
+import org.apache.http.NoHttpResponseException;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
+import javax.net.ssl.SSLException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.SocketException;
@@ -22,49 +54,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.net.ssl.SSLException;
-
-import org.apache.http.HttpRequest;
-import org.apache.http.NoHttpResponseException;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.huaweicloud.dis.Constants;
-import com.huaweicloud.dis.DISClientBuilder;
-import com.huaweicloud.dis.DISConfig;
-import com.huaweicloud.dis.core.DISCredentials;
-import com.huaweicloud.dis.core.DefaultRequest;
-import com.huaweicloud.dis.core.Request;
-import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
-import com.huaweicloud.dis.core.handler.AsyncHandler;
-import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.core.util.StringUtils;
-import com.huaweicloud.dis.exception.DISClientException;
-import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
-import com.huaweicloud.dis.http.exception.RestClientResponseException;
-import com.huaweicloud.dis.http.exception.UnknownHttpStatusCodeException;
-import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
-import com.huaweicloud.dis.iface.data.response.Record;
-import com.huaweicloud.dis.util.ExponentialBackOff;
-import com.huaweicloud.dis.util.JsonUtils;
-import com.huaweicloud.dis.util.RestClient;
-import com.huaweicloud.dis.util.SignUtil;
-import com.huaweicloud.dis.util.SnappyUtils;
-import com.huaweicloud.dis.util.Utils;
-import com.huaweicloud.dis.util.VersionUtils;
-import com.huaweicloud.dis.util.config.ICredentialsProvider;
-import com.huaweicloud.dis.util.encrypt.EncryptUtils;
 
 public class AbstractDISClient {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractDISClient.class);
@@ -650,7 +639,7 @@ public class AbstractDISClient {
     {
         // 对于连接超时/网络闪断/Socket异常/服务端5xx错误进行重试
         return t instanceof ConnectTimeoutException || t instanceof NoHttpResponseException
-                || t instanceof SocketException || t instanceof SSLException
+                || t instanceof HttpHostConnectException || t instanceof SocketException || t instanceof SSLException
                 || (t instanceof SocketTimeoutException && request.getHttpMethod() == HttpMethodName.GET)
                 || (t instanceof RestClientResponseException && ((RestClientResponseException) t).getRawStatusCode() / 100 == 5)
                 || (t.getCause() != null && isRetriableSendException(t.getCause(), request));
