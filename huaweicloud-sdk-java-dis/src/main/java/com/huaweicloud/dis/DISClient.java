@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
 import com.huaweicloud.dis.iface.data.request.*;
@@ -686,5 +687,11 @@ public class DISClient extends AbstractDISClient implements DIS
         request.setResourcePath(resourcePath);
         setEndpoint(request, disConfig.getManagerEndpoint());
         return request(listStreamConsumingStateRequest, request, ListStreamConsumingStateResult.class);
+    }
+
+    @Override
+    public void updateCredentials(DISCredentials credentials)
+    {
+        super.innerUpdateCredentials(credentials);
     }
 }

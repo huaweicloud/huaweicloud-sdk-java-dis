@@ -1,6 +1,7 @@
 package com.huaweicloud.dis;
 
 import com.huaweicloud.dis.DISConfig.BodySerializeType;
+import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
@@ -1132,5 +1133,11 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         {
             executorService.shutdown();
         }
+	}
+
+	@Override
+	public void updateCredentials(DISCredentials credentials)
+	{
+		super.innerUpdateCredentials(credentials);
 	}
 }

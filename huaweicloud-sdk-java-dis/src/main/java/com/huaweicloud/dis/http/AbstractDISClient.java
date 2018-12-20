@@ -765,4 +765,12 @@ public class AbstractDISClient {
         }
         return false;
     }
+
+    protected void innerUpdateCredentials(DISCredentials credentials)
+    {
+        if (credentials != null)
+        {
+            this.credentials = credentials.clone();
+        }
+    }
 }
