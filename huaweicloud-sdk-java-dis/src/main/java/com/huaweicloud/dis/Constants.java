@@ -22,34 +22,114 @@ package com.huaweicloud.dis;
  */
 public interface Constants
 {
-    
-    /**Http URI*/
-    final String PATH = "/v1/data";
-    
-    final String PUT_RECORDS_PATH = "/v2/records";
-    
-    final String GET_RECORDS_PATH = "/v2/records";
-    
-    final String GET_CURSORS_PATH = "/v2/cursors";
-    
-    final String VERSION = "v2";
-    
-    final String RECORDS_RESOURCES = "records";
-    
-    final String CURSORS_RESOURCES = "cursors";
+    /**
+     * Http URI
+     */
+    String PATH = "/v1/data";
 
-    final String STREAMS_RESOURCES = "streams";
-    
-    final String CHECKPOINT_RESOURCES = "checkpoints";
+    String PUT_RECORDS_PATH = "/v2/records";
 
-    final String DATA_RESOURCES = "data";
+    String GET_RECORDS_PATH = "/v2/records";
 
-    final String SPLITSHARD_RESOURCES = "split";
+    String GET_CURSORS_PATH = "/v2/cursors";
 
-    final String MERGESHARDS_RESOURCES = "merge";
+    String VERSION = "v2";
+
+    String RECORDS_RESOURCES = "records";
+
+    String CURSORS_RESOURCES = "cursors";
+
+    String STREAMS_RESOURCES = "streams";
+
+    String CHECKPOINT_RESOURCES = "checkpoints";
+
+    String DATA_RESOURCES = "data";
+
+    String SPLITSHARD_RESOURCES = "split";
+
+    String MERGESHARDS_RESOURCES = "merge";
 
     /********************************Data Signature********************************/
-    
-    static final String SERVICENAME = "dis";
-    
+
+    String SERVICENAME = "dis";
+
+    /**
+     * HTTP响应码 441 : DIS用户认证失败
+     */
+    int HTTP_CODE_DIS_AUTHENTICATION_FAILED = 441;
+
+    /**
+     * HTTP响应码 400 : BAD_REQUEST
+     */
+    int HTTP_CODE_BAD_REQUEST = 400;
+
+    /**
+     * HTTP响应码 413 : 请求体超大
+     */
+    int HTTP_CODE_REQUEST_ENTITY_TOO_LARGE = 413;
+
+    /**
+     * 错误码: 通道不存在
+     */
+    String ERROR_CODE_STREAM_NOT_EXISTS = "DIS.4301";
+
+    /**
+     * 错误码: 分区已过期
+     */
+    String ERROR_CODE_PARTITION_IS_EXPIRED = "DIS.4319";
+
+    /**
+     * 错误码: 分区不存在
+     */
+    String ERROR_CODE_PARTITION_NOT_EXISTS = "DIS.4302";
+
+    /**
+     * 错误码: 位移超过范围
+     */
+    String ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE = "DIS.4224";
+
+    /**
+     * 错误码: 请求异常
+     */
+    String ERROR_CODE_REQUEST_ERROR = "DIS.4300";
+
+    /**
+     * 错误码: 超出流控
+     */
+    String ERROR_CODE_TRAFFIC_CONTROL_LIMIT = "DIS.4303";
+
+    /**
+     * 错误码: app已存在
+     */
+    String ERROR_CODE_APP_NAME_EXISTS = "DIS.4330";
+
+    /**
+     * 错误码: APP正在使用
+     */
+    String ERROR_CODE_APP_IN_USING = "DIS.4331";
+
+    /**
+     * 错误码: app不存在
+     */
+    String ERROR_CODE_APP_NAME_NOT_EXISTS = "DIS.4332";
+
+    /**
+     * 错误码: 超出APP配额上限
+     */
+    String ERROR_CODE_APP_QUOTA_EXCEEDED = "DIS.4329";
+
+    /**
+     * 错误描述: 时间戳异常 (对应错误码: {@link Constants#ERROR_CODE_REQUEST_ERROR})
+     */
+    String ERROR_INFO_TIMESTAMP_IS_EXPIRED = "timestamp is expired";
+
+    /**
+     * 错误描述: 位移超过范围 (对应错误码: {@link Constants#ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE})
+     */
+    String ERROR_INFO_SEQUENCE_NUMBER_OUT_OF_RANGE = "Sequence_number out of range";
+
+    /**
+     * 错误描述: 通道名称不存在 (对应错误码: {@link Constants#ERROR_CODE_STREAM_NOT_EXISTS})
+     */
+    String ERROR_INFO_STREAM_NOT_EXISTS = "Stream does not exist";
 }

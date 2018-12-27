@@ -10,7 +10,7 @@ import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
 import com.huaweicloud.dis.core.util.StringUtils;
-import com.huaweicloud.dis.exception.DISClientException;
+import com.huaweicloud.dis.exception.*;
 import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
 import com.huaweicloud.dis.http.exception.RestClientResponseException;
 import com.huaweicloud.dis.http.exception.UnknownHttpStatusCodeException;
@@ -449,19 +449,21 @@ public class AbstractDISClient {
 		        }
 		
 		public void retryHandle(Throwable t, boolean tryLock, int retryIndex) throws ExecutionException, InterruptedException{
-			String errorMsg = t.getMessage();
+            String errorMsg = t.getMessage();
             if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException)
             {
                 errorMsg = ((RestClientResponseException)t).getRawStatusCode() + " : "
-                    + ((RestClientResponseException)t).getResponseBodyAsString();
+                        + ((RestClientResponseException)t).getResponseBodyAsString();
             }
-            
+
             // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
-            if (!AbstractDISClient.this.isRetriableSendException(t, request) || retryIndex >= disConfig.getExceptionRetries())
+            boolean isRetriable = isRetriableSendException(t, request);
+            if (!isRetriable || retryIndex >= disConfig.getExceptionRetries())
             {
-            	throw new DISClientException(errorMsg, t);
+                handleError(t, errorMsg, isRetriable);
             }
-            
+
+            // 重试
             if(tryLock) {
             	if(!retryLock.tryLock()) {
             		return;
@@ -478,7 +480,7 @@ public class AbstractDISClient {
             	int tmpRetryIndex = retryCount.incrementAndGet();
                 
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
-                request = SignUtil.sign(request, ak, sk, region,disConfig);
+                request = SignUtil.sign(request, ak, sk, region, disConfig);
                 
                 ConnectRetryCallback<T> connectRetryCallback = null;
                 if(callback != null){
@@ -607,20 +609,22 @@ public class AbstractDISClient {
                 String errorMsg = t.getMessage();
                 if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException)
                 {
-                    errorMsg = ((RestClientResponseException)t).getRawStatusCode() + " : "
-                        + ((RestClientResponseException)t).getResponseBodyAsString();
+                    errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : "
+                            + ((RestClientResponseException) t).getResponseBodyAsString();
                 }
-                
+
                 // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
-                if (!isRetriableSendException(t, request) || retryCount >= disConfig.getExceptionRetries())
+                boolean isRetriable = isRetriableSendException(t, request);
+                if (!isRetriable || retryCount >= disConfig.getExceptionRetries())
                 {
-                    throw new DISClientException(errorMsg, t);
+                    handleError(t, errorMsg, isRetriable);
                 }
+
                 LOG.warn("Find Retriable Exception [{}], url [{} {}], currRetryCount is {}",
-                    errorMsg.replaceAll("[\\r\\n]", ""),
-                    request.getHttpMethod(),
-                    uri.toString(),
-                    retryCount);
+                        errorMsg.replaceAll("[\\r\\n]", ""),
+                        request.getHttpMethod(),
+                        uri,
+                        retryCount);
             }
         } while (retryCount < disConfig.getExceptionRetries());
         
@@ -771,6 +775,61 @@ public class AbstractDISClient {
         if (credentials != null)
         {
             this.credentials = credentials.clone();
+        }
+    }
+
+    protected void handleError(final Throwable t, String errorMsg, final boolean isRetriableException)
+    {
+        if (t instanceof HttpStatusCodeException)
+        {
+            int statusCode = ((HttpStatusCodeException) t).getRawStatusCode();
+            // 441
+            if (Constants.HTTP_CODE_DIS_AUTHENTICATION_FAILED == statusCode)
+            {
+                throw new DISAuthenticationException(errorMsg, t);
+            }
+            // 400
+            else if (Constants.HTTP_CODE_BAD_REQUEST == statusCode)
+            {
+                if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE))
+                {
+                    throw new DISSequenceNumberOutOfRangeException(errorMsg, t);
+                }
+                else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_IS_EXPIRED))
+                {
+                    throw new DISPartitionExpiredException(errorMsg, t);
+                }
+                else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_NOT_EXISTS))
+                {
+                    throw new DISPartitionNotExistsException(errorMsg, t);
+                }
+                else if (errorMsg.contains(Constants.ERROR_CODE_STREAM_NOT_EXISTS))
+                {
+                    throw new DISStreamNotExistsException(errorMsg, t);
+                }
+                else if (errorMsg.contains(Constants.ERROR_CODE_TRAFFIC_CONTROL_LIMIT))
+                {
+                    throw new DISTrafficControlException(errorMsg, t);
+                }
+                else if (errorMsg.contains(Constants.ERROR_INFO_TIMESTAMP_IS_EXPIRED))
+                {
+                    throw new DISTimestampOutOfRangeException(errorMsg, t);
+                }
+            }
+            // 413
+            else if (Constants.HTTP_CODE_REQUEST_ENTITY_TOO_LARGE == statusCode)
+            {
+                throw new DISRequestEntityTooLargeException(errorMsg, t);
+            }
+        }
+
+        if (isRetriableException)
+        {
+            throw new DISClientRetriableException(errorMsg, t);
+        }
+        else
+        {
+            throw new DISClientException(errorMsg, t);
         }
     }
 }

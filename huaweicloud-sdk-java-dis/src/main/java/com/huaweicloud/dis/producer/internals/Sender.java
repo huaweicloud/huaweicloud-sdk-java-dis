@@ -86,7 +86,7 @@ public class Sender extends Thread
      */
     public void run()
     {
-        log.debug("Starting Kafka producer I/O thread.");
+        log.debug("Starting DIS producer I/O thread.");
         
         // main loop, runs until close is called
         while (running)
@@ -98,11 +98,11 @@ public class Sender extends Thread
             }
             catch (Exception e)
             {
-                log.error("Uncaught error in kafka producer I/O thread: ", e);
+                log.error("Uncaught error in DIS producer I/O thread: ", e);
             }
         }
         
-        log.debug("Beginning shutdown of Kafka producer I/O thread, sending remaining records.");
+        log.debug("Beginning shutdown of DIS producer I/O thread, sending remaining records.");
         
         // okay we stopped accepting requests but there may still be
         // requests in the accumulator or waiting for acknowledgment,
