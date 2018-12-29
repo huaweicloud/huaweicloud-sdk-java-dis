@@ -421,10 +421,10 @@ public class DISConfig extends Properties implements ClientParams
 
     public int getMaxInFlightRequestsPerConnection()
     {
-        int maxConnection = getInt(PROPERTY_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 100);
+        int maxConnection = getInt(PROPERTY_MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, Constants.DEFAULT_THREAD_POOL_SIZE);
         if (maxConnection <= 0)
         {
-            return 100;
+            return Constants.DEFAULT_THREAD_POOL_SIZE;
         }
         return maxConnection;
     }

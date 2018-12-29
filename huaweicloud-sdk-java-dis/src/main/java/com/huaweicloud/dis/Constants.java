@@ -49,6 +49,8 @@ public interface Constants
 
     String MERGESHARDS_RESOURCES = "merge";
 
+    int DEFAULT_THREAD_POOL_SIZE = 50;
+
     /********************************Data Signature********************************/
 
     String SERVICENAME = "dis";

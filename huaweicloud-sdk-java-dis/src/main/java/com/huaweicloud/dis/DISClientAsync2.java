@@ -4,6 +4,7 @@ import com.huaweicloud.dis.DISConfig.BodySerializeType;
 import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
 import com.huaweicloud.dis.core.restresource.*;
@@ -56,8 +57,8 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
     
     @Deprecated
     public DISClientAsync2(DISConfig disConfig, ExecutorService executorService) {
-    	super(disConfig);
-    	this.executorService = executorService == null ? Executors.newFixedThreadPool(100) : executorService;
+		super(disConfig);
+		this.executorService = executorService == null ? new DefaultExecutorFactory().newExecutor() : executorService;
 	}
 
 	public Future<GetRecordsResult> getRecordsAsync(GetRecordsRequest getRecordsParam,

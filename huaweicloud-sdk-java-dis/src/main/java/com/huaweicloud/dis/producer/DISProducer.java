@@ -19,6 +19,7 @@ package com.huaweicloud.dis.producer;
 import com.huaweicloud.dis.DISAsync;
 import com.huaweicloud.dis.DISClientAsync;
 import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
@@ -58,7 +59,7 @@ public class DISProducer
 
     public DISProducer(DISConfig disConfig)
     {
-        this(disConfig, Executors.newFixedThreadPool(disConfig.getMaxInFlightRequestsPerConnection()));
+        this(disConfig, new DefaultExecutorFactory(disConfig.getMaxInFlightRequestsPerConnection()).newExecutor());
     }
 
     public DISProducer(DISConfig disConfig, DISAsync disAsync)

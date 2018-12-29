@@ -16,6 +16,7 @@
 
 package com.huaweicloud.dis;
 
+import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
@@ -38,16 +39,12 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
-import static java.util.concurrent.Executors.newFixedThreadPool;
-
 public class DISClientAsync extends DISClient implements DISAsync
 {
     
     private static final Logger LOG = LoggerFactory.getLogger(DISClientAsync.class);
-    
-    private static final int DEFAULT_THREAD_POOL_SIZE = 100;
 
-    private final java.util.concurrent.ExecutorService executorService;
+    private final ExecutorService executorService;
     
     public DISClientAsync(DISConfig disConfig) {
     	this(disConfig, null);
@@ -63,9 +60,7 @@ public class DISClientAsync extends DISClient implements DISAsync
     public DISClientAsync(DISConfig disConfig, ExecutorService executorService)
     {
         super(disConfig);
-        
-        this.executorService =
-            (null == executorService) ? newFixedThreadPool(DEFAULT_THREAD_POOL_SIZE) : executorService;
+        this.executorService = executorService == null ? new DefaultExecutorFactory().newExecutor() : executorService;
     }
     
     @Override

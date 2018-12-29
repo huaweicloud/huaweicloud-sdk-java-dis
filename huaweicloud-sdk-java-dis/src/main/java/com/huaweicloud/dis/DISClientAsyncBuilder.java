@@ -16,12 +16,9 @@
 
 package com.huaweicloud.dis;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import com.huaweicloud.dis.core.AsyncClientParams;
 import com.huaweicloud.dis.core.builder.AsyncClientBuilder;
-import com.huaweicloud.dis.core.builder.ExecutorFactory;
+import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 
 
 /**
@@ -65,14 +62,5 @@ public class DISClientAsyncBuilder extends AsyncClientBuilder<DISClientAsyncBuil
             executorFactory = new DefaultExecutorFactory();
         }
     	return new DISClientAsync(disConfig, executorFactory.newExecutor());
-    }
-    
-    private static class DefaultExecutorFactory implements ExecutorFactory{
-        @Override
-        public ExecutorService newExecutor()
-        {
-            return Executors.newFixedThreadPool(100);
-        }
-        
     }
 }
