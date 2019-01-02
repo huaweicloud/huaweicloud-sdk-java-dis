@@ -816,6 +816,12 @@ public class AbstractDISClient {
                     throw new DISTimestampOutOfRangeException(errorMsg, t);
                 }
             }
+            // 410
+            else if (Constants.HTTP_CODE_GONE == statusCode)
+            {
+                // 410 will be reported when putRecords
+                throw new DISStreamNotExistsException(errorMsg, t);
+            }
             // 413
             else if (Constants.HTTP_CODE_REQUEST_ENTITY_TOO_LARGE == statusCode)
             {

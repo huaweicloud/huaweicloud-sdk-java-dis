@@ -36,7 +36,7 @@ public class DefaultExecutorFactory implements ExecutorFactory
 
     public DefaultExecutorFactory(int poolSize)
     {
-        this(poolSize, "dis-sender");
+        this(poolSize, "dis-pool");
     }
 
     public DefaultExecutorFactory(int poolSize, String namePrefix)

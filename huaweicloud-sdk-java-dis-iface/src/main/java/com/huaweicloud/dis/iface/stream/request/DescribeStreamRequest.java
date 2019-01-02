@@ -37,6 +37,7 @@ public class DescribeStreamRequest
     /**
      * <p>
      * 从该分区值开始返回分区列表，返回的分区列表不包括此分区。
+     * 分区格式为shardId-%010d，比如0分区为shardId-0000000000；15分区为shardId-0000000015
      * </p>
      */
     @JsonProperty("start_partitionId")

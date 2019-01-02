@@ -27,6 +27,7 @@ import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
 import com.huaweicloud.dis.iface.data.request.*;
 import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.util.Utils;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -414,6 +415,9 @@ public class DISClient extends AbstractDISClient implements DIS
      */
     protected final DescribeStreamResult innerDescribeStream(DescribeStreamRequest describeStreamRequest)
     {
+        // change to shardId format
+        describeStreamRequest.setStartPartitionId(Utils.getShardIdFromPartitionId(describeStreamRequest.getStartPartitionId()));
+
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
         request.setHttpMethod(HttpMethodName.GET);
         

@@ -55,6 +55,8 @@ public interface Constants
 
     String SERVICENAME = "dis";
 
+    String SHARD_ID_PREFIX = "shardId";
+
     /**
      * HTTP响应码 441 : DIS用户认证失败
      */
@@ -64,6 +66,11 @@ public interface Constants
      * HTTP响应码 400 : BAD_REQUEST
      */
     int HTTP_CODE_BAD_REQUEST = 400;
+
+    /**
+     * HTTP响应码 410 : GONE
+     */
+    int HTTP_CODE_GONE = 410;
 
     /**
      * HTTP响应码 413 : 请求体超大

@@ -16,12 +16,13 @@
 
 package com.huaweicloud.dis.util;
 
-import java.io.UnsupportedEncodingException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
+import com.huaweicloud.dis.Constants;
+import com.huaweicloud.dis.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.UnsupportedEncodingException;
+import java.util.regex.Pattern;
 
 public class Utils
 {
@@ -54,5 +55,31 @@ public class Utils
         
         Pattern pattern = Pattern.compile(endpointPattern);
         return pattern.matcher(endpoint).matches();
+    }
+
+    /**
+     * change partitionId to shardId, e.g: 0 to shardId-0000000000
+     * @param partitionId partitionId
+     * @return shardId
+     */
+    public static String getShardIdFromPartitionId(String partitionId)
+    {
+        if (StringUtils.isNullOrEmpty(partitionId) || partitionId.startsWith(Constants.SHARD_ID_PREFIX))
+        {
+            return partitionId;
+        }
+
+        try
+        {
+            int id = Integer.parseInt(partitionId);
+            if (id >= 0)
+            {
+                return String.format(Constants.SHARD_ID_PREFIX + "-%010d", Integer.parseInt(partitionId));
+            }
+        }
+        catch (Exception ignored)
+        {
+        }
+        return partitionId;
     }
 }

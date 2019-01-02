@@ -24,6 +24,7 @@ import com.huaweicloud.dis.iface.stream.request.*;
 import com.huaweicloud.dis.iface.stream.response.*;
 import com.huaweicloud.dis.util.ExponentialBackOff;
 import com.huaweicloud.dis.util.IOUtils;
+import com.huaweicloud.dis.util.Utils;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -514,6 +515,9 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 	@Override
 	public Future<DescribeStreamResult> describeStreamAsync(DescribeStreamRequest describeStreamRequest,
 			AsyncHandler<DescribeStreamResult> asyncHandler) {
+
+        // change to shardId format
+        describeStreamRequest.setStartPartitionId(Utils.getShardIdFromPartitionId(describeStreamRequest.getStartPartitionId()));
     	Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getManagerEndpoint(),
     			ResourcePathBuilder.standard()
                 .withProjectId(disConfig.getProjectId())

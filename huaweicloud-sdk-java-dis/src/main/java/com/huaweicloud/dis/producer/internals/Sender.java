@@ -16,19 +16,21 @@
 
 package com.huaweicloud.dis.producer.internals;
 
+import com.huaweicloud.dis.DISAsync;
+import com.huaweicloud.dis.core.handler.AsyncHandler;
+import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.LockSupport;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.huaweicloud.dis.DISAsync;
-import com.huaweicloud.dis.core.handler.AsyncHandler;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
 
 
 /**
@@ -156,75 +158,95 @@ public class Sender extends Thread
     
     private boolean sendProducerData(long now)
     {
-        
+
         // create produce requests
         List<ProducerBatch> batches = this.accumulator.drain(now);
-        
-        if(batches.isEmpty()){
-            //log.info("no data to send.");
+
+        if (batches.isEmpty())
+        {
+            log.trace("no data to send.");
             return false;
         }
-        log.debug("begin to send : {}", batches.size());
         for (ProducerBatch batch : batches)
         {
-            
-            log.debug("batch size: {}, {}", batch.getRelativeOffset(), batch.getTotolByteSize());
-            
+            log.trace("begin to process batch {}, count {}, size {}B", batch.getTp(), batch.getRelativeOffset(), batch.getTotolByteSize());
+
             StreamPartition tp = batch.getTp();
-            
+
             PutRecordsRequest putRecordsParam = new PutRecordsRequest();
             putRecordsParam.setStreamName(tp.topic());
             putRecordsParam.setRecords(batch.getBatchPutRecordsRequestEntrys());
 
             totalSendTimes.incrementAndGet();
             totalSendCount.addAndGet(batch.getRelativeOffset());
-            Future<PutRecordsResult> resultFuture =
-                client.putRecordsAsync(putRecordsParam, new AsyncHandler<PutRecordsResult>()
+            Future<PutRecordsResult> resultFuture = client.putRecordsAsync(putRecordsParam, new AsyncHandler<PutRecordsResult>()
+            {
+                long start = System.currentTimeMillis();
+
+                @Override
+                public void onSuccess(PutRecordsResult result)
                 {
-                    long start = System.currentTimeMillis();
-                    
-                    @Override
-                    public void onSuccess(PutRecordsResult result)
+                    totalSendSuccessTimes.incrementAndGet();
+                    totalSendSuccessCount.addAndGet(result.getRecords().size() - result.getFailedRecordCount().get());
+                    totalSendFailedCount.addAndGet(result.getFailedRecordCount().get());
+                    if (result.getFailedRecordCount().get() > 0)
                     {
-                        totalSendSuccessTimes.incrementAndGet();
-                        totalSendSuccessCount.addAndGet(result.getRecords().size()  - result.getFailedRecordCount().get());
-                        totalSendFailedCount.addAndGet(result.getFailedRecordCount().get());
-                        if(result.getFailedRecordCount().get()>0) {
-                            log.info("Batches {} send finish, cost {}ms, total count {}, failed count {}",
-                                    tp.toString(),
-                                    (System.currentTimeMillis() - start),
-                                    batch.getRelativeOffset(),
-                                    result.getFailedRecordCount().get());
+                        String errorMsg = null;
+                        for (int i = 0; i < result.getRecords().size(); i++)
+                        {
+                            PutRecordsResultEntry putRecordsRequestEntry = result.getRecords().get(i);
+                            if (!StringUtils.isNullOrEmpty(putRecordsRequestEntry.getErrorCode()))
+                            {
+                                errorMsg = putRecordsRequestEntry.getErrorCode() + " : " + putRecordsRequestEntry.getErrorMessage();
+                                break;
+                            }
                         }
-                        batch.done(result, null);
-                        batchIsDone(batch);
+                        log.error("Batch {} send partial successfully, cost {}ms, count {}, size {}B, failed count {}, failed info {}",
+                                tp.toString(),
+                                (System.currentTimeMillis() - start),
+                                batch.getRelativeOffset(),
+                                batch.getTotolByteSize(),
+                                result.getFailedRecordCount().get(),
+                                errorMsg);
                     }
-                    
-                    @Override
-                    public void onError(Exception exception)
+                    else
                     {
-                        totalSendFailedTimes.incrementAndGet();
-                        totalSendFailedCount.addAndGet(putRecordsParam.getRecords().size());
-                        log.error("Batches {} send failed, cost {}ms, total count {}, error info {}",
+                        log.debug("Batch {} send successfully, cost {}ms, count {}, size {}B",
+                                tp.toString(),
+                                (System.currentTimeMillis() - start),
+                                batch.getRelativeOffset(),
+                                batch.getTotolByteSize());
+                    }
+                    batch.done(result, null);
+                    batchIsDone(batch);
+                }
+
+                @Override
+                public void onError(Exception exception)
+                {
+                    totalSendFailedTimes.incrementAndGet();
+                    totalSendFailedCount.addAndGet(putRecordsParam.getRecords().size());
+                    log.error("Batch {} send failed, cost {}ms, count {}, size {}B, error info {}",
                             tp.toString(),
                             (System.currentTimeMillis() - start),
                             batch.getRelativeOffset(),
-                            exception.getMessage());
-                        if (exception instanceof RuntimeException)
-                        {
-                            batch.done(null, (RuntimeException)exception);
-                        }
-                        else
-                        {
-                            batch.done(null, new RuntimeException(exception));
-                        }
-                        batchIsDone(batch);
+                            batch.getTotolByteSize(),
+                            exception.getMessage(), exception);
+                    if (exception instanceof DISClientException)
+                    {
+                        batch.done(null, (DISClientException) exception);
                     }
-                });
-            
+                    else
+                    {
+                        batch.done(null, new DISClientException(exception));
+                    }
+                    batchIsDone(batch);
+                }
+            });
+
             //accumulator.setOnSendingPartitionFuture(tp, resultFuture);
         }
-        
+
         return true;
     }
     
