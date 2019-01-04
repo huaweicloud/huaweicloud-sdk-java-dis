@@ -82,4 +82,19 @@ public class Utils
         }
         return partitionId;
     }
+
+    /**
+     * Thread sleep time in millis
+     * @param millis sleep time
+     */
+    public static void sleep(long millis)
+    {
+        try
+        {
+            Thread.sleep(millis);
+        }
+        catch (InterruptedException ignored)
+        {
+        }
+    }
 }

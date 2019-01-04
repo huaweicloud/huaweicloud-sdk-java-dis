@@ -250,29 +250,29 @@ public final class RecordAccumulator {
             synchronized (deque)
             {
                 ProducerBatch first = deque.peekFirst();
-                
+
                 if (first == null)
                 {
                     continue;
                 }
-                
+
                 if (first.waitedTimeMs(now) < retryBackoffMs && !first.isFull())
                 {
                     continue;
                 }
-                
+
                 if (first.isEmpty())
                 {
                     first.reenqueued(now);
                     continue;
                 }
-                
+
                 ProducerBatch batch = deque.pollFirst();
                 drainBatches.add(batch);
                 batch.drained(now);
-                
+
                 log.debug(
-                    "Drain batch({} records) success, currentBufferSize is {}, currentBufferCount is {}, queueSize {}.",
+                    "Drain batch({} records) success, currentBufferCount is {}, currentBufferSize is {}, queueSize {}.",
                     batch.getRelativeOffset(),
                     bufferCount.get(),
                     bufferSize.get(),

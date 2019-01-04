@@ -16,30 +16,22 @@
 
 package com.huaweicloud.dis.util;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import javax.net.ssl.SSLContext;
-
+import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.http.HttpMethodName;
+import com.huaweicloud.dis.exception.DISClientException;
+import com.huaweicloud.dis.http.*;
+import com.huaweicloud.dis.http.converter.ByteArrayHttpMessageConverter;
+import com.huaweicloud.dis.http.converter.HttpMessageConverter;
+import com.huaweicloud.dis.http.converter.StringHttpMessageConverter;
+import com.huaweicloud.dis.http.converter.json.JsonHttpMessageConverter;
+import com.huaweicloud.dis.http.converter.protobuf.ProtobufHttpMessageConverter;
+import com.huaweicloud.dis.http.exception.ResourceAccessException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.*;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -58,20 +50,18 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.huaweicloud.dis.DISConfig;
-import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.exception.DISClientException;
-import com.huaweicloud.dis.http.DefaultResponseErrorHandler;
-import com.huaweicloud.dis.http.HttpMessageConverterExtractor;
-import com.huaweicloud.dis.http.ResponseErrorHandler;
-import com.huaweicloud.dis.http.ResponseExtractor;
-import com.huaweicloud.dis.http.SdkProxyRoutePlanner;
-import com.huaweicloud.dis.http.converter.ByteArrayHttpMessageConverter;
-import com.huaweicloud.dis.http.converter.HttpMessageConverter;
-import com.huaweicloud.dis.http.converter.StringHttpMessageConverter;
-import com.huaweicloud.dis.http.converter.json.JsonHttpMessageConverter;
-import com.huaweicloud.dis.http.converter.protobuf.ProtobufHttpMessageConverter;
-import com.huaweicloud.dis.http.exception.ResourceAccessException;
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * Rest Client for RESTful API
@@ -268,11 +258,45 @@ public class RestClient
     protected <T> T execute(final HttpUriRequest request, ResponseExtractor<T> responseExtractor)
     {
         HttpResponse response;
+        long startTime = System.currentTimeMillis();
         try
         {
             response = httpClient.execute(request);
+
+            if (InterfaceLogUtils.IS_INTERFACE_LOGGER_ENABLED)
+            {
+                InterfaceLogUtils.TOTAL_REQUEST_TIMES.incrementAndGet();
+                long cost = System.currentTimeMillis() - startTime;
+                long requestSize = request instanceof HttpEntityEnclosingRequestBase ?
+                        ((HttpEntityEnclosingRequestBase) request).getEntity().getContentLength() : 0;
+                int responseCode = response.getStatusLine().getStatusCode();
+                int resultFlag = 0;
+                if (responseCode < 400 || responseCode >= 600)
+                {
+                    // normal
+                    InterfaceLogUtils.TOTAL_REQUEST_SUCCESSFUL_TIMES.incrementAndGet();
+                    InterfaceLogUtils.TOTAL_REQUEST_POSTPONE_MILLIS.addAndGet(cost);
+                    InterfaceLogUtils.TOTAL_REQUEST_ENTITY_SIZE.addAndGet(requestSize);
+                }
+                else
+                {
+                    // exception
+                    resultFlag = 1;
+                    InterfaceLogUtils.TOTAL_REQUEST_FAILED_TIMES.incrementAndGet();
+                }
+
+                // method uri responseCode requestSize cost result
+                InterfaceLogUtils.INTERFACE_DETAIL_LOGGER.trace("{} {} {} {} {} {}",
+                        request.getMethod(),
+                        request.getURI().getPath(),
+                        responseCode,
+                        requestSize,
+                        cost,
+                        resultFlag);
+            }
+
             handleResponse(response);
-            
+
             if (responseExtractor != null)
             {
                 return responseExtractor.extractData(response);
@@ -284,13 +308,28 @@ public class RestClient
         }
         catch (IOException ex)
         {
+            if (InterfaceLogUtils.IS_INTERFACE_LOGGER_ENABLED)
+            {
+                InterfaceLogUtils.TOTAL_REQUEST_TIMES.incrementAndGet();
+                long cost = System.currentTimeMillis() - startTime;
+                long requestSize = request instanceof HttpEntityEnclosingRequestBase ?
+                        ((HttpEntityEnclosingRequestBase) request).getEntity().getContentLength() : 0;
+                InterfaceLogUtils.TOTAL_REQUEST_FAILED_TIMES.incrementAndGet();
+                InterfaceLogUtils.INTERFACE_DETAIL_LOGGER.trace("{} {} {} {} {} {}",
+                        request.getMethod(),
+                        request.getURI().getPath(),
+                        ex.getClass().getName(),
+                        requestSize,
+                        cost,
+                        2);
+            }
+
             String resource = request.getURI().toString();
             String query = request.getURI().getRawQuery();
             resource = (query != null ? resource.substring(0, resource.indexOf(query) - 1) : resource);
             throw new ResourceAccessException(
                 "I/O error on " + request.getMethod() + " request for \"" + resource + "\": " + ex.getMessage(), ex);
         }
-        
     }
     
     /**

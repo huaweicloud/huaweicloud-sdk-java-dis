@@ -16,17 +16,16 @@
 
 package com.huaweicloud.dis.producer.internals;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 
 
@@ -84,17 +83,30 @@ public final class ProducerBatch {
         return futureRecordsMetadata;
     }
     
-    public void done(PutRecordsResult putRecordsResult, RuntimeException exception) {
+    public void done(PutRecordsResult putRecordsResult, RuntimeException exception)
+    {
         produceFuture.set(putRecordsResult, exception);
-        produceFuture.done();
 
-        for (Thunk thunk : asyncHandlers) {
-            if (exception == null) {
-                thunk.callback.onSuccess(thunk.future.value());
-            } else {
-                thunk.callback.onError(exception);
+        for (Thunk thunk : asyncHandlers)
+        {
+            try
+            {
+                if (exception == null)
+                {
+                    thunk.callback.onSuccess(thunk.future.value());
+                }
+                else
+                {
+                    thunk.callback.onError(exception);
+                }
+            }
+            catch (Exception e)
+            {
+                log.error("Error executing user-provided callback on message for stream {} : {}", tp.topic(), e.getMessage(), e);
             }
         }
+
+        produceFuture.done();
     }
     
     public boolean isEmpty(){

@@ -23,6 +23,7 @@ import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
+import com.huaweicloud.dis.util.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,7 +64,11 @@ public class Sender extends Thread
     private static final int DEFAULT_SENDER_POLLING_MS = 50;
     
     private AtomicInteger flushId = new AtomicInteger();
-    
+
+    private AtomicLong inFlightRequestCount = new AtomicLong(0);
+
+    private boolean exitRunLoop = false;
+
     public static AtomicLong totalSendCount = new AtomicLong();
     public static AtomicLong totalSendSuccessCount = new AtomicLong();
     public static AtomicLong totalSendFailedCount = new AtomicLong();
@@ -103,7 +108,8 @@ public class Sender extends Thread
                 log.error("Uncaught error in DIS producer I/O thread: ", e);
             }
         }
-        
+
+        exitRunLoop = true;
         log.debug("Beginning shutdown of DIS producer I/O thread, sending remaining records.");
         
         // okay we stopped accepting requests but there may still be
@@ -179,6 +185,7 @@ public class Sender extends Thread
 
             totalSendTimes.incrementAndGet();
             totalSendCount.addAndGet(batch.getRelativeOffset());
+            inFlightRequestCount.incrementAndGet();
             Future<PutRecordsResult> resultFuture = client.putRecordsAsync(putRecordsParam, new AsyncHandler<PutRecordsResult>()
             {
                 long start = System.currentTimeMillis();
@@ -219,6 +226,7 @@ public class Sender extends Thread
                     }
                     batch.done(result, null);
                     batchIsDone(batch);
+                    inFlightRequestCount.decrementAndGet();
                 }
 
                 @Override
@@ -241,6 +249,7 @@ public class Sender extends Thread
                         batch.done(null, new DISClientException(exception));
                     }
                     batchIsDone(batch);
+                    inFlightRequestCount.decrementAndGet();
                 }
             });
 
@@ -260,9 +269,44 @@ public class Sender extends Thread
 //        this.notify();
     }
 
-    public void close()
+    public void close(long timeout)
     {
         this.running = false;
+
+        long start = System.currentTimeMillis();
+        // waiting for Thread.run finish.
+        while (!this.exitRunLoop && (System.currentTimeMillis() - start) < timeout)
+        {
+            Utils.sleep(5);
+        }
+
+        int loop = 0;
+        while (loop < 3 && (System.currentTimeMillis() - start) < timeout)
+        {
+            if (this.accumulator.hasUndrained() || this.inFlightRequestCount.get() > 0)
+            {
+                // there are still sending records.
+                loop = 0;
+                try
+                {
+                    run(System.currentTimeMillis());
+                }
+                catch (Exception e)
+                {
+                    log.error("Uncaught error in DIS producer I/O thread: ", e);
+                }
+            }
+            else
+            {
+                loop++;
+                Utils.sleep(5);
+            }
+        }
+
+        if (this.accumulator.hasUndrained() || this.inFlightRequestCount.get() > 0)
+        {
+            log.warn("The timeout period {}ms has been reached, but there are still records that have not been processed successfully.", timeout);
+        }
     }
 
     //flush需要堵塞，把当前缓冲的数据发送到DIS服务端,多个线程分别调用flush的情况 TODO

@@ -135,14 +135,26 @@ public class DISProducer
     {
         this.sender.flush();
     }
-    
+
     public void close()
     {
-        accumulator.close();
-        sender.close();
-        disAsync.close();
+        close(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
     }
-    
+
+    public void close(long timeout, TimeUnit timeUnit)
+    {
+        if (timeout < 0)
+        {
+            throw new IllegalArgumentException("The timeout cannot be negative.");
+        }
+        log.debug("Closing the DIS producer with timeoutMillis = {} ms.", timeUnit.toMillis(timeout));
+
+        accumulator.close();
+        sender.close(timeUnit.toMillis(timeout));
+        disAsync.close();
+        log.debug("The DIS producer has closed.");
+    }
+
     private static class PutRecordsResultEntryFuture implements Future<PutRecordsResultEntry>{
 
         private Future<PutRecordsResult> future;
