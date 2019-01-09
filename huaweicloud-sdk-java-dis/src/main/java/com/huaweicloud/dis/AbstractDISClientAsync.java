@@ -1,6 +1,7 @@
 package com.huaweicloud.dis;
 
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.AbstractDISClient;
@@ -28,11 +29,13 @@ import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
 import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdateStreamRequest;
 import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
 import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
 import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
+import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
 
 public abstract class AbstractDISClientAsync extends AbstractDISClient implements DIS, DISAsync{
 	
@@ -226,4 +229,22 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 			throw new DISClientException(e);
 		}
 	}
+	
+	@Override
+	public UpdateStreamResult updateStream(UpdateStreamRequest updateStreamRequest)
+	{
+	    try {
+            return updateStreamAsync(updateStreamRequest).get();
+        } catch (ExecutionException e) {            
+            throw new DISClientException(e.getCause() == null ? e : e.getCause());
+        }catch(InterruptedException e) {
+            throw new DISClientException(e);
+        }
+	}
+
+    private Future<UpdateStreamResult> updateStreamAsync(UpdateStreamRequest updateStreamRequest)
+    {
+        throw new UnsupportedOperationException();
+    }
+	
 }

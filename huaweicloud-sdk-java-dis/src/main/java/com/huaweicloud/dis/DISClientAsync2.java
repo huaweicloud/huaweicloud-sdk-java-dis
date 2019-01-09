@@ -25,6 +25,7 @@ import com.huaweicloud.dis.iface.stream.response.*;
 import com.huaweicloud.dis.util.ExponentialBackOff;
 import com.huaweicloud.dis.util.IOUtils;
 import com.huaweicloud.dis.util.Utils;
+
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1130,7 +1131,12 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         return requestAsync(listStreamConsumingStateRequest, request, ListStreamConsumingStateResult.class, asyncHandler);
     }
 
-
+    @Override
+    public UpdateStreamResult updateStream(UpdateStreamRequest updateStreamRequest)
+    {
+        return null;
+    }
+    
 	@Override
 	public void close()
 	{

@@ -22,17 +22,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-import com.huaweicloud.dis.core.DISCredentials;
-import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
-import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.*;
-import com.huaweicloud.dis.iface.data.response.*;
-import com.huaweicloud.dis.util.Utils;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.huaweicloud.dis.DISConfig.BodySerializeType;
+import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.http.HttpMethodName;
@@ -45,26 +40,47 @@ import com.huaweicloud.dis.core.restresource.ResourcePathBuilder;
 import com.huaweicloud.dis.core.restresource.StateResource;
 import com.huaweicloud.dis.core.restresource.StreamResource;
 import com.huaweicloud.dis.core.util.StringUtils;
-import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.AbstractDISClient;
 import com.huaweicloud.dis.http.exception.HttpClientErrorException;
 import com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils;
 import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
 import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
+import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
+import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
+import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
+import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
+import com.huaweicloud.dis.iface.data.request.QueryFileState;
+import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.FileUploadResult;
+import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
+import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
 import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
 import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdateStreamRequest;
 import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
 import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
 import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
+import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
 import com.huaweicloud.dis.util.ExponentialBackOff;
-import com.huaweicloud.dis.util.cache.CacheManager;
+import com.huaweicloud.dis.util.Utils;
 import com.huaweicloud.dis.util.cache.CacheUtils;
 
 public class DISClient extends AbstractDISClient implements DIS
@@ -693,6 +709,26 @@ public class DISClient extends AbstractDISClient implements DIS
         return request(listStreamConsumingStateRequest, request, ListStreamConsumingStateResult.class);
     }
 
+    @Override
+    public UpdateStreamResult updateStream(UpdateStreamRequest updateStreamRequest)
+    {
+        return innerUpdateStream(updateStreamRequest);
+    }
+    
+    protected UpdateStreamResult innerUpdateStream(UpdateStreamRequest updateStreamRequest){
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.PUT);
+        
+        final String resourcePath = ResourcePathBuilder.standard()
+            .withProjectId(disConfig.getProjectId())
+            .withResource(new StreamResource(StreamResource.DEFAULT_RESOURCE_NAME, updateStreamRequest.getStreamName(), "update"))
+            .build();
+        
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        return request(updateStreamRequest, request, UpdateStreamResult.class);
+    }
+    
     @Override
     public void updateCredentials(DISCredentials credentials)
     {

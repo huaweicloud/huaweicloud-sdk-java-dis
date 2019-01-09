@@ -21,11 +21,13 @@ import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
 import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
 import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdateStreamRequest;
 import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
 import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
 import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
 import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
+import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
 
 /**
  * DIS服务的管理面接口
@@ -65,4 +67,9 @@ public interface IStreamService
      * deleted状态和expired状态的分片不参与计费。
      * */
     UpdatePartitionCountResult updatePartitionCount(UpdatePartitionCountRequest updatePartitionCountRequest);
+    
+    /**
+     * 更新通道：当前支持更新通道的源数据类型和设置自动扩缩容
+     */
+    UpdateStreamResult updateStream(UpdateStreamRequest updateStreamRequest);
 }

@@ -26,7 +26,7 @@ import com.huaweicloud.dis.core.util.StringUtils;
 public class StreamResource extends RestResource
 {
     
-    private static final String DEFAULT_RESOURCE_NAME = "streams";
+    public static final String DEFAULT_RESOURCE_NAME = "streams";
     
     private String resourceName;
     
