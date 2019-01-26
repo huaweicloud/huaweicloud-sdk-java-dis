@@ -140,6 +140,20 @@ public class CreateStreamRequest
     @JsonProperty("tags")
     private List<Tag> tags;
     
+    /**
+     * <p>
+     * 通道是否在独享集群上创建
+     * </p>
+     * true: 在独享集群上创建；false: 在共享集群上创建
+     */
+    @JsonProperty("is_private")
+    private boolean isPrivate;
+    
+    /**
+     * 在独享集群上创建的通道对应的独享集群ID
+     */
+    @JsonProperty("private_cluster_id")
+    private String privateClusterId;
     
     public Boolean getAutoScaleEnabled()
     {
@@ -324,6 +338,26 @@ public class CreateStreamRequest
 
     public void setCsvProperties(CSVProperties csvProperties) {
         this.csvProperties = csvProperties;
+    }
+    
+	public boolean isPrivate()
+    {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean isPrivate)
+    {
+        this.isPrivate = isPrivate;
+    }
+
+    public String getPrivateClusterId()
+    {
+        return privateClusterId;
+    }
+
+    public void setPrivateClusterId(String privateClusterId)
+    {
+        this.privateClusterId = privateClusterId;
     }
 
     @Override
