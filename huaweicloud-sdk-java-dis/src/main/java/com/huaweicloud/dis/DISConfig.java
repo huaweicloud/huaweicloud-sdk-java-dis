@@ -51,7 +51,7 @@ public class DISConfig extends Properties implements ClientParams
     private static final String DEFAULT_VALUE_DATA_CACHE_DIR = "/data/dis";
     private static final int DEFAULT_VALUE_DATA_CACHE_DIR_MAX_SIZE = 2048;
     private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_MAX_SIZE = 512;
-    private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_LIFE_CYCLE = 24 * 3600;
+    private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_LIFE_CYCLE = 60;
     
     private static final BodySerializeType DEFAULT_VALUE_BODY_SERIALIZE_TYPE = BodySerializeType.json;
     

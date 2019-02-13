@@ -17,7 +17,6 @@
 package com.huaweicloud.dis.util.cache;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -25,9 +24,11 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.huaweicloud.dis.Constants;
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.util.IOUtils;
 import com.huaweicloud.dis.util.JsonUtils;
 
 /**
@@ -41,23 +42,6 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     
     private static final Logger LOGGER = LoggerFactory.getLogger(CacheManager.class);
     
-    private static final String CACHE_FILE_PREFIX = "dis-cache-data-";
-    
-    /*
-     * 缓存临时文件后缀
-     */
-    private static final String CACHE_TMP_FILE_SUFFIX = ".tmp";
-    
-    /*
-     * 缓存归档数据文件后缀
-     */
-    private static final String CACHE_ARCHIVE_DATA_FILE_SUFFIX = ".data";
-    
-    /*
-     * 缓存归档索引文件后缀
-     */
-    private static final String CACHE_ARCHIVE_INDEX_FILE_SUFFIX = ".index";
-    
     private static CacheManager instance;
     
     private DISConfig disConfig;
@@ -67,6 +51,8 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     private String dataTmpFileName; // 临时缓存数据文件名
     
     private long tmpFileCreateTime; // 临时缓存文件创建时间
+    
+    private int totalIndex; // 已写入临时缓存文件的请求数
     
     private CacheManager()
     {
@@ -97,6 +83,20 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
         
         synchronized (this)
         {
+            // 缓存临时文件不存在则新建
+            if (dataTmpFile == null || !dataTmpFile.exists())
+            {
+                try
+                {
+                    dataTmpFile.createNewFile();
+                }
+                catch (IOException e)
+                {
+                    LOGGER.error("Failed to create cache tmp file, return.", e);
+                    return ;
+                }
+            }
+            
             if (needToArchive(data))
             {
                 // 缓存临时文件归档
@@ -106,7 +106,8 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
             
             if (hasEnoughSpace(data))
             {
-                writeToFile(data);
+                IOUtils.appendToFile(data, dataTmpFileName);
+                totalIndex++;
             }
             else
             {
@@ -131,7 +132,7 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     private boolean needToArchive(String data)
     {
         long dataSize = getDataSize(data);
-        if (((dataSize + FileUtils.sizeOf(dataTmpFile)) / 1024 / 1024 > disConfig.getDataCacheArchiveMaxSize())
+        if (((dataSize + FileUtils.sizeOf(dataTmpFile)) / 1024 > disConfig.getDataCacheArchiveMaxSize())
             || (System.currentTimeMillis() - tmpFileCreateTime > disConfig.getDataCacheArchiveLifeCycle() * 1000))
         {
             return true;
@@ -159,34 +160,47 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     /**
      * 临时缓存文件归档
      */
-    private void archive()
+    @Override
+    public void archive()
     {
-        if (dataTmpFile == null || !dataTmpFile.exists())
+        synchronized (this)
         {
-            LOGGER.error("Tmp cache file not exist, filename: '{}'.", dataTmpFileName);
-            return ;
+            if (dataTmpFile == null || !dataTmpFile.exists())
+            {
+                LOGGER.error("Tmp cache file not exist, filename: '{}'.", dataTmpFileName);
+                return ;
+            }
+            
+            String archiveDataFilename = dataTmpFileName.replace(Constants.CACHE_TMP_FILE_SUFFIX, "") + Constants.CACHE_ARCHIVE_DATA_FILE_SUFFIX;
+            String archiveIndexFilename = dataTmpFileName.replace(Constants.CACHE_TMP_FILE_SUFFIX, "") + Constants.CACHE_ARCHIVE_INDEX_FILE_SUFFIX;
+            File archiveDataFile = new File(archiveDataFilename);
+            File archiveIndexFile = new File(archiveIndexFilename);
+            try
+            {
+                if (dataTmpFile.length() == 0)
+                {
+                    dataTmpFile.delete(); // 临时缓存文件为空时，直接删除文件即可
+                }
+                else
+                {
+                    FileUtils.moveFile(dataTmpFile, archiveDataFile);
+                    archiveIndexFile.createNewFile();
+                    // 索引文件数据格式：0,记录数
+                    IOUtils.writeToFile("0," + totalIndex, archiveIndexFilename);
+                }
+            }
+            catch (IOException e)
+            {
+                LOGGER.error("Failed to create archive files.", e);
+                archiveDataFile.deleteOnExit();
+                archiveIndexFile.deleteOnExit();
+                return ;
+            }
+            
+            // 重置缓存临时文件
+            reset();
+            init();
         }
-        
-        String archiveDataFilename = dataTmpFileName.replace(CACHE_TMP_FILE_SUFFIX, "") + CACHE_ARCHIVE_DATA_FILE_SUFFIX;
-        String archiveIndexFilename = dataTmpFileName.replace(CACHE_TMP_FILE_SUFFIX, "") + CACHE_ARCHIVE_INDEX_FILE_SUFFIX;
-        File archiveDataFile = new File(archiveDataFilename);
-        File archiveIndexFile = new File(archiveIndexFilename);
-        try
-        {
-            FileUtils.moveFile(dataTmpFile, archiveDataFile);
-            archiveIndexFile.createNewFile();
-        }
-        catch (IOException e)
-        {
-            LOGGER.error("Failed to create archive files.", e);
-            archiveDataFile.deleteOnExit();
-            archiveIndexFile.deleteOnExit();
-            return ;
-        }
-        
-        // 重置缓存临时文件
-        reset();
-        init();
     }
     
     /**
@@ -195,24 +209,15 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     private void init()
     {
         Long timestamp = System.currentTimeMillis();
-        String cacheTmpDataFileName = CACHE_FILE_PREFIX + timestamp + CACHE_TMP_FILE_SUFFIX;
+        String cacheTmpDataFileName = Constants.CACHE_FILE_PREFIX + timestamp + Constants.CACHE_TMP_FILE_SUFFIX;
         
         LOGGER.debug("Cache tmp data file name: '{}'.", cacheTmpDataFileName);
         if (dataTmpFile == null || !dataTmpFile.exists())
         {
-            try
-            {
-                // 生成缓存数据文件和缓存索引文件
-                dataTmpFileName = getCacheDir() + File.separator + cacheTmpDataFileName;
-                dataTmpFile = new File(dataTmpFileName);
-                dataTmpFile.createNewFile();
-                tmpFileCreateTime = System.currentTimeMillis();
-            }
-            catch (IOException e)
-            {
-                LOGGER.error("Failed to create cache tmp file.", e);
-                throw new DISClientException(e);
-            }
+            // 生成缓存数据文件和缓存索引文件
+            dataTmpFileName = getCacheDir() + File.separator + cacheTmpDataFileName;
+            dataTmpFile = new File(dataTmpFileName);
+            tmpFileCreateTime = System.currentTimeMillis();
         }
     }
     
@@ -223,6 +228,7 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
     {
         dataTmpFile = null;
         dataTmpFileName = null;
+        totalIndex = 0;
     }
     
     /**
@@ -246,26 +252,6 @@ public class CacheManager implements ICacheManager<PutRecordsRequest>
         catch (IOException e)
         {
             LOGGER.error("Invalid cache dir: {}.", disConfig.getDataCacheDir());
-            throw new DISClientException(e);
-        }
-    }
-    
-    /**
-     * 写入缓存文件
-     * @param data 待写入缓存文件的数据
-     */
-    private void writeToFile(String data)
-    {
-        try
-        {
-            // 追加写 
-            FileWriter writer = new FileWriter(dataTmpFileName, true);
-            writer.write(data + System.getProperty("line.separator"));
-            writer.close();
-        }
-        catch (IOException e)
-        {
-            LOGGER.error("Failed to write cache file.");
             throw new DISClientException(e);
         }
     }

@@ -81,6 +81,7 @@ import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
 import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
 import com.huaweicloud.dis.util.ExponentialBackOff;
 import com.huaweicloud.dis.util.Utils;
+import com.huaweicloud.dis.util.cache.CacheResenderThread;
 import com.huaweicloud.dis.util.cache.CacheUtils;
 
 public class DISClient extends AbstractDISClient implements DIS
@@ -88,6 +89,8 @@ public class DISClient extends AbstractDISClient implements DIS
     private static final Logger LOG = LoggerFactory.getLogger(DISClient.class);
 
     protected ReentrantLock recordsRetryLock = new ReentrantLock();
+    
+    private CacheResenderThread cacheResenderThread;
     
     public DISClient(DISConfig disConfig)
     {
@@ -116,6 +119,13 @@ public class DISClient extends AbstractDISClient implements DIS
             PutRecordsResult putRecordsResult = null;
             try
             {
+                // 若本地缓存开关打开，则启动缓存数据重发线程
+                if (this.cacheResenderThread == null)
+                {
+                    cacheResenderThread = new CacheResenderThread("DisClient", disConfig);
+                    cacheResenderThread.start();
+                }
+                
                 putRecordsResult = innerPutRecordsWithRetry(putRecordsParam);
                 // 部分记录上传失败
                 if (putRecordsResult.getFailedRecordCount().get() > 0)

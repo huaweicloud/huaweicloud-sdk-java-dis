@@ -141,4 +141,27 @@ public interface Constants
      * 错误描述: 通道名称不存在 (对应错误码: {@link Constants#ERROR_CODE_STREAM_NOT_EXISTS})
      */
     String ERROR_INFO_STREAM_NOT_EXISTS = "Stream does not exist";
+    
+    
+    /******************************** Local Data Cache ********************************/
+    /**
+     * 缓存文件的前缀
+     */
+    String CACHE_FILE_PREFIX = "dis-cache-data-";
+    
+    /*
+     * 缓存临时文件后缀
+     */
+    String CACHE_TMP_FILE_SUFFIX = ".tmp";
+    
+    /*
+     * 缓存归档数据文件后缀
+     */
+    String CACHE_ARCHIVE_DATA_FILE_SUFFIX = ".data";
+    
+    /*
+     * 缓存归档索引文件后缀
+     */
+    String CACHE_ARCHIVE_INDEX_FILE_SUFFIX = ".index";
+    /****************************** Local Data Cache End ******************************/
 }

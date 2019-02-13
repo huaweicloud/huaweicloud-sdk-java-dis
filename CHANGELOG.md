@@ -12,6 +12,7 @@
 - Features
   * Support configuring proxy
   * Support caching failed records locally
+  * Support resend caching failed records
 
 - Bugfixs
   * update jackson-core version to 2.8.11

@@ -39,4 +39,8 @@ public interface ICacheManager<T>
      */
     public boolean hasEnoughSpace(String data);
     
+    /**
+     * 归档缓存临时文件
+     */
+    public void archive();
 }

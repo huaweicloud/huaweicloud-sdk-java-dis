@@ -16,10 +16,14 @@
 
 package com.huaweicloud.dis.util;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
 
 /**
  * IO Utils
@@ -213,6 +218,71 @@ public class IOUtils
          * @param index 本次读取索引
          */
         void doLastIO(DATATYPE readType, int index);
+    }
+    
+    /**
+     * 追加写入文件
+     * @param data 待写入缓存文件的数据
+     * @param file 文件路径
+     */
+    public static void appendToFile(String data, String file)
+    {
+        FileWriter writer = null;
+        try
+        {
+            // 追加写 
+            writer = new FileWriter(file, true);
+            writer.write(data + System.getProperty("line.separator"));
+        }
+        catch (IOException e)
+        {
+            LOG.error("Failed to append to file.");
+            throw new DISClientException(e);
+        }
+        finally
+        {
+            if (writer != null)
+            {
+                try
+                {
+                    writer.close();
+                }
+                catch (IOException e)
+                {
+                    LOG.error("Failed to close writer.", e);
+                }
+            }
+        }
+    }
+    
+    /**
+     * 写入文件，文件存在则覆盖
+     * @param data 待写入缓存文件的数据
+     * @param file 文件路径
+     */
+    public static void writeToFile(String data, String file)
+    {
+        BufferedWriter out = null;
+        try
+        {
+            out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+            out.write(data);
+        }
+        catch (Exception e)
+        {
+            LOG.error("Failed to write to file.");
+        }
+        finally
+        {
+            try
+            {
+                out.close();
+            }
+            catch (IOException e)
+            {
+                LOG.error("Failed to close writer.", e);
+            }
+        }
     }
     
 }
