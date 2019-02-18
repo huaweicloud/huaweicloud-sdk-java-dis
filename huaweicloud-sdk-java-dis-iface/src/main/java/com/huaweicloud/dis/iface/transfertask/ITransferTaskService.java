@@ -37,13 +37,6 @@ public interface ITransferTaskService
      */
     UpdateTransferTaskResult updateTransferTask(UpdateTransferTaskRequest updateTransferTaskRequest);
 
-
-    /**
-     * <p>
-     * 暂停/启动转储任务。
-     * </p>
-     */
-    SuspendTransferTaskResult suspendTransferTask(SuspendTransferTaskRequest suspendTransferTaskRequest);
     
     /**
      * <p>

@@ -31,14 +31,7 @@ import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.core.restresource.AppsResource;
-import com.huaweicloud.dis.core.restresource.CheckPointResource;
-import com.huaweicloud.dis.core.restresource.CursorResource;
-import com.huaweicloud.dis.core.restresource.FileResource;
-import com.huaweicloud.dis.core.restresource.RecordResource;
-import com.huaweicloud.dis.core.restresource.ResourcePathBuilder;
-import com.huaweicloud.dis.core.restresource.StateResource;
-import com.huaweicloud.dis.core.restresource.StreamResource;
+import com.huaweicloud.dis.core.restresource.*;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.AbstractDISClient;
 import com.huaweicloud.dis.http.exception.HttpClientErrorException;
@@ -49,36 +42,12 @@ import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
-import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
-import com.huaweicloud.dis.iface.data.request.QueryFileState;
-import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.FileUploadResult;
-import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
-import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
-import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
-import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
-import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
-import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
-import com.huaweicloud.dis.iface.stream.request.UpdateStreamRequest;
-import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
-import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
-import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
-import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
-import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
+import com.huaweicloud.dis.iface.data.request.*;
+import com.huaweicloud.dis.iface.data.response.*;
+import com.huaweicloud.dis.iface.stream.request.*;
+import com.huaweicloud.dis.iface.stream.response.*;
+import com.huaweicloud.dis.iface.transfertask.request.*;
+import com.huaweicloud.dis.iface.transfertask.response.*;
 import com.huaweicloud.dis.util.ExponentialBackOff;
 import com.huaweicloud.dis.util.Utils;
 import com.huaweicloud.dis.util.cache.CacheResenderThread;
@@ -743,5 +712,125 @@ public class DISClient extends AbstractDISClient implements DIS
     public void updateCredentials(DISCredentials credentials)
     {
         super.innerUpdateCredentials(credentials);
+    }
+    
+    // ------------ITransferTaskService------------
+    public CreateTransferTaskResult createTransferTask(CreateTransferTaskRequest createTransferTaskRequest)
+    {
+        return innerCreateTransferTask(createTransferTaskRequest);
+    }
+    
+    public final CreateTransferTaskResult innerCreateTransferTask(CreateTransferTaskRequest createTransferTaskRequest)
+    {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.POST);
+        
+        final String resourcePath = ResourcePathBuilder.standard()
+            .withProjectId(disConfig.getProjectId())
+            .withResource(new StreamResource(null, createTransferTaskRequest.getStreamName()))
+            .withResource(new TransferTaskResource(null, null))
+            .build();
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        
+        CreateTransferTaskResult result = request(createTransferTaskRequest, request, CreateTransferTaskResult.class);
+        
+        return result;
+    }
+    
+    public UpdateTransferTaskResult updateTransferTask(UpdateTransferTaskRequest updateTransferTaskRequest)
+    {
+        return innerUpdateTransferTask(updateTransferTaskRequest);
+    }
+    
+    public final UpdateTransferTaskResult innerUpdateTransferTask(UpdateTransferTaskRequest updateTransferTaskRequest)
+    {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.PUT);
+        
+        final String resourcePath = ResourcePathBuilder.standard()
+            .withProjectId(disConfig.getProjectId())
+            .withResource(new StreamResource(null, updateTransferTaskRequest.getStreamName()))
+            .withResource(new TransferTaskResource(null, null))
+            .build();
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        
+        UpdateTransferTaskResult result = request(updateTransferTaskRequest, request, UpdateTransferTaskResult.class);
+        
+        return result;
+    }
+    
+    public DeleteTransferTaskResult deleteTransferTask(DeleteTransferTaskRequest deleteTransferTaskRequest)
+    {
+        return innerDeleteTransferTask(deleteTransferTaskRequest);
+    }
+    
+    public final DeleteTransferTaskResult innerDeleteTransferTask(DeleteTransferTaskRequest deleteTransferTaskRequest)
+    {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.DELETE);
+        
+        final String resourcePath = ResourcePathBuilder.standard()
+            .withProjectId(disConfig.getProjectId())
+            .withResource(new StreamResource(null, deleteTransferTaskRequest.getStreamName()))
+            .withResource(new TransferTaskResource(null, deleteTransferTaskRequest.getTransferTaskName()))
+            .build();
+        
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        
+        DeleteTransferTaskResult result = request(deleteTransferTaskRequest, request, DeleteTransferTaskResult.class);
+        return result;
+    }
+    
+    @Override
+    public DescribeTransferTaskResult describeTransferTask(DescribeTransferTaskRequest describeTransferTaskRequest)
+    {
+        return innerDescribeTransferTask(describeTransferTaskRequest);
+    }
+    
+    public final DescribeTransferTaskResult innerDescribeTransferTask(
+        DescribeTransferTaskRequest describeTransferTaskRequest)
+    {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.GET);
+        
+        final String resourcePath = ResourcePathBuilder.standard()
+            .withProjectId(disConfig.getProjectId())
+            .withResource(new StreamResource(null, describeTransferTaskRequest.getStreamName()))
+            .withResource(new TransferTaskResource(null, describeTransferTaskRequest.getTransferTaskName()))
+            .build();
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        
+        DescribeTransferTaskResult result =
+            request(describeTransferTaskRequest, request, DescribeTransferTaskResult.class);
+        
+        return result;
+    }
+    
+    @Override
+    public ListTransferTasksResult listTransferTasks(ListTransferTasksRquest listTransferTasksRquest)
+    {
+        return innerListTransferTasks(listTransferTasksRquest);
+    }
+    
+    public final ListTransferTasksResult innerListTransferTasks(ListTransferTasksRquest listTransferTasksRquest)
+    {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.GET);
+        
+        final String resourcePath = ResourcePathBuilder.standard()
+            .withProjectId(disConfig.getProjectId())
+            .withResource(new StreamResource(null, listTransferTasksRquest.getStreamName()))
+            .withResource(new TransferTaskResource(null, null))
+            .build();
+        
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+        
+        ListTransferTasksResult result = request(listTransferTasksRquest, request, ListTransferTasksResult.class);
+        return result;
     }
 }

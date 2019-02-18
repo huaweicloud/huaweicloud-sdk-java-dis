@@ -1,5 +1,20 @@
 package com.huaweicloud.dis;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
+
+import org.apache.http.HttpRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.huaweicloud.dis.DISConfig.BodySerializeType;
 import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.core.DefaultRequest;
@@ -22,24 +37,11 @@ import com.huaweicloud.dis.iface.data.request.*;
 import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.iface.stream.request.*;
 import com.huaweicloud.dis.iface.stream.response.*;
+import com.huaweicloud.dis.iface.transfertask.request.*;
+import com.huaweicloud.dis.iface.transfertask.response.*;
 import com.huaweicloud.dis.util.ExponentialBackOff;
 import com.huaweicloud.dis.util.IOUtils;
 import com.huaweicloud.dis.util.Utils;
-
-import org.apache.http.HttpRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 	
@@ -1151,4 +1153,96 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 	{
 		super.innerUpdateCredentials(credentials);
 	}
+    
+    @Override
+    public Future<CreateTransferTaskResult> createTransferTaskAsync(CreateTransferTaskRequest createTransferTaskRequest) {
+        return createTransferTaskAsync(createTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<CreateTransferTaskResult> createTransferTaskAsync(CreateTransferTaskRequest createTransferTaskRequest,
+        AsyncHandler<CreateTransferTaskResult> asyncHandler) {
+        Request<HttpRequest> request = buildRequest(HttpMethodName.POST, disConfig.getManagerEndpoint(),
+            ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new StreamResource(null, createTransferTaskRequest.getStreamName()))
+                .withResource(new TransferTaskResource(null, null))
+                .build());
+        
+        return requestAsync(createTransferTaskRequest, request, CreateTransferTaskResult.class, asyncHandler);
+    }
+    
+    @Override
+    public Future<UpdateTransferTaskResult> updateTransferTaskAsync(UpdateTransferTaskRequest updateTransferTaskRequest) {
+        return updateTransferTaskAsync(updateTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<UpdateTransferTaskResult> updateTransferTaskAsync(UpdateTransferTaskRequest updateTransferTaskRequest,
+        AsyncHandler<UpdateTransferTaskResult> asyncHandler) {
+        Request<HttpRequest> request = buildRequest(HttpMethodName.POST, disConfig.getManagerEndpoint(),
+            ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new StreamResource(null, updateTransferTaskRequest.getStreamName()))
+                .withResource(new TransferTaskResource(null, null))
+                .build());
+        
+        return requestAsync(updateTransferTaskRequest, request, UpdateTransferTaskResult.class, asyncHandler);
+    }
+    
+    @Override
+    public Future<DeleteTransferTaskResult> deleteTransferTaskAsync(DeleteTransferTaskRequest deleteTransferTaskRequest) {
+        return deleteTransferTaskAsync(deleteTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<DeleteTransferTaskResult> deleteTransferTaskAsync(DeleteTransferTaskRequest deleteTransferTaskRequest,
+        AsyncHandler<DeleteTransferTaskResult> asyncHandler) {
+        Request<HttpRequest> request = buildRequest(HttpMethodName.DELETE, disConfig.getManagerEndpoint(),
+            ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new StreamResource(null, deleteTransferTaskRequest.getStreamName()))
+                .withResource(new TransferTaskResource(null, deleteTransferTaskRequest.getTransferTaskName()))
+                .build());
+        
+        return requestAsync(deleteTransferTaskRequest, request, DeleteTransferTaskResult.class, asyncHandler);
+    }
+    
+    @Override
+    public Future<ListTransferTasksResult> listTransferTasksAsync(ListTransferTasksRquest listTransferTasksRequest) {
+        return listTransferTasksAsync(listTransferTasksRequest, null);
+    }
+    
+    @Override
+    public Future<ListTransferTasksResult> listTransferTasksAsync(ListTransferTasksRquest listTransferTasksRequest,
+        AsyncHandler<ListTransferTasksResult> asyncHandler) {
+        Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getManagerEndpoint(),
+            ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new StreamResource(null, listTransferTasksRequest.getStreamName()))
+                .withResource(new TransferTaskResource(null, null))
+                .build());
+        
+        return requestAsync(listTransferTasksRequest, request, ListTransferTasksResult.class, asyncHandler);
+    }
+    
+    
+    @Override
+    public Future<DescribeTransferTaskResult> describeTransferTaskAsync(DescribeTransferTaskRequest describeTransferTaskRequest) {
+        return describeTransferTaskAsync(describeTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<DescribeTransferTaskResult> describeTransferTaskAsync(DescribeTransferTaskRequest describeTransferTaskRequest,
+        AsyncHandler<DescribeTransferTaskResult> asyncHandler) {
+        Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getManagerEndpoint(),
+            ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new StreamResource(null, describeTransferTaskRequest.getStreamName()))
+                .withResource(new TransferTaskResource(null, describeTransferTaskRequest.getTransferTaskName()))
+                .build());
+        
+        return requestAsync(describeTransferTaskRequest, request, DescribeTransferTaskResult.class, asyncHandler);
+    }
+    
 }

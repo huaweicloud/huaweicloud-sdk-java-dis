@@ -16,6 +16,16 @@
 
 package com.huaweicloud.dis;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.util.StringUtils;
@@ -28,16 +38,9 @@ import com.huaweicloud.dis.iface.data.request.*;
 import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.iface.stream.request.*;
 import com.huaweicloud.dis.iface.stream.response.*;
+import com.huaweicloud.dis.iface.transfertask.request.*;
+import com.huaweicloud.dis.iface.transfertask.response.*;
 import com.huaweicloud.dis.util.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 public class DISClientAsync extends DISClient implements DISAsync
 {
@@ -573,7 +576,7 @@ public class DISClientAsync extends DISClient implements DISAsync
             }
         });
     }
-
+ 
     protected static interface InnerExecutor<REQUEST, RESULT>
     {
         /*
@@ -680,5 +683,89 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             executorService.shutdown();
         }
+    }
+    
+    @Override
+    public Future<CreateTransferTaskResult> createTransferTaskAsync(CreateTransferTaskRequest createTransferTaskRequest) {
+        return createTransferTaskAsync(createTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<CreateTransferTaskResult> createTransferTaskAsync(CreateTransferTaskRequest createTransferTaskRequest,
+        AsyncHandler<CreateTransferTaskResult> asyncHandler) {
+        
+        return submit(createTransferTaskRequest, asyncHandler, new InnerExecutor<CreateTransferTaskRequest, CreateTransferTaskResult>()
+        {
+            public CreateTransferTaskResult innerExecute(CreateTransferTaskRequest createTransferTaskRequest) {
+                return innerCreateTransferTask(createTransferTaskRequest);
+            };
+        });
+    }
+    
+    @Override
+    public Future<UpdateTransferTaskResult> updateTransferTaskAsync(UpdateTransferTaskRequest updateTransferTaskRequest) {
+        return updateTransferTaskAsync(updateTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<UpdateTransferTaskResult> updateTransferTaskAsync(UpdateTransferTaskRequest updateTransferTaskRequest,
+        AsyncHandler<UpdateTransferTaskResult> asyncHandler) {
+        
+        return submit(updateTransferTaskRequest, asyncHandler, new InnerExecutor<UpdateTransferTaskRequest, UpdateTransferTaskResult>()
+        {
+            public UpdateTransferTaskResult innerExecute(UpdateTransferTaskRequest updateTransferTaskRequest) {
+                return innerUpdateTransferTask(updateTransferTaskRequest);
+            };
+        });
+    }
+    
+    @Override
+    public Future<DeleteTransferTaskResult> deleteTransferTaskAsync(DeleteTransferTaskRequest deleteTransferTaskRequest) {
+        return deleteTransferTaskAsync(deleteTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<DeleteTransferTaskResult> deleteTransferTaskAsync(DeleteTransferTaskRequest deleteTransferTaskRequest,
+        AsyncHandler<DeleteTransferTaskResult> asyncHandler) {
+        return submit(deleteTransferTaskRequest, asyncHandler, new InnerExecutor<DeleteTransferTaskRequest, DeleteTransferTaskResult>()
+        {
+            public DeleteTransferTaskResult innerExecute(DeleteTransferTaskRequest deleteTransferTaskRequest) {
+                return innerDeleteTransferTask(deleteTransferTaskRequest);
+            };
+        });
+    }
+    
+    @Override
+    public Future<ListTransferTasksResult> listTransferTasksAsync(ListTransferTasksRquest listTransferTasksRequest) {
+        return listTransferTasksAsync(listTransferTasksRequest, null);
+    }
+    
+    @Override
+    public Future<ListTransferTasksResult> listTransferTasksAsync(ListTransferTasksRquest listTransferTasksRequest,
+        AsyncHandler<ListTransferTasksResult> asyncHandler) {
+        return submit(listTransferTasksRequest, asyncHandler, new InnerExecutor<ListTransferTasksRquest, ListTransferTasksResult>()
+        {
+            public ListTransferTasksResult innerExecute(ListTransferTasksRquest listTransferTasksRequest) {
+                return innerListTransferTasks(listTransferTasksRequest);
+            };
+        });
+    }
+    
+    @Override
+    public Future<DescribeTransferTaskResult> describeTransferTaskAsync(DescribeTransferTaskRequest describeTransferTaskRequest)
+    {
+        return describeTransferTaskAsync(describeTransferTaskRequest, null);
+    }
+    
+    @Override
+    public Future<DescribeTransferTaskResult> describeTransferTaskAsync(DescribeTransferTaskRequest describeTransferTaskRequest,
+        AsyncHandler<DescribeTransferTaskResult> asyncHandler)
+    {
+        return submit(describeTransferTaskRequest, asyncHandler, new InnerExecutor<DescribeTransferTaskRequest, DescribeTransferTaskResult>()
+        {
+            public DescribeTransferTaskResult innerExecute(DescribeTransferTaskRequest describeTransferTaskRequest) {
+                return innerDescribeTransferTask(describeTransferTaskRequest);
+            };
+        });
     }
 }
