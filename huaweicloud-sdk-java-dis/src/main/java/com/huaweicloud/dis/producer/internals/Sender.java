@@ -180,7 +180,7 @@ public class Sender extends Thread
             StreamPartition tp = batch.getTp();
 
             PutRecordsRequest putRecordsParam = new PutRecordsRequest();
-            putRecordsParam.setStreamName(tp.topic());
+            putRecordsParam.setStreamId(tp.topic());
             putRecordsParam.setRecords(batch.getBatchPutRecordsRequestEntrys());
 
             totalSendTimes.incrementAndGet();

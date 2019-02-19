@@ -224,7 +224,7 @@ public class DISClient extends AbstractDISClient implements DIS
                     {
                         // 初始化重试发送的数据请求
                         retryPutRecordsRequest = new PutRecordsRequest();
-                        retryPutRecordsRequest.setStreamName(putRecordsParam.getStreamName());
+                        retryPutRecordsRequest.setStreamId(putRecordsParam.getStreamId());
                         retryPutRecordsRequest.setRecords(new ArrayList<>(currentFailed));
                     }
                     
@@ -290,7 +290,7 @@ public class DISClient extends AbstractDISClient implements DIS
         request.setHttpMethod(HttpMethodName.POST);
         
         final String resourcePath =
-            ResourcePathBuilder.standard()
+            ResourcePathBuilder.standard().withVersion(Constants.VERSION_V3)
                 .withProjectId(disConfig.getProjectId())
                 .withResource(new RecordResource(null))
                 .build();
