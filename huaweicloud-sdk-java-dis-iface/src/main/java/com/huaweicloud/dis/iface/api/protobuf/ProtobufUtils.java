@@ -62,7 +62,7 @@ public class ProtobufUtils
     {
         com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest.Builder builder = com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest.newBuilder();
         
-        builder.setStreamName(putRecordsParam.getStreamName());
+        builder.setStreamName(putRecordsParam.getStreamId());
         for(PutRecordsRequestEntry putRecordsRequestEntry : putRecordsParam.getRecords()){
             com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder ebuilder = com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.newBuilder();
             
@@ -113,7 +113,7 @@ public class ProtobufUtils
     public static PutRecordsRequest toPutRecordsRequest(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest putRecordsParam)
     {
         PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
-        putRecordsRequest.setStreamName(putRecordsParam.getStreamName());
+        putRecordsRequest.setStreamId(putRecordsParam.getStreamName());
         
         List<PutRecordsRequestEntry> records = new ArrayList<PutRecordsRequestEntry>();
         for(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry protoEntry : putRecordsParam.getRecordsList()){

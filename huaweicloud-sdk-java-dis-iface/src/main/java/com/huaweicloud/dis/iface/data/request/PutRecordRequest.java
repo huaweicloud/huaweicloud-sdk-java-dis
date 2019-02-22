@@ -37,15 +37,15 @@ public class PutRecordRequest
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("PartitionKey")
     private String partitionKey;
-    
+
     /**
      * <p>
      * 通道名称。
      * </p>
      */
     @JsonDeserialize(using = ForceStringDeserializer.class)
-    @JsonProperty("StreamName")
-    private String streamName;
+    @JsonProperty("StreamId")
+    private String streamId;
     
     /**
      * <p>
@@ -79,16 +79,6 @@ public class PutRecordRequest
     public void setPartitionKey(String partitionKey)
     {
         this.partitionKey = partitionKey;
-    }
-    
-    public String getStreamName()
-    {
-        return streamName;
-    }
-    
-    public void setStreamName(String streamName)
-    {
-        this.streamName = streamName;
     }
     
     public String getSequenceNumberForOrdering()
@@ -129,10 +119,18 @@ public class PutRecordRequest
         this.timestamp = timestamp;
     }
 
+    public String getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
+    }
+
     @Override
     public String toString()
     {
-        return "PutRecordParam [partitionKey=" + partitionKey + ", streamName=" + streamName
+        return "PutRecordParam [partitionKey=" + partitionKey + ", streamId=" + streamId
             + ", sequenceNumberForOrdering=" + sequenceNumberForOrdering + ", explicitHashKey=" + explicitHashKey
             + ", timestamp=" + timestamp
             + "]";
