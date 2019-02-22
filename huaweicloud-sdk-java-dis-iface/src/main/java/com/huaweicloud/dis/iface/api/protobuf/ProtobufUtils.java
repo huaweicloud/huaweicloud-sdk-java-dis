@@ -62,7 +62,7 @@ public class ProtobufUtils
     {
         com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest.Builder builder = com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest.newBuilder();
         
-        builder.setStreamName(putRecordsParam.getStreamId());
+        builder.setStreamName(putRecordsParam.getStreamName());
         for(PutRecordsRequestEntry putRecordsRequestEntry : putRecordsParam.getRecords()){
             com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder ebuilder = com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.newBuilder();
             
@@ -100,7 +100,7 @@ public class ProtobufUtils
                     exbuilder.setSeqNum(putRecordsRequestEntryExtendedInfo.getSeqNum());
                 }
                 
-                ebuilder.setExtendedInfo(exbuilder);    
+                ebuilder.setExtendedInfo(exbuilder);
             }
             
             builder.addRecords(ebuilder);
@@ -113,7 +113,7 @@ public class ProtobufUtils
     public static PutRecordsRequest toPutRecordsRequest(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest putRecordsParam)
     {
         PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
-        putRecordsRequest.setStreamId(putRecordsParam.getStreamName());
+        putRecordsRequest.setStreamName(putRecordsParam.getStreamName());
         
         List<PutRecordsRequestEntry> records = new ArrayList<PutRecordsRequestEntry>();
         for(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry protoEntry : putRecordsParam.getRecordsList()){
@@ -129,7 +129,7 @@ public class ProtobufUtils
                 record.setTimestamp(protoEntry.getTimestamp());
             }
 
-            com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo protoExtendedInfo = protoEntry.getExtendedInfo(); 
+            com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo protoExtendedInfo = protoEntry.getExtendedInfo();
             if(protoExtendedInfo != null){
                 PutRecordsRequestEntryExtendedInfo extendedInfo =  new PutRecordsRequestEntryExtendedInfo();
                 

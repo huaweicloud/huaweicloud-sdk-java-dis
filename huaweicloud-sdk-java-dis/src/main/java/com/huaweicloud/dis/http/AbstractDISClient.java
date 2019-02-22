@@ -106,7 +106,7 @@ public class AbstractDISClient {
     
     /**
      * Decorate {@link PutRecordsRequest} before sending HTTP Request.
-     * 
+     *
      * @param putRecordsParam A <code>PutRecords</code> request.
      * @return A <code>PutRecords</code> request after decorating.
      */
@@ -151,7 +151,7 @@ public class AbstractDISClient {
     
     /**
      * Decorate {@link GetRecordsResult} after getting HTTP Response.
-     * 
+     *
      * @param getRecordsResult A <code>GetRecords</code> response.
      * @return A <code>GetRecords</code> response after decorating.
      */
@@ -385,7 +385,7 @@ public class AbstractDISClient {
 			connectRetryCallback = new ConnectRetryCallback<T>(callback, connectRetryFuture, 0);
 		}
 		
-        Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri, 
+        Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri,
         		request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
         
         connectRetryFuture.setInnerFuture(restFuture);
@@ -601,7 +601,7 @@ public class AbstractDISClient {
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
                 // 每次重传需要重新签名
                 request = SignUtil.sign(request, ak, sk, region,disConfig);
-                return RestClient.getInstance(disConfig).exchange(uri, 
+                return RestClient.getInstance(disConfig).exchange(uri,
                 		request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
             }
             catch (Throwable t)
@@ -705,7 +705,8 @@ public class AbstractDISClient {
     protected PutRecordsRequest toPutRecordsRequest(PutRecordRequest putRecordRequest)
     {
         PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
-        putRecordsRequest.setStreamId(putRecordRequest.getStreamId());
+        putRecordsRequest.setStreamName(putRecordRequest.getStreamName());
+        putRecordRequest.setStreamId(putRecordRequest.getStreamId());
         
         List<PutRecordsRequestEntry> putRecordsRequestEntryList = new ArrayList<PutRecordsRequestEntry>();
         PutRecordsRequestEntry putRecordsRequestEntry = new PutRecordsRequestEntry();

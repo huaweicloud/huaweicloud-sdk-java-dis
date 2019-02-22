@@ -44,8 +44,8 @@ public class PutRecordRequest
      * </p>
      */
     @JsonDeserialize(using = ForceStringDeserializer.class)
-    @JsonProperty("StreamId")
-    private String streamId;
+    @JsonProperty("StreamName")
+    private String streamName;
     
     /**
      * <p>
@@ -71,6 +71,15 @@ public class PutRecordRequest
     @JsonProperty("timestamp")
     private Long timestamp;
     
+    /**
+     * <p>
+     * 通道ID，用于授权访问， 与streamName二选一。
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("StreamId")
+    private String streamId;
+    
     public String getPartitionKey()
     {
         return partitionKey;
@@ -79,6 +88,16 @@ public class PutRecordRequest
     public void setPartitionKey(String partitionKey)
     {
         this.partitionKey = partitionKey;
+    }
+    
+    public String getStreamName()
+    {
+        return streamName;
+    }
+    
+    public void setStreamName(String streamName)
+    {
+        this.streamName = streamName;
     }
     
     public String getSequenceNumberForOrdering()
@@ -118,19 +137,21 @@ public class PutRecordRequest
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
-
-    public String getStreamId() {
+    
+    public String getStreamId()
+    {
         return streamId;
     }
-
-    public void setStreamId(String streamId) {
+    
+    public void setStreamId(String streamId)
+    {
         this.streamId = streamId;
     }
-
+    
     @Override
     public String toString()
     {
-        return "PutRecordParam [partitionKey=" + partitionKey + ", streamId=" + streamId
+        return "PutRecordParam [partitionKey=" + partitionKey + ", streamName=" + streamName
             + ", sequenceNumberForOrdering=" + sequenceNumberForOrdering + ", explicitHashKey=" + explicitHashKey
             + ", timestamp=" + timestamp
             + "]";
