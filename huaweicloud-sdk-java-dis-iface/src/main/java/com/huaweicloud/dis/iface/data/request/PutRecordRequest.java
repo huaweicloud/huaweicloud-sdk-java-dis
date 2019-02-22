@@ -71,6 +71,15 @@ public class PutRecordRequest
     @JsonProperty("timestamp")
     private Long timestamp;
     
+    /**
+     * <p>
+     * 通道ID，用于授权访问， 与streamName二选一。
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("StreamId")
+    private String streamId;
+    
     public String getPartitionKey()
     {
         return partitionKey;
@@ -127,6 +136,16 @@ public class PutRecordRequest
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+    
+    public String getStreamId()
+    {
+        return streamId;
+    }
+    
+    public void setStreamId(String streamId)
+    {
+        this.streamId = streamId;
     }
     
     @Override
