@@ -706,6 +706,7 @@ public class AbstractDISClient {
     {
         PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
         putRecordsRequest.setStreamName(putRecordRequest.getStreamName());
+        putRecordRequest.setStreamId(putRecordRequest.getStreamId());
         
         List<PutRecordsRequestEntry> putRecordsRequestEntryList = new ArrayList<PutRecordsRequestEntry>();
         PutRecordsRequestEntry putRecordsRequestEntry = new PutRecordsRequestEntry();

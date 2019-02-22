@@ -44,6 +44,15 @@ public class PutRecordsRequest
     @JsonProperty("records")
     private List<PutRecordsRequestEntry> records;
     
+    /**
+     * <p>
+     * 通道ID，用于授权访问， 与streamName二选一。
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("stream_id")
+    private String streamId;
+    
     public String getStreamName()
     {
         return streamName;
@@ -62,6 +71,16 @@ public class PutRecordsRequest
     public void setRecords(List<PutRecordsRequestEntry> records)
     {
         this.records = records;
+    }
+    
+    public String getStreamId()
+    {
+        return streamId;
+    }
+    
+    public void setStreamId(String streamId)
+    {
+        this.streamId = streamId;
     }
     
     @Override

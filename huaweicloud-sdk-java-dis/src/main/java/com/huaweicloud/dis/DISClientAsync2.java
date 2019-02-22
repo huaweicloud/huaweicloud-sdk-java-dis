@@ -348,6 +348,7 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 	            
 	            PutRecordsRequest retryPutRecordsRequest = new PutRecordsRequest();
 	            retryPutRecordsRequest.setStreamName(putRecordsParam.getStreamName());
+                retryPutRecordsRequest.setStreamId(putRecordsParam.getStreamId());
 	            retryPutRecordsRequest.setRecords(retryRecordEntrys);
 	            
 	    		PutRecordsTrafficLimitRetryCallback trafficLimitRetryCallback = null;
@@ -765,6 +766,7 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
                         // 初始化重试发送的数据请求
                         retryPutRecordsRequest = new PutRecordsRequest();
                         retryPutRecordsRequest.setStreamName(putRecordsParam.getStreamName());
+                        retryPutRecordsRequest.setStreamId(putRecordsParam.getStreamId());
                         retryPutRecordsRequest.setRecords(new ArrayList<>(currentFailed));
                     }
                     
