@@ -35,10 +35,10 @@ import java.util.concurrent.locks.LockSupport;
 
 
 /**
- * The background thread that handles the sending of produce requests to the dis server. 
+ * The background thread that handles the sending of produce requests to the dis server.
  * TODO makes metadata requests to renew its view of the cluster
  * sends produce requests to the dis server.
- * 
+ *
  * TODO 增加配置，为了保序，使同一streamPartition的数据，同步发送
  */
 public class Sender extends Thread
@@ -180,7 +180,7 @@ public class Sender extends Thread
             StreamPartition tp = batch.getTp();
 
             PutRecordsRequest putRecordsParam = new PutRecordsRequest();
-            putRecordsParam.setStreamId(tp.topic());
+            putRecordsParam.setStreamName(tp.topic());
             putRecordsParam.setRecords(batch.getBatchPutRecordsRequestEntrys());
 
             totalSendTimes.incrementAndGet();

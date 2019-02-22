@@ -18,7 +18,7 @@ package com.huaweicloud.dis;
 
 
 /**
- * 
+ *
  */
 public interface Constants
 {
@@ -35,9 +35,6 @@ public interface Constants
 
     String VERSION = "v2";
     
-    //put record 新增v3接口，支持授权用户上传数据至指定ID的通道
-    String VERSION_V3 = "v3";
-
     String RECORDS_RESOURCES = "records";
 
     String CURSORS_RESOURCES = "cursors";

@@ -44,8 +44,8 @@ public class PutRecordRequest
      * </p>
      */
     @JsonDeserialize(using = ForceStringDeserializer.class)
-    @JsonProperty("StreamId")
-    private String streamId;
+    @JsonProperty("StreamName")
+    private String streamName;
     
     /**
      * <p>
@@ -79,6 +79,16 @@ public class PutRecordRequest
     public void setPartitionKey(String partitionKey)
     {
         this.partitionKey = partitionKey;
+    }
+    
+    public String getStreamName()
+    {
+        return streamName;
+    }
+    
+    public void setStreamName(String streamName)
+    {
+        this.streamName = streamName;
     }
     
     public String getSequenceNumberForOrdering()
@@ -118,19 +128,11 @@ public class PutRecordRequest
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
-
-    public String getStreamId() {
-        return streamId;
-    }
-
-    public void setStreamId(String streamId) {
-        this.streamId = streamId;
-    }
-
+    
     @Override
     public String toString()
     {
-        return "PutRecordParam [partitionKey=" + partitionKey + ", streamId=" + streamId
+        return "PutRecordParam [partitionKey=" + partitionKey + ", streamName=" + streamName
             + ", sequenceNumberForOrdering=" + sequenceNumberForOrdering + ", explicitHashKey=" + explicitHashKey
             + ", timestamp=" + timestamp
             + "]";
