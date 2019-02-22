@@ -72,7 +72,7 @@ public class DISClient extends AbstractDISClient implements DIS
     public DISClient()
     {
     	super();
-    }    
+    }
     
     @Override
     public PutRecordsResult putRecords(PutRecordsRequest putRecordsParam)
@@ -224,7 +224,7 @@ public class DISClient extends AbstractDISClient implements DIS
                     {
                         // 初始化重试发送的数据请求
                         retryPutRecordsRequest = new PutRecordsRequest();
-                        retryPutRecordsRequest.setStreamId(putRecordsParam.getStreamId());
+                        retryPutRecordsRequest.setStreamName(putRecordsParam.getStreamName());
                         retryPutRecordsRequest.setRecords(new ArrayList<>(currentFailed));
                     }
                     
@@ -290,18 +290,18 @@ public class DISClient extends AbstractDISClient implements DIS
         request.setHttpMethod(HttpMethodName.POST);
         
         final String resourcePath =
-            ResourcePathBuilder.standard().withVersion(Constants.VERSION_V3)
+            ResourcePathBuilder.standard()
                 .withProjectId(disConfig.getProjectId())
                 .withResource(new RecordResource(null))
                 .build();
         request.setResourcePath(resourcePath);
         setEndpoint(request, disConfig.getEndpoint());
-        if(BodySerializeType.protobuf.equals(disConfig.getBodySerializeType())){            
+        if(BodySerializeType.protobuf.equals(disConfig.getBodySerializeType())){
             request.addHeader("Content-Type", "application/x-protobuf; charset=utf-8");
             
             com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequest protoRequest = ProtobufUtils.toProtobufPutRecordsRequest(putRecordsParam);
             
-            com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult putRecordsResult = request(protoRequest.toByteArray(), request, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult.class);            
+            com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult putRecordsResult = request(protoRequest.toByteArray(), request, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult.class);
             
             PutRecordsResult result = ProtobufUtils.toPutRecordsResult(putRecordsResult);
             
@@ -363,7 +363,7 @@ public class DISClient extends AbstractDISClient implements DIS
 
         GetRecordsResult result;
         
-        if(BodySerializeType.protobuf.equals(disConfig.getBodySerializeType())){            
+        if(BodySerializeType.protobuf.equals(disConfig.getBodySerializeType())){
             request.addHeader("Content-Type", "application/x-protobuf; charset=utf-8");
             
             com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsResult protoResult = request(getRecordsParam, request, com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsResult.class);

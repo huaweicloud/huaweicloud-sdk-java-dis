@@ -31,25 +31,27 @@ public class PutRecordsRequest
     
     /**
      * <p>
-     * 通道ID。
+     * 通道名称。
      * </p>
      */
     @JsonDeserialize(using = ForceStringDeserializer.class)
-    @JsonProperty("stream_id")
-    private String streamId;
+    @JsonProperty("stream_name")
+    private String streamName;
     
     /**
      * 记录列表。
      */
     @JsonProperty("records")
     private List<PutRecordsRequestEntry> records;
-
-    public String getStreamId() {
-        return streamId;
+    
+    public String getStreamName()
+    {
+        return streamName;
     }
-
-    public void setStreamId(String streamId) {
-        this.streamId = streamId;
+    
+    public void setStreamName(String streamName)
+    {
+        this.streamName = streamName;
     }
 
     public List<PutRecordsRequestEntry> getRecords()
@@ -65,7 +67,7 @@ public class PutRecordsRequest
     @Override
     public String toString()
     {
-        return "MultipleProducerParams [streamId=" + streamId + ", records=" + records + "]";
+        return "MultipleProducerParams [streamName=" + streamName + ", records=" + records + "]";
     }
     
 }
