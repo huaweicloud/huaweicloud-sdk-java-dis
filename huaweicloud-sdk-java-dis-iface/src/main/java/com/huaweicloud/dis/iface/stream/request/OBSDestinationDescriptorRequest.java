@@ -38,6 +38,14 @@ public class OBSDestinationDescriptorRequest
     
     /**
      * <p>
+     * DIS will create an IAM agency for user, automatically.
+     * </p>
+     */
+    @JsonProperty("auto_agency_enabled")
+    private boolean autoAgencyEnabled;
+    
+    /**
+     * <p>
      * Name of the agency created in IAM. DIS uses an agency to access your specified resources.For Example, DIS will
      * use this agency to dump data from a DIS stream to an OBS bucket.
      * </p>
@@ -311,5 +319,15 @@ public class OBSDestinationDescriptorRequest
     public void setCompressionFormat(String compressionFormat)
     {
         this.compressionFormat = compressionFormat;
+    }
+    
+    public boolean isAutoAgencyEnabled()
+    {
+        return autoAgencyEnabled;
+    }
+    
+    public void setAutoAgencyEnabled(boolean autoAgencyEnabled)
+    {
+        this.autoAgencyEnabled = autoAgencyEnabled;
     }
 }
