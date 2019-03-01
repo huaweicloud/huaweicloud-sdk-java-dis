@@ -51,6 +51,37 @@ public class PartitionConsumingState {
 
     @JsonProperty("checkpoint_type")
     private String checkpointType;
+    
+    /**
+     * <p>
+     * 分区的当前状态。可能是以下某种状态：
+     * </p>
+     * <ul>
+     * <li>
+     * <p>
+     * CREATING - 创建中。
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * ACTIVE - 运行中。
+     * </p>
+     * </li>
+     * <li>
+     * <li>
+     * <p>
+     * DELETED - 已删除。
+     * </p>
+     * </li>
+     * <li>
+     * <p>
+     * EXPIRED - 已过期。
+     * </p>
+     * </li>
+     * </ul>
+     */
+    @JsonProperty("status")
+    private String status;
 
     public String getPartitionId() {
         return partitionId;
@@ -99,5 +130,15 @@ public class PartitionConsumingState {
 
     public void setEarliestOffset(Long earliestOffset) {
         this.earliestOffset = earliestOffset;
+    }
+
+    public String getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(String status)
+    {
+        this.status = status;
     }
 }

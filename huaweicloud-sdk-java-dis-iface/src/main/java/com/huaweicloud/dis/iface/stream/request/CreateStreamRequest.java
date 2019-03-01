@@ -155,6 +155,12 @@ public class CreateStreamRequest
     @JsonProperty("private_cluster_id")
     private String privateClusterId;
     
+    /**
+     * 在独享集群上创建的通道对应的集群Topic名称
+     */
+    @JsonProperty("private_cluster_topic_name")
+    private String privateClusterTopicName;
+    
     public Boolean getAutoScaleEnabled()
     {
         return autoScaleEnabled;
@@ -358,6 +364,16 @@ public class CreateStreamRequest
     public void setPrivateClusterId(String privateClusterId)
     {
         this.privateClusterId = privateClusterId;
+    }
+
+    public String getPrivateClusterTopicName()
+    {
+        return privateClusterTopicName;
+    }
+
+    public void setPrivateClusterTopicName(String privateClusterTopicName)
+    {
+        this.privateClusterTopicName = privateClusterTopicName;
     }
 
     @Override
