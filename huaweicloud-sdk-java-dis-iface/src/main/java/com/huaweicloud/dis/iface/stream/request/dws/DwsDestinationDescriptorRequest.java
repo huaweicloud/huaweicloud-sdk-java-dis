@@ -174,6 +174,9 @@ public class DwsDestinationDescriptorRequest
     @JsonProperty("consumer_strategy")
     private String consumerStrategy;
     
+    //规划导入DWS容错性，以控制导入过程中处理错误的方式。
+    private Options options;
+    
     public String getDwsClusterName()
     {
         return dwsClusterName;
@@ -332,5 +335,15 @@ public class DwsDestinationDescriptorRequest
     public void setConsumerStrategy(String consumerStrategy)
     {
         this.consumerStrategy = consumerStrategy;
+    }
+    
+    public Options getOptions()
+    {
+        return options;
+    }
+    
+    public void setOptions(Options options)
+    {
+        this.options = options;
     }
 }
