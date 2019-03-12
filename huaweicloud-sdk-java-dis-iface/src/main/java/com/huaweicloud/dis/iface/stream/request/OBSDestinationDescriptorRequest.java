@@ -120,15 +120,7 @@ public class OBSDestinationDescriptorRequest
      */
     @JsonProperty("compression_format")
     private String compressionFormat;
-    
-    /**
-     * <p>
-     * 用户JOSN格式数据schema的地址: 暂时限定obs路径.
-     * </p>
-     */
-    @JsonProperty("data_schema_path")
-    private String dataSchemaPath;
-    
+
     /**
      * <p>
      * CarbonWriter.builder.withTableProperties(tablePropertiesMap)
@@ -144,15 +136,6 @@ public class OBSDestinationDescriptorRequest
      */
     @JsonProperty("processing_schema")
     private ProcessingSchema processingSchema;
-    
-    /**
-     * <p>
-     * Specify how long a failed delivery job shoud be retried, after which error delivery file will be delivered to the
-     * intermediate obs bucket.Default value: 0.
-     * </p>
-     */
-    @JsonProperty("retry_duration")
-    private int retryDuration;
     
     /**
      * <p>
@@ -233,16 +216,6 @@ public class OBSDestinationDescriptorRequest
         this.transferTaskName = transferTaskName;
     }
     
-    public int getRetryDuration()
-    {
-        return retryDuration;
-    }
-    
-    public void setRetryDuration(int retryDuration)
-    {
-        this.retryDuration = retryDuration;
-    }
-    
     public String getDestinationFileType()
     {
         return destinationFileType;
@@ -261,16 +234,6 @@ public class OBSDestinationDescriptorRequest
     public void setRecordDelimiter(String recordDelimiter)
     {
         this.recordDelimiter = recordDelimiter;
-    }
-    
-    public String getDataSchemaPath()
-    {
-        return dataSchemaPath;
-    }
-    
-    public void setDataSchemaPath(String dataSchemaPath)
-    {
-        this.dataSchemaPath = dataSchemaPath;
     }
     
     public String getConsumerStrategy()
