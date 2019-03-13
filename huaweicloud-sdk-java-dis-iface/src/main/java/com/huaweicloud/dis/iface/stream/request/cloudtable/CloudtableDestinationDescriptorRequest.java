@@ -23,12 +23,30 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.huaweicloud.dis.iface.stream.request.ForceStringDeserializer;
-import com.huaweicloud.dis.iface.stream.request.OBSDestinationDescriptorRequest;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CloudtableDestinationDescriptorRequest extends OBSDestinationDescriptorRequest
+public class CloudtableDestinationDescriptorRequest
 {
+    /**
+     * <p>
+     * The name of the transfer task.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("task_name")
+    private String transferTaskName;
+    
+    /**
+     * <p>
+     * Name of the agency created in IAM. DIS uses an agency to access your specified resources.For Example, DIS will
+     * use this agency to dump data from a DIS stream to an OBS bucket.
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("agency_name")
+    private String agencyName;
+    
     /**
      * <p>
      * Name of the CloudTable cluster to which data will be dumped. If data will be dumped to OpenTSDB, the CloudTable
@@ -106,6 +124,15 @@ public class CloudtableDestinationDescriptorRequest extends OBSDestinationDescri
      */
     @JsonProperty("backup_file_prefix")
     private String backupfilePrefix;
+    
+    /**
+     * <p>
+     * 设置从DIS拉取数据时的初始偏移量: 默认LATEST - 从最新的记录开始读取; TRIM_HORIZON - 从最早的记录开始读取
+     * </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("consumer_strategy")
+    private String consumerStrategy;
     
     public String getCloudtableClusterName()
     {
@@ -185,5 +212,35 @@ public class CloudtableDestinationDescriptorRequest extends OBSDestinationDescri
     public void setObsBackupBucketPath(String obsBackupBucketPath)
     {
         this.obsBackupBucketPath = obsBackupBucketPath;
+    }
+    
+    public String getTransferTaskName()
+    {
+        return transferTaskName;
+    }
+    
+    public void setTransferTaskName(String transferTaskName)
+    {
+        this.transferTaskName = transferTaskName;
+    }
+    
+    public String getConsumerStrategy()
+    {
+        return consumerStrategy;
+    }
+    
+    public void setConsumerStrategy(String consumerStrategy)
+    {
+        this.consumerStrategy = consumerStrategy;
+    }
+    
+    public String getAgencyName()
+    {
+        return agencyName;
+    }
+    
+    public void setAgencyName(String agencyName)
+    {
+        this.agencyName = agencyName;
     }
 }
