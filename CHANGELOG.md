@@ -16,3 +16,8 @@
 
 - Bugfixs
   * update jackson-core version to 2.8.11
+
+# 1.3.3
+
+- Bugfixs
+  * proxy configuration bug fix, support configuring 'NonProxyHosts'

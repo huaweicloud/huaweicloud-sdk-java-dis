@@ -39,6 +39,8 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
 	
 	protected String proxyDomain;
 	
+	protected String nonProxyHosts;
+	
 
 	protected DISConfig configDISConfig(DISConfig disConfig){
 		if(disConfig == null) {
@@ -101,6 +103,10 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
         if (!StringUtils.isNullOrEmpty(proxyDomain))
         {
             disConfig.setProxyDomain(proxyDomain);
+        }
+        if (!StringUtils.isNullOrEmpty(nonProxyHosts))
+        {
+            disConfig.setNonProxyHosts(nonProxyHosts);
         }
         
         Enumeration iter = extendProperties.propertyNames();// 得到配置文件的名字
@@ -203,6 +209,12 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
     public final Subclass withProxyDomain(String proxyDomain)
     {
         this.proxyDomain = proxyDomain;
+        return getSubclass();
+    }
+    
+    public final Subclass withNonProxyHosts(String nonProxyHosts)
+    {
+        this.nonProxyHosts = nonProxyHosts;
         return getSubclass();
     }
 }
