@@ -21,3 +21,5 @@
 
 - Bugfixs
   * proxy configuration bug fix, support configuring 'NonProxyHosts'
+  * Some configurations cannot be read from config.properties
+  * Cannot load default Java TrustStore
