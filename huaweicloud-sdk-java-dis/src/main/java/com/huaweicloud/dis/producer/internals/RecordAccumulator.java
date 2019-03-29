@@ -16,19 +16,27 @@
 
 package com.huaweicloud.dis.producer.internals;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
 import com.huaweicloud.dis.util.CopyOnWriteMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 /**
@@ -56,6 +64,7 @@ public final class RecordAccumulator {
     
     private Map<StreamPartition, Future<PutRecordsResult>> onSendingPartitions = Collections.synchronizedMap(new HashMap<>());
     
+    private boolean orderByPartition;//分片串行发送，使数据按分片保序
     /**
      * 
      * @param maxBatchSize 最大批量大小
@@ -64,7 +73,7 @@ public final class RecordAccumulator {
      * @param maxBufferCount 最大缓冲计数
      * @param retryBackoffMs 一个上传单元，缓冲的最长时间，到时间后，即使大小很小，也要上传远端
      */
-    public RecordAccumulator(long maxBatchSize, int maxBatchCount, long maxBufferSize, int maxBufferCount, long retryBackoffMs)
+    public RecordAccumulator(long maxBatchSize, int maxBatchCount, long maxBufferSize, int maxBufferCount, long retryBackoffMs, boolean orderByPartition)
     {
         this.closed = false;
         this.flushesInProgress = new AtomicInteger(0);
@@ -74,6 +83,7 @@ public final class RecordAccumulator {
         this.maxBufferSize = maxBufferSize;
         this.maxBufferCount = maxBufferCount;
         this.retryBackoffMs = retryBackoffMs;
+        this.orderByPartition = orderByPartition;
         this.batches = new CopyOnWriteMap<>();
     }
 
@@ -226,7 +236,7 @@ public final class RecordAccumulator {
         this.onSendingPartitions.put(sp, future);
     }
     
-    public List<ProducerBatch> drain(long now) {
+    public List<ProducerBatch> drain(long now, CopyOnWriteArrayList<StreamPartition> onSendingStreamPartitions) {
 
         List<ProducerBatch> drainBatches = new ArrayList<>();
         
@@ -242,6 +252,11 @@ public final class RecordAccumulator {
             StreamPartition sp = entry.getKey();
             Deque<ProducerBatch> deque = entry.getValue();
             
+            if(orderByPartition){//如果需要分片保序，且分片正在发送中，待发送完完成后再取
+                if(onSendingStreamPartitions.contains(sp)){
+                    continue;
+                }
+            }
             //如果当前分片还有没发送完成的，待发送完成后再取
 //            if(onSendingPartitions.containsKey(sp)){
 //                continue;

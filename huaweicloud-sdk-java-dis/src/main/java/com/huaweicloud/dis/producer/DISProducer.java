@@ -16,24 +16,34 @@
 
 package com.huaweicloud.dis.producer;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.huaweicloud.dis.DISAsync;
 import com.huaweicloud.dis.DISClientAsync;
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
+import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
+import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
+import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
 import com.huaweicloud.dis.producer.internals.RecordAccumulator;
 import com.huaweicloud.dis.producer.internals.Sender;
 import com.huaweicloud.dis.producer.internals.StreamPartition;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
 
 
 /**
@@ -57,6 +67,10 @@ public class DISProducer
 
     private DISAsync disAsync;
 
+    private DISConfig disConfig;
+    
+    private boolean orderByPartition;
+    
     public DISProducer(DISConfig disConfig)
     {
         this(disConfig, new DefaultExecutorFactory(disConfig.getMaxInFlightRequestsPerConnection()).newExecutor());
@@ -75,12 +89,16 @@ public class DISProducer
     private DISProducer(DISConfig disConfig, DISAsync disAsync, ExecutorService executorService)
     {
         DISConfig config = DISConfig.buildConfig(disConfig);
+        this.disConfig = config;
         this.lingerMs = config.getLingerMs();
         this.maxBlockMs = config.getMaxBlockMs();
         long batchSize = config.getBatchSize();
         int batchCount = config.getBatchCount();
         long bufferSize = config.getBufferMemory();
         int bufferCount = config.getBufferCount();
+        boolean orderByPartition = config.getBoolean("orderByPartition", false);
+        this.orderByPartition = orderByPartition;
+        
         if (disAsync != null)
         {
             this.disAsync = disAsync;
@@ -89,7 +107,7 @@ public class DISProducer
         {
             this.disAsync = new DISClientAsync(config, executorService);
         }
-        this.accumulator = new RecordAccumulator(batchSize, batchCount, bufferSize, bufferCount, this.lingerMs);
+        this.accumulator = new RecordAccumulator(batchSize, batchCount, bufferSize, bufferCount, this.lingerMs, orderByPartition);
         this.sender = new Sender(this.disAsync, accumulator, this.lingerMs);
 
         sender.start();
@@ -108,10 +126,92 @@ public class DISProducer
         return new PutRecordsResultEntryFuture(future);
     }
     
+    private ConcurrentHashMap<String, StreamInfo> metadata = new ConcurrentHashMap<String, StreamInfo>();
+    private CopyOnWriteArrayList<String> onSyncStreams = new CopyOnWriteArrayList<>();
+    
+    private StreamInfo fetchMetadata(String streamName){
+        StreamInfo streamInfo = metadata.get(streamName);
+        if(streamInfo == null){
+            DescribeStreamRequest describeStreamRequest = new DescribeStreamRequest();
+            describeStreamRequest.setStreamName(streamName);
+            DescribeStreamResult describeStreamResult = disAsync.describeStream(describeStreamRequest);
+            
+            streamInfo = new StreamInfo();
+            streamInfo.setStreamName(streamName);
+            streamInfo.setSyncTimestamp(System.currentTimeMillis());
+            streamInfo.setPartitions(describeStreamResult.getWritablePartitionCount());
+            
+            metadata.put(streamName, streamInfo);
+        }else{
+            if(System.currentTimeMillis() - streamInfo.getSyncTimestamp() > Long.parseLong(disConfig.get("metadataTimeoutMS", "600000"))){
+                if(!onSyncStreams.contains(streamName)){
+                    onSyncStreams.add(streamName);
+                    
+                    DescribeStreamRequest describeStreamRequest = new DescribeStreamRequest();
+                    describeStreamRequest.setStreamName(streamName);
+                    disAsync.describeStreamAsync(describeStreamRequest, new AsyncHandler<DescribeStreamResult>()
+                    {
+                        @Override
+                        public void onError(Exception exception)
+                        {
+                            log.error(exception.getMessage());
+                            onSyncStreams.remove(streamName);
+                        }
+
+                        @Override
+                        public void onSuccess(DescribeStreamResult result)
+                        {
+                            StreamInfo streamInfo = new StreamInfo();
+                            streamInfo.setStreamName(streamName);
+                            streamInfo.setSyncTimestamp(System.currentTimeMillis());
+                            streamInfo.setPartitions(result.getWritablePartitionCount());
+                            
+                            metadata.put(streamName, streamInfo);
+                            
+                            onSyncStreams.remove(streamName);
+                        }
+                    });
+                
+                }
+            }
+        }
+        
+        return streamInfo;
+    }
+    
+    private int calPartitionId(StreamInfo streamInfo, PutRecordsRequestEntry entry)
+    {
+        if(!StringUtils.isNullOrEmpty(entry.getPartitionId())){
+            return PartitionKeyUtils.getPartitionNumberFromShardId(entry.getPartitionId());
+        }
+        
+        Long hashKey = PartitionKeyUtils.getHashKey(entry.getPartitionKey(), entry.getExplicitHashKey());
+        
+        return PartitionKeyUtils.calPartitionIndex(streamInfo.getPartitions(), hashKey);
+    }
+    
     public Future<PutRecordsResult> putRecordsAsync(PutRecordsRequest putRecordsRequest, AsyncHandler<PutRecordsResult> callback) throws InterruptedException
     {
-        // TODO 先不按partition分组,streamPartition表示的其实是流而不是分片，分片字段传固定的
-        StreamPartition tp = new StreamPartition(putRecordsRequest.getStreamName(), STABLE_PARTITION_ID);
+        String streamName = putRecordsRequest.getStreamName();
+        
+        //不按partition排序的话，就不按partition分组,streamPartition表示的其实是流而不是分片，分片字段传固定的
+        String partitionId = STABLE_PARTITION_ID;
+        if(orderByPartition){
+            StreamInfo streamInfo = fetchMetadata(streamName);
+            
+            int caledPartitionId = -1;
+            for(PutRecordsRequestEntry entry : putRecordsRequest.getRecords()){
+                int tmpPartition = calPartitionId(streamInfo, entry);
+                if(caledPartitionId != -1 && caledPartitionId != tmpPartition){
+                    throw new RuntimeException("one batch should in one partition when orderByPartition on.");
+                }
+                caledPartitionId = tmpPartition;
+            }
+            
+            partitionId = Integer.toString(caledPartitionId);
+        }
+       
+        StreamPartition tp = new StreamPartition(streamName, partitionId);
         
         long timestamp = System.currentTimeMillis();
         log.trace("Sending records {} with callback {} to streampartition ", putRecordsRequest, callback, tp);
@@ -129,7 +229,6 @@ public class DISProducer
         // for API exceptions return them in the future,
         // for other exceptions throw directly
     }
-
 
     public void flush()
     {
@@ -232,4 +331,34 @@ public class DISProducer
         
     }
 
+    private static class StreamInfo{
+        private String streamName;
+        private int partitions;
+        private long syncTimestamp;
+        public String getStreamName()
+        {
+            return streamName;
+        }
+        public void setStreamName(String streamName)
+        {
+            this.streamName = streamName;
+        }
+        public int getPartitions()
+        {
+            return partitions;
+        }
+        public void setPartitions(int partitions)
+        {
+            this.partitions = partitions;
+        }
+        public long getSyncTimestamp()
+        {
+            return syncTimestamp;
+        }
+        public void setSyncTimestamp(long syncTimestamp)
+        {
+            this.syncTimestamp = syncTimestamp;
+        }
+    }
+    
 }

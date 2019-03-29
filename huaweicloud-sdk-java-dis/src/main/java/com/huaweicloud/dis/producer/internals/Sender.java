@@ -24,10 +24,12 @@ import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
 import com.huaweicloud.dis.util.Utils;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
@@ -162,11 +164,12 @@ public class Sender extends Thread
         }
     }
     
+    private CopyOnWriteArrayList<StreamPartition> onSendingStreamPartitions = new CopyOnWriteArrayList<StreamPartition>();
+    
     private boolean sendProducerData(long now)
     {
-
         // create produce requests
-        List<ProducerBatch> batches = this.accumulator.drain(now);
+        List<ProducerBatch> batches = this.accumulator.drain(now, onSendingStreamPartitions);
 
         if (batches.isEmpty())
         {
@@ -186,6 +189,8 @@ public class Sender extends Thread
             totalSendTimes.incrementAndGet();
             totalSendCount.addAndGet(batch.getRelativeOffset());
             inFlightRequestCount.incrementAndGet();
+            
+            onSendingStreamPartitions.add(tp);
             Future<PutRecordsResult> resultFuture = client.putRecordsAsync(putRecordsParam, new AsyncHandler<PutRecordsResult>()
             {
                 long start = System.currentTimeMillis();
@@ -227,6 +232,7 @@ public class Sender extends Thread
                     batch.done(result, null);
                     batchIsDone(batch);
                     inFlightRequestCount.decrementAndGet();
+                    onSendingStreamPartitions.remove(tp);
                 }
 
                 @Override
@@ -250,6 +256,7 @@ public class Sender extends Thread
                     }
                     batchIsDone(batch);
                     inFlightRequestCount.decrementAndGet();
+                    onSendingStreamPartitions.remove(tp);
                 }
             });
 
