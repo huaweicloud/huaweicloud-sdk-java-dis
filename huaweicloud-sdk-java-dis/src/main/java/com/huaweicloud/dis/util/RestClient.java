@@ -51,7 +51,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.net.ssl.SSLContext;
+
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -413,6 +417,7 @@ public class RestClient
             // 启用客户端证书校验
             if (isDefaultTrustedJKSEnabled)
             {
+            	trustStore = getDefaultTrustStore();
                 sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, null).build();
             }
             else
@@ -443,10 +448,19 @@ public class RestClient
         {
             throw new RuntimeException(e);
         }
-        catch (NoSuchAlgorithmException e)
+		catch (NoSuchAlgorithmException e) 
         {
-            throw new RuntimeException(e);
-        }
+			throw new RuntimeException(e);
+		}
+		catch (CertificateException e) 
+        {
+			throw new RuntimeException(e);
+		} catch (IOException e) 
+        {
+			throw new RuntimeException(e);
+		}
+		 
+			 
         finally
         {
             // if (null != in)
@@ -510,6 +524,43 @@ public class RestClient
             .setRetryHandler(new HttpRequestRetryHandler(3, true))
             .setDefaultRequestConfig(requestConfig)
             .build();
+    }
+    
+    /**
+     * 读取Java默认的TrustStore
+     * 
+     * @return Default Java TrustStore
+     * @throws KeyStoreException KeyStoreException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws CertificateException CertificateException
+     * @throws IOException
+     */
+    private KeyStore getDefaultTrustStore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException
+    {
+		final String CACERTS_PATH = System.getProperty("javax.net.ssl.trustStore") == null
+				? System.getProperties().getProperty("java.home") + File.separator + "lib" + File.separator + "security"
+						+ File.separator + "cacerts"
+				: System.getProperty("javax.net.ssl.keyStore");
+		final String CACERTS_PASSWORD = System.getProperty("javax.net.ssl.trustStorePassword") == null ? "changeit"
+				: System.getProperty("javax.net.ssl.trustStorePassword");
+            
+        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        InputStream in = null;
+        
+        try
+        {
+            in = new FileInputStream(CACERTS_PATH);
+            trustStore.load(in, CACERTS_PASSWORD.toCharArray());
+        }
+        finally
+        {
+            if (null != in)
+            {
+                in.close();
+            }
+        }
+        
+        return trustStore;
     }
     
 }
