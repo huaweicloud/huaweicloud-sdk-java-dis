@@ -70,7 +70,9 @@ public class DISProducer
     private DISConfig disConfig;
     
     private boolean orderByPartition;
-    
+
+    private long metadataTimeoutMS;
+
     public DISProducer(DISConfig disConfig)
     {
         this(disConfig, new DefaultExecutorFactory(disConfig.getMaxInFlightRequestsPerConnection()).newExecutor());
@@ -96,9 +98,10 @@ public class DISProducer
         int batchCount = config.getBatchCount();
         long bufferSize = config.getBufferMemory();
         int bufferCount = config.getBufferCount();
-        boolean orderByPartition = config.getBoolean("orderByPartition", false);
+        boolean orderByPartition = config.isOrderByPartition();
         this.orderByPartition = orderByPartition;
-        
+        this.metadataTimeoutMS = config.getMetadataTimeoutMs();
+
         if (disAsync != null)
         {
             this.disAsync = disAsync;
@@ -143,7 +146,7 @@ public class DISProducer
             
             metadata.put(streamName, streamInfo);
         }else{
-            if(System.currentTimeMillis() - streamInfo.getSyncTimestamp() > Long.parseLong(disConfig.get("metadataTimeoutMS", "600000"))){
+            if(System.currentTimeMillis() - streamInfo.getSyncTimestamp() > metadataTimeoutMS){
                 if(!onSyncStreams.contains(streamName)){
                     onSyncStreams.add(streamName);
                     

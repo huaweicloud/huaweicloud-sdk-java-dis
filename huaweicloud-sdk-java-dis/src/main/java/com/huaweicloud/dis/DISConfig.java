@@ -54,7 +54,9 @@ public class DISConfig extends Properties implements ClientParams
     private static final int DEFAULT_VALUE_DATA_CACHE_ARCHIVE_LIFE_CYCLE = 60;
     
     private static final BodySerializeType DEFAULT_VALUE_BODY_SERIALIZE_TYPE = BodySerializeType.json;
-    
+    private static final boolean DEFAULT_VALUE_ORDER_BY_PARTITION = false;
+    private static final int DEFAULT_VALUE_METADATA_TIMEOUT_MS = 600000;
+
     private static final int DEFAULT_NIO_IO_THREADS = Runtime.getRuntime().availableProcessors();
     
     public static final String PROPERTY_REGION_ID = "region";
@@ -128,7 +130,11 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_PRODUCER_RECORDS_RETRIABLE_ERROR_CODE = "records.retriable.error.code";
 
     public static final String PROPERTY_NIO_IO_THREADS = "nio.io.threads";
-    
+
+    public static final String PROPERTY_ORDER_BY_PARTITION = "order.by.partition";
+
+    public static final String PROPERTY_METADATA_TIMEOUT_MS = "metadata.timeout.ms";
+
     public String[] producerRecordsRetriableErrorCode;
 
     private Credentials credentials;
@@ -342,6 +348,16 @@ public class DISConfig extends Properties implements ClientParams
     
     public int getNIOIOThreads() {
     	return getInt(PROPERTY_NIO_IO_THREADS, DEFAULT_NIO_IO_THREADS);
+    }
+
+    public boolean isOrderByPartition()
+    {
+        return getBoolean(PROPERTY_ORDER_BY_PARTITION, DEFAULT_VALUE_ORDER_BY_PARTITION);
+    }
+
+    public long getMetadataTimeoutMs()
+    {
+        return (long) getInt(PROPERTY_METADATA_TIMEOUT_MS, DEFAULT_VALUE_METADATA_TIMEOUT_MS);
     }
 
     /**
