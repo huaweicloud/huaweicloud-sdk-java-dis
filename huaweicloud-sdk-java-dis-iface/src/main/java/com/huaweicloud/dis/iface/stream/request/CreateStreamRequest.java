@@ -21,8 +21,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.huaweicloud.dis.iface.stream.request.cloudtable.CloudtableDestinationDescriptorRequest;
-import com.huaweicloud.dis.iface.stream.request.dws.DwsDestinationDescriptorRequest;
+import com.huaweicloud.dis.iface.data.request.StreamType;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -31,60 +30,19 @@ public class CreateStreamRequest
     /**
      * 普通通道类型
      */
-    public static final String STREAM_TYPE_COMMON = "COMMON";
+    public static final String STREAM_TYPE_COMMON = StreamType.COMMON.getType();
     
     /**
      * 高级通道类型
      */
-    public static final String STREAM_TYPE_ADVANCED = "ADVANCED";
-    
-    /** -------------------- stream属性 ------------------- **/
+    public static final String STREAM_TYPE_ADVANCED = StreamType.ADVANCED.getType();
     
     /**
-     * 流名称 aws: [a-zA-Z0-9_.-]+ hws: [a-zA-Z0-9_-]+
+     * 流名称，必填。校验规则 [a-zA-Z0-9_-]+
      */
-    // @JsonDeserialize(using = ForceStringDeserializer.class)
+    //aws: [a-zA-Z0-9_.-]+ hws: [a-zA-Z0-9_-]+
     @JsonProperty("stream_name")
     private String streamName;
-    
-    // @JsonDeserialize(using = ForceIntegerDeserializer.class)
-    @JsonProperty("partition_count")
-    private Integer partitionCount;
-    
-    @JsonProperty("auto_scale_enabled")
-    private Boolean autoScaleEnabled;
-    
-    @JsonProperty("auto_scale_min_partition_count")
-    private Integer autoScaleMinPartitionCount;
-    
-    @JsonProperty("auto_scale_max_partition_count")
-    private Integer autoScaleMaxPartitionCount;
-    
-    /** -------------------- DIS属性 ------------------- **/
-    
-    /** OBS目的对象描述 */
-    @JsonProperty("obs_destination_descriptor")
-    private List<OBSDestinationDescriptorRequest> obsDestinationDescriptors;
-    
-    /** MRS目的对象描述 */
-    @JsonProperty("mrs_destination_descriptor")
-    private List<MRSDestinationDescriptorRequest> mrsDestinationDescriptors;
-    
-    /** Uquery目的对象描述 */
-    @JsonProperty("uquery_destination_descriptor")
-    private List<UqueryDestinationDescriptorRequest> uqueryDestinationDescriptors;
-    
-    /** dli目的对象描述:Uquery服务改名为dli，为兼容原接口，保留uquery_destination_descriptor */
-    @JsonProperty("dli_destination_descriptor")
-    private List<UqueryDestinationDescriptorRequest> dliDestinationDescriptors;
-    
-    /** cloudttable目的对象描述 */
-    @JsonProperty("cloudtable_destination_descriptor")
-    private List<CloudtableDestinationDescriptorRequest> cloudtableDestinationDescriptors;
-    
-    /** dws目的对象描述 */
-    @JsonProperty("dws_destination_descriptor")
-    private List<DwsDestinationDescriptorRequest> dwsDestinationDescriptors;
     
     /**
      * 流类型
@@ -92,17 +50,49 @@ public class CreateStreamRequest
      * @see {@link #STREAM_TYPE_COMMON} 对应带宽上限为1MB
      * @see {@link #STREAM_TYPE_ADVANCED} 对应带宽上限为5MB
      */
-    // @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("stream_type")
     private String streamType;
-
-    // 数据的类型，目前支持：BLOB、JSON、CSV格式
+    
+    /**
+     * 分区数量，必填。正整数，但不应大于用户剩余分区配额
+     * */
+    @JsonProperty("partition_count")
+    private Integer partitionCount;
+    
+    /**
+     * 数据保留时长，单位为小时，默认为24小时
+     */
+    @JsonProperty("data_duration")
+    private Integer dataDuration;
+    
+    /**
+     * 是否启用自动扩缩容，默认关闭
+     * */
+    @JsonProperty("auto_scale_enabled")
+    private Boolean autoScaleEnabled;
+    
+    /**
+     * 当自动扩缩容启用时，自动缩容的最小分片数
+     * */
+    @JsonProperty("auto_scale_min_partition_count")
+    private Integer autoScaleMinPartitionCount;
+    
+    /**
+     * 当自动扩缩容启用时，自动扩容的最大分片数
+     * */
+    @JsonProperty("auto_scale_max_partition_count")
+    private Integer autoScaleMaxPartitionCount;
+    
+    
+    /**
+     * 数据的类型，目前支持："BLOB"、"JSON"、"CSV"
+     * */ 
     @JsonProperty("data_type")
     private String dataType;
 
     /**
      * <p>
-     * 用户JOSN、CSV格式数据schema,用avro shema描述
+     * 用户JOSN、CSV格式数据schema,选填，用avro shema描述
      * </p>
      */
     @JsonProperty("data_schema")
@@ -110,27 +100,19 @@ public class CreateStreamRequest
 
     /**
      * <p>
-     * 数据的压缩类型，目前支持：不压缩, snappy, gzip, zip
-     * </p>
-     */
-    @JsonProperty("compression_format")
-    private String compressionFormat;
-
-
-    /**
-     * 数据保留时长，单位为小时，默认为24小时
-     */
-    // @JsonDeserialize(using = ForceIntegerDeserializer.class)
-    @JsonProperty("data_duration")
-    private Integer dataDuration;
-
-    /**
-     * <p>
-     * CSV格式数据的描述，如delimiter
+     * CSV格式数据的描述，选填。如delimiter
      * </p>
      */
     @JsonProperty("csv_properties")
     private CSVProperties csvProperties;
+    
+    /**
+     * <p>
+     * 数据的压缩类型，选填。目前支持：不压缩, snappy, gzip, zip
+     * </p>
+     */
+    @JsonProperty("compression_format")
+    private String compressionFormat;
 
     /**
      * <p>
@@ -142,7 +124,7 @@ public class CreateStreamRequest
     
     /**
      * <p>
-     * 通道是否在独享集群上创建
+     * 通道是否在独享集群上创建,选填
      * </p>
      * true: 在独享集群上创建；false: 在共享集群上创建
      */
@@ -223,36 +205,6 @@ public class CreateStreamRequest
         return this;
     }
     
-    public List<MRSDestinationDescriptorRequest> getMrsDestinationDescriptors()
-    {
-        return mrsDestinationDescriptors;
-    }
-    
-    public void setMrsDestinationDescriptors(List<MRSDestinationDescriptorRequest> mrsDestinationDescriptors)
-    {
-        this.mrsDestinationDescriptors = mrsDestinationDescriptors;
-    }
-    
-    public List<OBSDestinationDescriptorRequest> getObsDestinationDescriptors()
-    {
-        return obsDestinationDescriptors;
-    }
-    
-    public void setObsDestinationDescriptors(List<OBSDestinationDescriptorRequest> obsDestinationDescriptors)
-    {
-        this.obsDestinationDescriptors = obsDestinationDescriptors;
-    }
-    
-    public List<UqueryDestinationDescriptorRequest> getUqueryDestinationDescriptors()
-    {
-        return uqueryDestinationDescriptors;
-    }
-    
-    public void setUqueryDestinationDescriptors(List<UqueryDestinationDescriptorRequest> uqueryDestinationDescriptors)
-    {
-        this.uqueryDestinationDescriptors = uqueryDestinationDescriptors;
-    }
-    
     public String getStreamType()
     {
         return streamType;
@@ -271,37 +223,6 @@ public class CreateStreamRequest
     public void setDataDuration(Integer dataDuration)
     {
         this.dataDuration = dataDuration;
-    }
-    
-    public List<CloudtableDestinationDescriptorRequest> getCloudtableDestinationDescriptors()
-    {
-        return cloudtableDestinationDescriptors;
-    }
-    
-    public void setCloudtableDestinationDescriptors(
-        List<CloudtableDestinationDescriptorRequest> cloudtableDestinationDescriptors)
-    {
-        this.cloudtableDestinationDescriptors = cloudtableDestinationDescriptors;
-    }
-    
-    public List<DwsDestinationDescriptorRequest> getDwsDestinationDescriptors()
-    {
-        return dwsDestinationDescriptors;
-    }
-    
-    public void setDwsDestinationDescriptors(List<DwsDestinationDescriptorRequest> dwsDestinationDescriptors)
-    {
-        this.dwsDestinationDescriptors = dwsDestinationDescriptors;
-    }
-    
-    public List<UqueryDestinationDescriptorRequest> getDliDestinationDescriptors()
-    {
-        return dliDestinationDescriptors;
-    }
-    
-    public void setDliDestinationDescriptors(List<UqueryDestinationDescriptorRequest> dliDestinationDescriptors)
-    {
-        this.dliDestinationDescriptors = dliDestinationDescriptors;
     }
     
     public String getDataType()

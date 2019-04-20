@@ -17,7 +17,7 @@
 package com.huaweicloud.dis.iface.data.request;
 
 /**
- * 
+ * 通道分片类型枚举
  */
 public enum StreamType {
 
