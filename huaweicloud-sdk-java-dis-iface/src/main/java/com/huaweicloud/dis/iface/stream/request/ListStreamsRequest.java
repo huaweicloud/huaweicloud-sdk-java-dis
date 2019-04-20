@@ -41,7 +41,7 @@ public class ListStreamsRequest
      * </p>
      */
     @JsonProperty("start_stream_name")
-    private String exclusivetartStreamName;
+    private String exclusiveStartStreamName;
     
     public Integer getLimit()
     {
@@ -53,20 +53,20 @@ public class ListStreamsRequest
         this.limit = limit;
     }
     
-    public String getExclusivetartStreamName()
+    public String getExclusiveStartStreamName()
     {
-        return exclusivetartStreamName;
+        return exclusiveStartStreamName;
     }
     
-    public void setExclusivetartStreamName(String exclusivetartStreamName)
+    public void setExclusiveStartStreamName(String exclusiveStartStreamName)
     {
-        this.exclusivetartStreamName = exclusivetartStreamName;
+        this.exclusiveStartStreamName = exclusiveStartStreamName;
     }
 
     @Override
     public String toString()
     {
-        return "ListStreamsRequest [limit=" + limit + ", exclusivetartStreamName=" + exclusivetartStreamName + "]";
+        return "ListStreamsRequest [limit=" + limit + ", exclusiveStartStreamName=" + exclusiveStartStreamName + "]";
     }
     
 }
