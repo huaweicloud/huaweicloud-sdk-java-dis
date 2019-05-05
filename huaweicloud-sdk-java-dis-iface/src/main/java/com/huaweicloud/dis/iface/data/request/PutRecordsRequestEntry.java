@@ -63,9 +63,6 @@ public class PutRecordsRequestEntry
     @JsonProperty("partition_key")
     private String partitionKey;
 
-    @JsonProperty("extended_info")
-    private PutRecordsRequestEntryExtendedInfo extendedInfo;
-
     @JsonProperty("timestamp")
     private Long timestamp;
 
@@ -109,16 +106,6 @@ public class PutRecordsRequestEntry
         this.partitionId = partitionId;
     }
 
-    public PutRecordsRequestEntryExtendedInfo getExtendedInfo()
-    {
-        return extendedInfo;
-    }
-
-    public void setExtendedInfo(PutRecordsRequestEntryExtendedInfo extendedInfo)
-    {
-        this.extendedInfo = extendedInfo;
-    }
-
     public Long getTimestamp() {
         return timestamp;
     }
@@ -130,8 +117,9 @@ public class PutRecordsRequestEntry
     @Override
     public String toString()
     {
-        return "PutRecordsRequestEntry [explicitHashKey=" + explicitHashKey + ", partitionKey=" + partitionKey
-           +  ", partitionId=" + partitionId + ", extendedInfo=" + extendedInfo + ", timestamp=" + timestamp + "]";
+        return "PutRecordsRequestEntry [data=" + data + ", explicitHashKey=" + explicitHashKey + ", partitionId="
+            + partitionId + ", partitionKey=" + partitionKey + ", timestamp=" + timestamp + "]";
     }
+
 
 }

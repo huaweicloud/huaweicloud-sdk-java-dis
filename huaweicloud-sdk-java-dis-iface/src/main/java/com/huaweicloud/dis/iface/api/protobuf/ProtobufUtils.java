@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.google.protobuf.ByteString;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
-import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntryExtendedInfo;
 import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
@@ -92,26 +91,6 @@ public class ProtobufUtils
                 ebuilder.setTimestamp(putRecordsRequestEntry.getTimestamp());
             }
             
-            PutRecordsRequestEntryExtendedInfo putRecordsRequestEntryExtendedInfo = putRecordsRequestEntry.getExtendedInfo();
-            if(putRecordsRequestEntryExtendedInfo != null){
-                com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.Builder exbuilder = com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.newBuilder();
-                
-                if(putRecordsRequestEntryExtendedInfo.getDeliverDataId() != null){
-                    exbuilder.setDeliverDataId(putRecordsRequestEntryExtendedInfo.getDeliverDataId());
-                }
-                if(putRecordsRequestEntryExtendedInfo.getEndFlag() != null){
-                    exbuilder.setEndFlag(putRecordsRequestEntryExtendedInfo.getEndFlag());
-                }
-                if(putRecordsRequestEntryExtendedInfo.getFileName() != null){
-                    exbuilder.setFileName(putRecordsRequestEntryExtendedInfo.getFileName());
-                }
-                if(putRecordsRequestEntryExtendedInfo.getSeqNum() != null){
-                    exbuilder.setSeqNum(putRecordsRequestEntryExtendedInfo.getSeqNum());
-                }
-                
-                ebuilder.setExtendedInfo(exbuilder);
-            }
-            
             builder.addRecords(ebuilder);
         }
         
@@ -145,18 +124,6 @@ public class ProtobufUtils
             if(protoEntry.hasTimestamp())
             {
                 record.setTimestamp(protoEntry.getTimestamp());
-            }
-
-            com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo protoExtendedInfo = protoEntry.getExtendedInfo();
-            if(protoExtendedInfo != null){
-                PutRecordsRequestEntryExtendedInfo extendedInfo =  new PutRecordsRequestEntryExtendedInfo();
-                
-                extendedInfo.setDeliverDataId(protoExtendedInfo.getDeliverDataId());
-                extendedInfo.setEndFlag(protoExtendedInfo.getEndFlag());
-                extendedInfo.setFileName(protoExtendedInfo.getFileName());
-                extendedInfo.setSeqNum(protoExtendedInfo.getSeqNum());
-                
-                record.setExtendedInfo(extendedInfo);
             }
 
             records.add(record);

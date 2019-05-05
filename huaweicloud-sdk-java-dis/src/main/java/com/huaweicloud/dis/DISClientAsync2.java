@@ -1,11 +1,12 @@
 package com.huaweicloud.dis;
 
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -17,12 +18,17 @@ import org.slf4j.LoggerFactory;
 
 import com.huaweicloud.dis.DISConfig.BodySerializeType;
 import com.huaweicloud.dis.core.DISCredentials;
-import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.core.restresource.*;
+import com.huaweicloud.dis.core.restresource.AppsResource;
+import com.huaweicloud.dis.core.restresource.CheckPointResource;
+import com.huaweicloud.dis.core.restresource.CursorResource;
+import com.huaweicloud.dis.core.restresource.RecordResource;
+import com.huaweicloud.dis.core.restresource.ResourcePathBuilder;
+import com.huaweicloud.dis.core.restresource.StreamResource;
+import com.huaweicloud.dis.core.restresource.TransferTaskResource;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.AbstractCallbackAdapter;
 import com.huaweicloud.dis.http.AbstractFutureAdapter;
@@ -33,14 +39,42 @@ import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
 import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
 import com.huaweicloud.dis.iface.app.response.ListAppsResult;
 import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.*;
-import com.huaweicloud.dis.iface.data.response.*;
-import com.huaweicloud.dis.iface.stream.request.*;
-import com.huaweicloud.dis.iface.stream.response.*;
-import com.huaweicloud.dis.iface.transfertask.request.*;
-import com.huaweicloud.dis.iface.transfertask.response.*;
-import com.huaweicloud.dis.util.ExponentialBackOff;
-import com.huaweicloud.dis.util.IOUtils;
+import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
+import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
+import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
+import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
+import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
+import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
+import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
+import com.huaweicloud.dis.iface.data.response.PutRecordsResultEntry;
+import com.huaweicloud.dis.iface.stream.request.CreateStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.DeleteStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.DescribeStreamRequest;
+import com.huaweicloud.dis.iface.stream.request.ListStreamsRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdatePartitionCountRequest;
+import com.huaweicloud.dis.iface.stream.request.UpdateStreamRequest;
+import com.huaweicloud.dis.iface.stream.response.CreateStreamResult;
+import com.huaweicloud.dis.iface.stream.response.DeleteStreamResult;
+import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
+import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
+import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
+import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
+import com.huaweicloud.dis.iface.transfertask.request.CreateTransferTaskRequest;
+import com.huaweicloud.dis.iface.transfertask.request.DeleteTransferTaskRequest;
+import com.huaweicloud.dis.iface.transfertask.request.DescribeTransferTaskRequest;
+import com.huaweicloud.dis.iface.transfertask.request.ListTransferTasksRquest;
+import com.huaweicloud.dis.iface.transfertask.request.UpdateTransferTaskRequest;
+import com.huaweicloud.dis.iface.transfertask.response.CreateTransferTaskResult;
+import com.huaweicloud.dis.iface.transfertask.response.DeleteTransferTaskResult;
+import com.huaweicloud.dis.iface.transfertask.response.DescribeTransferTaskResult;
+import com.huaweicloud.dis.iface.transfertask.response.ListTransferTasksResult;
+import com.huaweicloud.dis.iface.transfertask.response.UpdateTransferTaskResult;
 import com.huaweicloud.dis.util.Utils;
 
 public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
@@ -530,408 +564,6 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         
         return requestAsync(describeStreamRequest, request, DescribeStreamResult.class, asyncHandler);
     }
-    
-    @Override
-    public Future<PutFilesResult> putFilesAsync(PutFilesRequest putFilesRequest) {
-        return putFilesAsync(putFilesRequest, null);
-    }
-    
-    //---------------------------------------- putfilesAsync -----------------------------------------
-    @Override
-    public Future<PutFilesResult> putFilesAsync(PutFilesRequest putFilesRequest,
-        AsyncHandler<PutFilesResult> asyncHandler)
-    {
-        // 文件名称校验
-        if (!IOUtils.isValidFileName(putFilesRequest.getFileName()))
-        {
-            throw new RuntimeException("Invalid file name.");
-        }
-        
-        return submit(putFilesRequest, asyncHandler, new InnerExecutor<PutFilesRequest, PutFilesResult>()
-        {
-            public PutFilesResult innerExecute(PutFilesRequest putFilesRequest) {
-                
-                String DELIVER_DATA_ID = UUID.randomUUID().toString().replace("-", "");
-                DescribeStreamRequest describeStreamRequest = new DescribeStreamRequest();
-                describeStreamRequest.setStreamName(putFilesRequest.getStreamName());
-                DescribeStreamResult describeStreamResult = describeStream(describeStreamRequest);
-                innerReadFiles(putFilesRequest, DELIVER_DATA_ID, StreamType.getEnumByType(describeStreamResult.getStreamType()).getValue());
-                
-                // 异步返回，文件转储到OBS成功之后执行回调函数
-                QueryFileState queryFileState = new QueryFileState();
-                queryFileState.setStreamName(putFilesRequest.getStreamName());
-                queryFileState.setFileName(putFilesRequest.getFileName());
-                queryFileState.setDeliverDataId(String.valueOf(DELIVER_DATA_ID));
-                
-                boolean isSuccessful = false;
-                while (true)
-                {
-                    // 查询当前文件转储状态（获取文件状态接口不进行重试）
-                    FileUploadResult fileUploadResult = innerGetFileUploadResult(queryFileState);
-                    if (FileUploadResult.STATE_IN_OBS.equals(fileUploadResult.getState()))
-                    {
-                        isSuccessful = true;
-                        break; // 文件转储已经完成，返回
-                    }
-                    
-                    if(FileUploadResult.STATE_CANCELLED.equals(fileUploadResult.getState()))
-                    {
-                        //可能流已经被删除了
-                        LOG.error("Failed to upload file {}, {}", putFilesRequest.getFilePath(), fileUploadResult);
-                        break;
-                    }
-                    
-                    LOG.info("Wait for file {} transferring completed, {}",
-                        putFilesRequest.getFilePath(),
-                        fileUploadResult);
-                    try
-                    {
-                        Thread.sleep(5000);
-                    }
-                    catch (InterruptedException e)
-                    {
-                        LOG.error(e.getMessage(), e);;
-                    }
-                }
-                
-                // TODO 响应信息待优化
-                PutFilesResult putFilesResult = new PutFilesResult();
-                putFilesResult.setSuccessful(isSuccessful);
-                return putFilesResult;
-            };
-        });
-    }
-    
-    protected final FileUploadResult innerGetFileUploadResult(QueryFileState queryFileState)
-    {
-        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
-        request.setHttpMethod(HttpMethodName.GET);
-        
-        final String resourcePath = ResourcePathBuilder.standard()
-            .withProjectId(disConfig.getProjectId())
-            .withResource(new FileResource(queryFileState.getDeliverDataId()))
-            .withResource(new StateResource(null))
-            .build();
-        request.setResourcePath(resourcePath);
-        setEndpoint(request, disConfig.getEndpoint());
-        
-        return request(queryFileState, request, FileUploadResult.class);
-    }
-    
-    private void innerReadFiles(PutFilesRequest putFilesRequest, String deliverDataId, int bandwith)
-    {
-        final int READ_BYTES_PER_TIME = 300 * 1024;
-        
-        IOUtils.readFileByBytes(putFilesRequest.getFilePath(), READ_BYTES_PER_TIME, bandwith, new IOUtils.IOHandler<ByteBuffer>()
-        {
-            
-            @Override
-            public void doInIO(ByteBuffer byteBuffer, int seqNum)
-            {
-                innerPutFiles(putFilesRequest, byteBuffer, deliverDataId, seqNum, false);
-            }
-            
-            @Override
-            public void doLastIO(ByteBuffer byteBuffer, int seqNum)
-            {
-                innerPutFiles(putFilesRequest, byteBuffer, deliverDataId, seqNum, true);
-            }
-        });
-        
-    }
-    
-    private void innerPutFiles(PutFilesRequest putFilesRequest, ByteBuffer byteBuffer, String deliverDataId, long seqNum,
-        boolean endFlag)
-    {
-        PutRecordsRequest putRecordsRequest = getPutRecordsRequest(putFilesRequest, byteBuffer, deliverDataId, seqNum, endFlag);
-        
-        doWithRetry(putRecordsRequest, 3, 1000, new RetryExecutor<PutRecordsRequest>(){
-            
-            @Override
-            public void doWithRetry(PutRecordsRequest request, int maxRetries, long maxDelay)
-            {
-                PutRecordsResult putRecordsResult = innerPutRecordsWithRetry(putRecordsRequest);
-                
-                if (putRecordsResult.getFailedRecordCount().intValue() > 0)
-                {
-                    final String TRAFFIC_CONTROL_EXCEED_ERROR_CODE = "DIS.4303";
-                    if (putRecordsResult.getRecords().get(0).getErrorCode().equals(TRAFFIC_CONTROL_EXCEED_ERROR_CODE))
-                    {
-                        // 客户端有流量限制的情况下，超过流控限制，线程休眠1秒
-                        LOG.warn("Traffic control limit exceeded.");
-                        try
-                        {
-                            Thread.sleep(1000);
-                        }
-                        catch (InterruptedException e)
-                        {
-                            LOG.error(e.getMessage(), e);
-                        }
-                    }
-                    throw new RuntimeException(
-                        "Fail to put records, errorCode: " + putRecordsResult.getRecords().get(0).getErrorCode()
-                            + ", errorMessage: " + putRecordsResult.getRecords().get(0).getErrorMessage());
-                }
-            }
-            
-        });
-    }
-    
-    protected ReentrantLock recordsRetryLock = new ReentrantLock();
-    protected PutRecordsResult innerPutRecordsWithRetry(PutRecordsRequest putRecordsParam)
-    {
-        PutRecordsResult putRecordsResult = null;
-        PutRecordsResultEntry[] putRecordsResultEntryList = null;
-        Integer[] retryIndex = null;
-        PutRecordsRequest retryPutRecordsRequest = putRecordsParam;
-        
-        int retryCount = -1;
-        int currentFailed = 0;
-        int noRetryRecordsCount = 0;
-        ExponentialBackOff backOff = null;
-        try
-        {
-            do
-            {
-                retryCount++;
-                if (retryCount > 0)
-                {
-                    // 等待一段时间再发起重试
-                    if (backOff == null)
-                    {
-                        recordsRetryLock.lock();
-                        LOG.trace("Put records retry lock.");
-                        backOff = new ExponentialBackOff(ExponentialBackOff.DEFAULT_INITIAL_INTERVAL,
-                            ExponentialBackOff.DEFAULT_MULTIPLIER, disConfig.getBackOffMaxIntervalMs(),
-                            ExponentialBackOff.DEFAULT_MAX_ELAPSED_TIME);
-                    }
-                    
-                    if (putRecordsResult != null && currentFailed != putRecordsResult.getRecords().size())
-                    {
-                        // 部分失败则重置退避时间
-                        backOff.resetCurrentInterval();
-                    }
-                    
-                    long sleepMs = backOff.getNextBackOff();
-                    
-                    if (retryPutRecordsRequest.getRecords().size() > 0)
-                    {
-                        LOG.debug(
-                            "Put {} records but {} failed, will re-try after backoff {} ms, current retry count is {}.",
-                            putRecordsResult != null ? putRecordsResult.getRecords().size()
-                                : putRecordsParam.getRecords().size(),
-                            currentFailed,
-                            sleepMs,
-                            retryCount);
-                    }
-                    
-                    backOff.backOff(sleepMs);
-                }
-                
-                try
-                {
-                    putRecordsResult = putRecords(retryPutRecordsRequest);
-                }
-                catch (Throwable t)
-                {
-                    if (putRecordsResultEntryList != null)
-                    {
-                        LOG.error(t.getMessage(), t);
-                        break;
-                    }
-                    throw t;
-                }
-                
-                if (putRecordsResult != null)
-                {
-                    currentFailed = putRecordsResult.getFailedRecordCount().get();
-                    
-                    if (putRecordsResultEntryList == null && currentFailed == 0 || disConfig.getRecordsRetries() == 0)
-                    {
-                        // 第一次发送全部成功或者不需要重试，则直接返回结果
-                        return putRecordsResult;
-                    }
-                    
-                    if (putRecordsResultEntryList == null)
-                    {
-                        // 存在发送失败的情况，需要重试，则使用数组来汇总每次请求后的结果。
-                        putRecordsResultEntryList = new PutRecordsResultEntry[putRecordsParam.getRecords().size()];
-                    }
-                    
-                    // 需要重试发送数据的原始下标
-                    List<Integer> retryIndexTemp = new ArrayList<>(currentFailed);
-                    
-                    if (currentFailed > 0)
-                    {
-                        // 初始化重试发送的数据请求
-                        retryPutRecordsRequest = new PutRecordsRequest();
-                        retryPutRecordsRequest.setStreamName(putRecordsParam.getStreamName());
-                        retryPutRecordsRequest.setStreamId(putRecordsParam.getStreamId());
-                        retryPutRecordsRequest.setRecords(new ArrayList<>(currentFailed));
-                    }
-                    
-                    // 对每条结果分析，更新结果数据
-                    for (int i = 0; i < putRecordsResult.getRecords().size(); i++)
-                    {
-                        // 获取重试数据在原始数据中的下标位置
-                        int originalIndex = retryIndex == null ? i : retryIndex[i];
-                        PutRecordsResultEntry putRecordsResultEntry = putRecordsResult.getRecords().get(i);
-                        if (!StringUtils.isNullOrEmpty(putRecordsResultEntry.getErrorCode()))
-                        {
-                            // 只对指定异常(如流控与服务端内核异常)进行重试
-                            if (isRecordsRetriableErrorCode(putRecordsResultEntry.getErrorCode()))
-                            {
-                                retryIndexTemp.add(originalIndex);
-                                retryPutRecordsRequest.getRecords().add(putRecordsParam.getRecords().get(originalIndex));
-                            }
-                            else
-                            {
-                                noRetryRecordsCount++;
-                            }
-                        }
-                        putRecordsResultEntryList[originalIndex] = putRecordsResultEntry;
-                    }
-                    retryIndex = retryIndexTemp.size() > 0 ? retryIndexTemp.toArray(new Integer[retryIndexTemp.size()])
-                        : new Integer[0];
-                }
-            } while ((retryIndex == null || retryIndex.length > 0) && retryCount < disConfig.getRecordsRetries());
-        }
-        finally
-        {
-            if (retryCount > 0)
-            {
-                recordsRetryLock.unlock();
-                LOG.trace("Put records retry unlock.");
-            }
-        }
-        putRecordsResult = new PutRecordsResult();
-        if (retryIndex == null)
-        {
-            // 不可能存在此情况，完全没有发送出去会直接抛出异常
-            putRecordsResult.setFailedRecordCount(new AtomicInteger(putRecordsParam.getRecords().size()));
-        }
-        else
-        {
-            putRecordsResult.setFailedRecordCount(new AtomicInteger(retryIndex.length + noRetryRecordsCount));
-            putRecordsResult.setRecords(Arrays.asList(putRecordsResultEntryList));
-        }
-        
-        return putRecordsResult;
-    }
-    
-    private PutRecordsRequest getPutRecordsRequest(PutFilesRequest putFilesRequest, ByteBuffer byteBuffer,
-        String dELIVER_DATA_ID, long seqNum, boolean endFlag)
-    {
-        
-        PutRecordsRequestEntry putRecordsRequestEntry = new PutRecordsRequestEntry();
-        putRecordsRequestEntry.setData(byteBuffer);
-        putRecordsRequestEntry.setPartitionKey(putFilesRequest.getPartitionKey());
-        putRecordsRequestEntry.setExplicitHashKey(putFilesRequest.getExplicitHashKey());
-        
-        PutRecordsRequestEntryExtendedInfo extendedInfo = new PutRecordsRequestEntryExtendedInfo();
-        
-        if (StringUtils.isNullOrEmpty(putFilesRequest.getFileName()))
-        {
-            putFilesRequest.setFileName(putFilesRequest.getFileName().toString().replace("\\", "/").replace(":", ""));
-        }
-        extendedInfo.setFileName(putFilesRequest.getFileName());
-        extendedInfo.setDeliverDataId(String.valueOf(dELIVER_DATA_ID));
-        extendedInfo.setSeqNum(seqNum);
-        extendedInfo.setEndFlag(endFlag); // 文件末尾
-        putRecordsRequestEntry.setExtendedInfo(extendedInfo);
-        
-        List<PutRecordsRequestEntry> putRecordsRequestEntryList = new ArrayList<PutRecordsRequestEntry>();
-        putRecordsRequestEntryList.add(putRecordsRequestEntry);
-        
-        PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
-        putRecordsRequest.setRecords(putRecordsRequestEntryList);
-        putRecordsRequest.setStreamName(putFilesRequest.getStreamName());
-        
-        return putRecordsRequest;
-    }
-    
-    private <REQUEST> void doWithRetry(REQUEST request, int maxRetries, long maxDelay,
-        RetryExecutor<REQUEST> retryExecutor)
-    {
-        int count = 0;
-        while (true)
-        {
-            try
-            {
-                retryExecutor.doWithRetry(request, maxRetries, maxDelay);
-                break;
-            }
-            catch (Exception e)
-            {
-                if (++count <= maxRetries)
-                {
-                    try
-                    {
-                        Thread.sleep(maxDelay);
-                    }
-                    catch (InterruptedException e1)
-                    {
-                        LOG.error(e1.getMessage(), e1);
-                    }
-                }
-                else
-                {
-                    throw e;
-                }
-            }
-        }
-    }
-    
-    private <REQUEST, RESULT> Future<RESULT> submit(REQUEST request, AsyncHandler<RESULT> asyncHandler,
-        InnerExecutor<REQUEST, RESULT> innerExecutor)
-    {
-        return executorService.submit(new java.util.concurrent.Callable<RESULT>()
-        {
-            @Override
-            public RESULT call()
-                throws Exception
-            {
-                RESULT result = null;
-                
-                try
-                {
-                    result = innerExecutor.innerExecute(request);
-                }
-                catch (Exception ex)
-                {
-                    if (asyncHandler != null)
-                    {
-                        asyncHandler.onError(ex);
-                    }
-                    throw ex;
-                }
-                
-                if (asyncHandler != null)
-                {
-                    asyncHandler.onSuccess(result);
-                }
-                return result;
-            }
-        });
-    }
- 
-    protected static interface InnerExecutor<REQUEST, RESULT>
-    {
-        /*
-         * 异步方法需要执行的接口
-         */
-        RESULT innerExecute(REQUEST request);
-    }
-    
-    protected static interface RetryExecutor<REQUEST>
-    {
-        /*
-         * 需要重试的代码块
-         */
-        void doWithRetry(REQUEST request, int maxRetries, long maxDelay);
-    }
-
-	//---------------------------------------- putfilesAsync -----------------------------------------
     
 	@Override
 	public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest) {
