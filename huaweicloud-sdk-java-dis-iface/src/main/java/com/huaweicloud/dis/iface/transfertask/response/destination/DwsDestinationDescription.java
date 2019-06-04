@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.huaweicloud.dis.iface.stream.request.ForceStringDeserializer;
+import com.huaweicloud.dis.iface.stream.request.dws.Options;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -114,6 +115,9 @@ public class DwsDestinationDescription extends OBSDestinationDescription
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("kms_user_key_id")
     private String kmsUserKeyId;
+    
+    @JsonProperty("options")
+    private Options options;
     
     public String getDwsClusterName()
     {
@@ -215,4 +219,13 @@ public class DwsDestinationDescription extends OBSDestinationDescription
         this.kmsUserKeyId = kmsUserKeyId;
     }
     
+    public Options getOptions()
+    {
+        return options;
+    }
+    
+    public void setOptions(Options options)
+    {
+        this.options = options;
+    }
 }
