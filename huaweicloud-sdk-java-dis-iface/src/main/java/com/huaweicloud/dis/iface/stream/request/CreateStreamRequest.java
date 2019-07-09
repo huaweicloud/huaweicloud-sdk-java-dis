@@ -16,12 +16,12 @@
 
 package com.huaweicloud.dis.iface.stream.request;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.huaweicloud.dis.iface.data.request.StreamType;
+
+import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -121,7 +121,13 @@ public class CreateStreamRequest
      */
     @JsonProperty("tags")
     private List<Tag> tags;
-    
+    /**
+     * <p>
+     * 企业项目标签列表
+     * </p>
+     */
+    @JsonProperty("sys_tags")
+    private List<Tag> sysTags;
     /**
      * <p>
      * 通道是否在独享集群上创建,选填
@@ -250,6 +256,14 @@ public class CreateStreamRequest
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
+
+    public List<Tag> getSysTags() {
+        return sysTags;
+    }
+
+    public void setSysTags(List<Tag> sysTags) {
+        this.sysTags = sysTags;
+    }
 
     public String getCompressionFormat() {
         return compressionFormat;

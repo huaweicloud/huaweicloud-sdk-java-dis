@@ -195,7 +195,12 @@ public class DescribeStreamResult
     
     @JsonProperty("has_more_partitions")
     private Boolean hasMorePartitions = false;
-    
+
+    /**
+     * <p>
+     * 扩缩容操作记录列表。
+     * </p>
+     */
     @JsonProperty("update_partition_counts")
     private List<UpdatePartitionCount> updatePartitionCounts;
     
@@ -206,7 +211,15 @@ public class DescribeStreamResult
      */
     @JsonProperty("tags")
     private List<Tag> tags;
-    
+
+    /**
+     * <p>
+     * 通道的企业项目
+     * </p>
+     */
+    @JsonProperty("sys_tags")
+    private List<Tag> sysTags;
+
     @JsonProperty("auto_scale_enabled")
     private Boolean autoScaleEnabled;
 
@@ -431,6 +444,14 @@ public class DescribeStreamResult
 	public void setTags(List<Tag> tags) {
 		this.tags = tags;
 	}
+
+    public List<Tag> getSysTags() {
+        return sysTags;
+    }
+
+    public void setSysTags(List<Tag> sysTags) {
+        this.sysTags = sysTags;
+    }
 
     public String getCompressionFormat() {
         return compressionFormat;

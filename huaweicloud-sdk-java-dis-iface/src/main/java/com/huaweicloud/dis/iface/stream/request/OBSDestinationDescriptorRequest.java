@@ -97,15 +97,6 @@ public class OBSDestinationDescriptorRequest
     
     /**
      * <p>
-     * This parameter is mandatory if Dump Type is set to Custom file. Default value: file_stream
-     * </p>
-     */
-    @JsonDeserialize(using = ForceStringDeserializer.class)
-    @JsonProperty("deliver_data_type")
-    private String deliverDataType;
-    
-    /**
-     * <p>
      * Type of the Object file written into OBS, such as text, parquet, carbon. Default value: text.
      * </p>
      */
@@ -185,17 +176,7 @@ public class OBSDestinationDescriptorRequest
     {
         this.deliverTimeInterval = deliverTimeInterval;
     }
-    
-    public String getDeliverDataType()
-    {
-        return deliverDataType;
-    }
-    
-    public void setDeliverDataType(String deliverDataType)
-    {
-        this.deliverDataType = deliverDataType;
-    }
-    
+
     public String getAgencyName()
     {
         return agencyName;

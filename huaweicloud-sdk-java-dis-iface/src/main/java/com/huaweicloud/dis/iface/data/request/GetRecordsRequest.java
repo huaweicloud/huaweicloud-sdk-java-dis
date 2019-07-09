@@ -36,6 +36,7 @@ public class GetRecordsRequest
      * <p>
      * 每个请求获取 Record 的最大数量。
      * </p>
+     * @deprecated limit已不生效
      */
     @JsonProperty("limit")
     private Integer limit;
@@ -50,11 +51,13 @@ public class GetRecordsRequest
         this.partitionCursor = partitionCursor;
     }
 
+    @Deprecated
     public Integer getLimit()
     {
         return limit;
     }
     
+    @Deprecated
     public void setLimit(Integer limit)
     {
         this.limit = limit;

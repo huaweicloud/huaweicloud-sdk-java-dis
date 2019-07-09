@@ -26,6 +26,15 @@ import com.huaweicloud.dis.iface.stream.request.Tag;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class StreamInfo
 {
+    
+    /**
+     * <p>
+     * 通道id。
+     * </p>
+     */
+    @JsonProperty("stream_id")
+    private String streamId;
+    
     /**
      * <p>
      * 通道名称。
@@ -114,12 +123,6 @@ public class StreamInfo
      * <p>
      * CSV - DIS支持将CSV格式数据转储至OBS、MRS、DWS、DLI服务。
      * </p>
-     * </li>
-     * <li>
-     * <p>
-     * FILE - 表示小文件，DIS支持将用户上传的小文件转储至OBS服务。
-     * </p>
-     * </li>
      * </ul>
      */
     @JsonProperty("data_type")
@@ -140,6 +143,13 @@ public class StreamInfo
      */
     @JsonProperty("tags")
     private List<Tag> tags;
+    /**
+     * <p>
+     * 通道企业项目列表
+     * </p>
+     */
+    @JsonProperty("sys_tags")
+    private List<Tag> sysTags;
     
     @JsonProperty("auto_scale_enabled")
     private Boolean autoScaleEnabled;
@@ -150,7 +160,16 @@ public class StreamInfo
     @JsonProperty("auto_scale_max_partition_count")
     private Integer autoScaleMaxPartitionCount;
     
-    
+    public String getStreamId()
+    {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId)
+    {
+        this.streamId = streamId;
+    }
+
     public Boolean getAutoScaleEnabled()
     {
         return autoScaleEnabled;
@@ -259,11 +278,23 @@ public class StreamInfo
 		this.tags = tags;
 	}
 
-	@Override
+    public List<Tag> getSysTags() {
+        return sysTags;
+    }
+
+    public void setSysTags(List<Tag> sysTags) {
+        this.sysTags = sysTags;
+    }
+
+    @Override
     public String toString()
     {
-        return "StreamInfo [streamName=" + streamName + ", createTime=" + createTime + ", retentionPeriod="
-            + retentionPeriod + ", status=" + status + ", streamType=" + streamType + ", dataType=" + dataType
-            + ", partitionCount=" + partitionCount + "]";
+        return "StreamInfo [streamId=" + streamId + ", streamName=" + streamName + ", createTime=" + createTime
+            + ", retentionPeriod=" + retentionPeriod + ", status=" + status + ", streamType=" + streamType
+            + ", dataType=" + dataType + ", partitionCount=" + partitionCount + ", tags=" + tags + ", sysTags="
+            + sysTags + ", autoScaleEnabled=" + autoScaleEnabled + ", autoScaleMinPartitionCount="
+            + autoScaleMinPartitionCount + ", autoScaleMaxPartitionCount=" + autoScaleMaxPartitionCount + "]";
     }
+
+    
 }

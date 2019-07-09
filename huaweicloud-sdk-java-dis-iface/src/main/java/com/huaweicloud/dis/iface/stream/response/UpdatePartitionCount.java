@@ -24,16 +24,51 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UpdatePartitionCount
 {
+    /**
+     * <p>
+     * 扩缩容操作执行时间戳。
+     * </p>
+     */
     @JsonProperty("create_timestamp")
     private long createTimestamp;
+
+    /**
+     * <p>
+     * 扩缩容操作前分区数量。
+     * </p>
+     */
     @JsonProperty("src_partition_count")
     private int srcPartitionCount;
+
+    /**
+     * <p>
+     * 扩缩容操作后分区数量。
+     * </p>
+     */
     @JsonProperty("target_partition_count")
     private int targetPartitionCount;
+
+    /**
+     * <p>
+     * 扩缩容操作响应码。
+     * </p>
+     */
     @JsonProperty("result_code")
     private int resultCode;
+
+    /**
+     * <p>
+     * 扩缩容操作响应信息。
+     * </p>
+     */
     @JsonProperty("result_msg")
     private String resultMsg;
+
+    /**
+     * <p>
+     * 本次扩缩容操作是否为自动扩缩容。
+     * </p>
+     */
     @JsonProperty("auto_scale")
     private boolean autoScale;
     

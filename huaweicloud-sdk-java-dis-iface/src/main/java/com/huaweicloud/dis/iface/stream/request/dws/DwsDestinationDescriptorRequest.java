@@ -175,6 +175,7 @@ public class DwsDestinationDescriptorRequest
     private String consumerStrategy;
     
     //规划导入DWS容错性，以控制导入过程中处理错误的方式。
+    @JsonProperty("options")
     private Options options;
     
     public String getDwsClusterName()

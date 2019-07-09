@@ -23,3 +23,8 @@
   * proxy configuration bug fix, support configuring 'NonProxyHosts'
   * Some configurations cannot be read from config.properties
   * Cannot load default Java TrustStore
+  
+# 1.3.4
+
+- Features
+  * Support Lz4 compression
