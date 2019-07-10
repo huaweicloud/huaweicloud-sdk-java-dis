@@ -26,7 +26,7 @@ public class UpdatePartitionCount
 {
     /**
      * <p>
-     * À©ËõÈİ²Ù×÷Ö´ĞĞÊ±¼ä´Á¡£
+     * æ‰©ç¼©å®¹æ“ä½œæ‰§è¡Œæ—¶é—´æˆ³ã€‚
      * </p>
      */
     @JsonProperty("create_timestamp")
@@ -34,15 +34,15 @@ public class UpdatePartitionCount
 
     /**
      * <p>
-     * À©ËõÈİ²Ù×÷Ç°·ÖÇøÊıÁ¿¡£
+     * æ‰©ç¼©å®¹æ“ä½œå‰åˆ†åŒºæ•°é‡ã€‚
      * </p>
      */
     @JsonProperty("src_partition_count")
     private int srcPartitionCount;
-
+    
     /**
      * <p>
-     * À©ËõÈİ²Ù×÷ºó·ÖÇøÊıÁ¿¡£
+     * æ‰©ç¼©å®¹æ“ä½œååˆ†åŒºæ•°é‡ã€‚
      * </p>
      */
     @JsonProperty("target_partition_count")
@@ -50,7 +50,7 @@ public class UpdatePartitionCount
 
     /**
      * <p>
-     * À©ËõÈİ²Ù×÷ÏìÓ¦Âë¡£
+     * æ‰©ç¼©å®¹æ“ä½œå“åº”ç ã€‚
      * </p>
      */
     @JsonProperty("result_code")
@@ -58,7 +58,7 @@ public class UpdatePartitionCount
 
     /**
      * <p>
-     * À©ËõÈİ²Ù×÷ÏìÓ¦ĞÅÏ¢¡£
+     * æ‰©ç¼©å®¹æ“ä½œå“åº”ä¿¡æ¯ã€‚
      * </p>
      */
     @JsonProperty("result_msg")
@@ -66,7 +66,7 @@ public class UpdatePartitionCount
 
     /**
      * <p>
-     * ±¾´ÎÀ©ËõÈİ²Ù×÷ÊÇ·ñÎª×Ô¶¯À©ËõÈİ¡£
+     * æœ¬æ¬¡æ‰©ç¼©å®¹æ“ä½œæ˜¯å¦ä¸ºè‡ªåŠ¨æ‰©ç¼©å®¹ã€‚
      * </p>
      */
     @JsonProperty("auto_scale")
