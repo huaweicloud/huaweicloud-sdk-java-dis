@@ -135,6 +135,10 @@ public class DISConfig extends Properties implements ClientParams
 
     public static final String PROPERTY_METADATA_TIMEOUT_MS = "metadata.timeout.ms";
 
+    public static final String PROPERTY_BODY_COMPRESS_ENABLED = "body.compress.enabled";
+
+    public static final String PROPERTY_BODY_COMPRESS_TYPE = "body.compress.type";
+
     public String[] producerRecordsRetriableErrorCode;
 
     private Credentials credentials;

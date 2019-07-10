@@ -164,4 +164,11 @@ public interface Constants
      */
     String CACHE_ARCHIVE_INDEX_FILE_SUFFIX = ".index";
     /****************************** Local Data Cache End ******************************/
+
+    String COMPRESS_LZ4 = "lz4";
+
+    String COMPRESS_SNAPPY = "snappy";
+
+    String COMPRESS_LZ4_CONTENT_LENGTH = "x-dis-lz4-content-length";
+
 }
