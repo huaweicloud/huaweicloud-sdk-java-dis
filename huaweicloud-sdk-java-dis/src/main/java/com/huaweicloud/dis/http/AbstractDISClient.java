@@ -711,7 +711,8 @@ public class AbstractDISClient {
      */
     protected boolean isRetriableErrorCodeException(Throwable t)
     {
-        if (t instanceof RestClientResponseException && ((RestClientResponseException) t).getRawStatusCode() == HttpStatus.SC_UNAUTHORIZED)
+        if (disConfig.getExceptionRetriesErrorCode().length > 0 && t instanceof RestClientResponseException
+                && ((RestClientResponseException) t).getRawStatusCode() / 100 == 4)
         {
             String responseBody = ((RestClientResponseException) t).getResponseBodyAsString();
             ErrorMessage errorMessage = JsonUtils.jsonToObj(responseBody, ErrorMessage.class);
