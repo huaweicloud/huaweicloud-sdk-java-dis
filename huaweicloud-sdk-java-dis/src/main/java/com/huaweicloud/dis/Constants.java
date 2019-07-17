@@ -58,9 +58,9 @@ public interface Constants
     String SHARD_ID_PREFIX = "shardId";
 
     /**
-     * HTTP响应码 441 : DIS用户认证失败
+     * HTTP响应码 401 : DIS用户认证失败
      */
-    int HTTP_CODE_DIS_AUTHENTICATION_FAILED = 441;
+    int HTTP_CODE_DIS_AUTHENTICATION_FAILED = 401;
 
     /**
      * HTTP响应码 400 : BAD_REQUEST

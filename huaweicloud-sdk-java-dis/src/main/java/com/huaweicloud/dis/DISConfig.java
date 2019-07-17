@@ -129,6 +129,8 @@ public class DISConfig extends Properties implements ClientParams
 
     public static final String PROPERTY_PRODUCER_RECORDS_RETRIABLE_ERROR_CODE = "records.retriable.error.code";
 
+    public static final String PROPERTY_PRODUCER_EXCEPTION_RETRIABLE_ERROR_CODE = "exception.retriable.error.code";
+
     public static final String PROPERTY_NIO_IO_THREADS = "nio.io.threads";
 
     public static final String PROPERTY_ORDER_BY_PARTITION = "order.by.partition";
@@ -140,6 +142,8 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_BODY_COMPRESS_TYPE = "body.compress.type";
 
     public String[] producerRecordsRetriableErrorCode;
+
+    public String[] producerExceptionRetriableErrorCode;
 
     private Credentials credentials;
     
@@ -321,7 +325,7 @@ public class DISConfig extends Properties implements ClientParams
      */
     public int getExceptionRetries()
     {
-        int exceptionRetry = getInt(PROPERTY_PRODUCER_EXCEPTION_RETRIES, 8);
+        int exceptionRetry = getInt(PROPERTY_PRODUCER_EXCEPTION_RETRIES, 20);
         if (exceptionRetry < 0)
         {
             return Integer.MAX_VALUE;
@@ -348,6 +352,14 @@ public class DISConfig extends Properties implements ClientParams
     public String[] getRecordsRetriesErrorCode()
     {
         return producerRecordsRetriableErrorCode;
+    }
+
+    /**
+     * @return 发生4XX错误时，需要重试的错误码集合(多个之间以,分隔)
+     */
+    public String[] getExceptionRetriesErrorCode()
+    {
+        return producerExceptionRetriableErrorCode;
     }
     
     public int getNIOIOThreads() {
@@ -637,6 +649,22 @@ public class DISConfig extends Properties implements ClientParams
                 items[i] = items[i].trim();
             }
             disConfig.producerRecordsRetriableErrorCode = items;
+        }
+
+        // 默认情况下，发生4XX错误都不进行重试
+        String exceptionRetriableErrorCode = disConfig.get(PROPERTY_PRODUCER_EXCEPTION_RETRIABLE_ERROR_CODE, "");
+        if (StringUtils.isNullOrEmpty(exceptionRetriableErrorCode))
+        {
+            disConfig.producerExceptionRetriableErrorCode = new String[0];
+        }
+        else
+        {
+            String[] items = exceptionRetriableErrorCode.split(",");
+            for (int i = 0; i < items.length; i++)
+            {
+                items[i] = items[i].trim();
+            }
+            disConfig.producerExceptionRetriableErrorCode = items;
         }
 
         return disConfig;

@@ -14,6 +14,7 @@ import com.huaweicloud.dis.exception.*;
 import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
 import com.huaweicloud.dis.http.exception.RestClientResponseException;
 import com.huaweicloud.dis.http.exception.UnknownHttpStatusCodeException;
+import com.huaweicloud.dis.iface.common.ErrorMessage;
 import com.huaweicloud.dis.iface.data.request.PutRecordRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
@@ -24,6 +25,7 @@ import com.huaweicloud.dis.util.compress.ZstdUtil;
 import com.huaweicloud.dis.util.config.ICredentialsProvider;
 import com.huaweicloud.dis.util.encrypt.EncryptUtils;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpStatus;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
@@ -698,7 +700,30 @@ public class AbstractDISClient {
                 || t instanceof HttpHostConnectException || t instanceof SocketException || t instanceof SSLException
                 || (t instanceof SocketTimeoutException && request.getHttpMethod() == HttpMethodName.GET)
                 || (t instanceof RestClientResponseException && ((RestClientResponseException) t).getRawStatusCode() / 100 == 5)
+                || isRetriableErrorCodeException(t)
                 || (t.getCause() != null && isRetriableSendException(t.getCause(), request));
+    }
+
+    /**
+     * 根据异常中响应的DIS错误码来判断此异常是否可以重试
+     * @param t throwable exception
+     * @return
+     */
+    protected boolean isRetriableErrorCodeException(Throwable t)
+    {
+        if (t instanceof RestClientResponseException && ((RestClientResponseException) t).getRawStatusCode() == HttpStatus.SC_UNAUTHORIZED)
+        {
+            String responseBody = ((RestClientResponseException) t).getResponseBodyAsString();
+            ErrorMessage errorMessage = JsonUtils.jsonToObj(responseBody, ErrorMessage.class);
+            for (String item : disConfig.getExceptionRetriesErrorCode())
+            {
+                if (errorMessage.getErrorCode().contains(item))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     protected void check()
