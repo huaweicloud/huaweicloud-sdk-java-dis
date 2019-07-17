@@ -20,6 +20,7 @@ import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
 import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.util.*;
 import com.huaweicloud.dis.util.compress.Lz4Util;
+import com.huaweicloud.dis.util.compress.ZstdUtil;
 import com.huaweicloud.dis.util.config.ICredentialsProvider;
 import com.huaweicloud.dis.util.encrypt.EncryptUtils;
 import org.apache.http.HttpRequest;
@@ -313,6 +314,13 @@ public class AbstractDISClient {
             {
                 throw new DISClientException(e);
             }
+        }
+        else if (Constants.COMPRESS_ZSTD.equals(compressType))
+        {
+            request.addHeader("Content-Encoding", Constants.COMPRESS_ZSTD);
+            request.addHeader("Accept-Encoding", Constants.COMPRESS_ZSTD);
+            request.addHeader(Constants.COMPRESS_ZSTD_CONTENT_LENGTH, String.valueOf(source.length));
+            target = ZstdUtil.compressedByte(source);
         }
 
         return target;

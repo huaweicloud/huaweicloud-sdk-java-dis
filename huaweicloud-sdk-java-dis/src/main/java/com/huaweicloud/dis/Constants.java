@@ -169,6 +169,10 @@ public interface Constants
 
     String COMPRESS_SNAPPY = "snappy";
 
+    String COMPRESS_ZSTD = "zstd";
+
     String COMPRESS_LZ4_CONTENT_LENGTH = "x-dis-lz4-content-length";
+
+    String COMPRESS_ZSTD_CONTENT_LENGTH = "x-dis-zstd-content-length";
 
 }
