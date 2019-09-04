@@ -107,7 +107,16 @@ public class DwsDestinationDescriptorRequest
     @JsonDeserialize(using = ForceStringDeserializer.class)
     @JsonProperty("dws_table_name")
     private String dwsTableName;
-    
+
+    /**
+     *  <p>
+     *  Specific columns of the schema  for table in DWS to store in the DIS stream.
+     *  </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonProperty("dws_table_columns")
+    private String dwsTableColumns;
+
     /**
      * <p>
      * An indication that implies data is in different rows.
@@ -346,5 +355,15 @@ public class DwsDestinationDescriptorRequest
     public void setOptions(Options options)
     {
         this.options = options;
+    }
+
+    public String getDwsTableColumns()
+    {
+        return dwsTableColumns;
+    }
+
+    public void setDwsTableColumns(String dwsTableColumns)
+    {
+        this.dwsTableColumns = dwsTableColumns;
     }
 }
