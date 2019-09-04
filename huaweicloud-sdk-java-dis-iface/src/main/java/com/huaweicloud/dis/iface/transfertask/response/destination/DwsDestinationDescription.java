@@ -90,6 +90,16 @@ public class DwsDestinationDescription extends OBSDestinationDescription
     private String dwsTableName;
     
     /**
+     *  <p>
+     *  Specific columns of the schema  for table in DWS to store in the DIS stream.
+     *  </p>
+     */
+    @JsonDeserialize(using = ForceStringDeserializer.class)
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonProperty("dws_table_columns")
+    private String dwsTableColumns;
+
+    /**
      * <p>
      * An indication that implies data is in different rows.
      * </p>
@@ -188,7 +198,17 @@ public class DwsDestinationDescription extends OBSDestinationDescription
     {
         this.dwsTableName = dwsTableName;
     }
-    
+
+    public String getDwsTableColumns()
+    {
+        return dwsTableColumns;
+    }
+
+    public void setDwsTableColumns(String dwsTableColumns)
+    {
+        this.dwsTableColumns = dwsTableColumns;
+    }
+
     public String getDwsDelimiter()
     {
         return dwsDelimiter;
