@@ -890,6 +890,14 @@ public class AbstractDISClient {
                 {
                     throw new DISTrafficControlException(errorMsg, t);
                 }
+                else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_MEMBER_NOT_EXIST))
+                {
+                    throw new DISConsumerMemberNotExistsException(errorMsg, t);
+                }
+                else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_REBALANCE_IN_PROGRESS))
+                {
+                    throw new DISConsumerGroupRebalanceInProgressException(errorMsg, t);
+                }
                 else if (errorMsg.contains(Constants.ERROR_INFO_TIMESTAMP_IS_EXPIRED))
                 {
                     throw new DISTimestampOutOfRangeException(errorMsg, t);

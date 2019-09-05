@@ -20,6 +20,11 @@ public class JoinGroupRequest {
 
     private String streamPattern;
 
+    /**
+     * 是否加速分配，建议只有单一Consumer时开启，加速服务端分区分配
+     */
+    private Boolean accelerateAssignEnabled;
+
     public String getProjectId() {
         return projectId;
     }
@@ -58,5 +63,13 @@ public class JoinGroupRequest {
 
     public void setStreamPattern(String streamPattern) {
         this.streamPattern = streamPattern;
+    }
+
+    public Boolean isAccelerateAssignEnabled() {
+        return accelerateAssignEnabled;
+    }
+
+    public void setAccelerateAssignEnabled(Boolean accelerateAssignEnabled) {
+        this.accelerateAssignEnabled = accelerateAssignEnabled;
     }
 }

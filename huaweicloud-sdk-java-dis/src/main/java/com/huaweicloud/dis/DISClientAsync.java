@@ -318,8 +318,10 @@ public class DISClientAsync extends DISClient implements DISAsync
                     if (asyncHandler != null)
                     {
                         asyncHandler.onError(ex);
+                    } else {
+                        // No Handler
+                        throw ex;
                     }
-                    throw ex;
                 }
                 
                 if (asyncHandler != null)

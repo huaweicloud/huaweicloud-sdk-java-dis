@@ -65,6 +65,13 @@ public class CommitCheckpointRequest
     @JsonProperty("metadata")
     private String metadata;
 
+    /**
+     * <p>
+     *     客户端ID，可选。若指定了客户端ID，提交时会校验该Consumer是否在线。
+     * </p>
+     */
+    private String clientId;
+
     public String getAppName()
     {
         return appName;
@@ -125,12 +132,20 @@ public class CommitCheckpointRequest
         this.metadata = metadata;
     }
 
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
     @Override
     public String toString()
     {
         return "CommitCheckpointRequest [appName=" + appName + ", checkpointType=" + checkpointType + ", streamName="
             + streamName + ", partitionId=" + partitionId + ", sequenceNumber=" + sequenceNumber + ", metadata="
-            + metadata + "]";
+            + metadata + ", clientId=" + clientId + "]";
     }
-    
+
 }

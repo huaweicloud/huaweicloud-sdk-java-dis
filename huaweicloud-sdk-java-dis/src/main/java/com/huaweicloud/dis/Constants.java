@@ -128,6 +128,16 @@ public interface Constants
     String ERROR_CODE_APP_QUOTA_EXCEEDED = "DIS.4329";
 
     /**
+     * 错误码: 由于消费组处于rebalance状态，因此无法执行CheckPoint提交等操作
+     */
+    String ERROR_CODE_CONSUMER_GROUP_REBALANCE_IN_PROGRESS = "DIS.4701";
+
+    /**
+     * 错误码: 由于消费组已rebalanced，导致该消费者已被消费组剔除
+     */
+    String ERROR_CODE_CONSUMER_MEMBER_NOT_EXIST = "DIS.4702";
+
+    /**
      * 错误描述: 时间戳异常 (对应错误码: {@link Constants#ERROR_CODE_REQUEST_ERROR})
      */
     String ERROR_INFO_TIMESTAMP_IS_EXPIRED = "timestamp is expired";
