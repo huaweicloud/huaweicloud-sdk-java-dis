@@ -898,6 +898,10 @@ public class AbstractDISClient {
                 {
                     throw new DISConsumerGroupRebalanceInProgressException(errorMsg, t);
                 }
+                else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_ILLEGAL_GENERATION))
+                {
+                    throw new DISConsumerGroupIllegalGenerationException(errorMsg, t);
+                }
                 else if (errorMsg.contains(Constants.ERROR_INFO_TIMESTAMP_IS_EXPIRED))
                 {
                     throw new DISTimestampOutOfRangeException(errorMsg, t);

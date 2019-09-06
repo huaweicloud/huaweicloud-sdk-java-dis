@@ -138,6 +138,11 @@ public interface Constants
     String ERROR_CODE_CONSUMER_MEMBER_NOT_EXIST = "DIS.4702";
 
     /**
+     * 错误码: 消费组客户端和服务端版本号不一致
+     */
+    String ERROR_CODE_CONSUMER_GROUP_ILLEGAL_GENERATION = "DIS.4703";
+
+    /**
      * 错误描述: 时间戳异常 (对应错误码: {@link Constants#ERROR_CODE_REQUEST_ERROR})
      */
     String ERROR_INFO_TIMESTAMP_IS_EXPIRED = "timestamp is expired";
