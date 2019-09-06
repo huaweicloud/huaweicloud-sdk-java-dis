@@ -41,6 +41,17 @@ public class GetRecordsRequest
     @JsonProperty("limit")
     private Integer limit;
 
+    /**
+     * <p>
+     *     每个请求获取记录的最大字节数。
+     * </p>
+     * <p>
+     *     <b>注意：</b>该值如果小于分区中单条记录的大小，会导致一直无法获取到记录。
+     * </p>
+     */
+    @JsonProperty("max_fetch_bytes")
+    private Long maxFetchBytes;
+
     public String getPartitionCursor()
     {
         return partitionCursor;
@@ -63,10 +74,18 @@ public class GetRecordsRequest
         this.limit = limit;
     }
 
+    public Long getMaxFetchBytes() {
+        return maxFetchBytes;
+    }
+
+    public void setMaxFetchBytes(Long maxFetchBytes) {
+        this.maxFetchBytes = maxFetchBytes;
+    }
+
     @Override
     public String toString()
     {
-        return "GetRecordsParam [shardIterator=" + partitionCursor + ", limit=" + limit  + "]";
+        return "GetRecordsParam [shardIterator=" + partitionCursor + ", limit=" + limit + ", maxFetchBytes=" + maxFetchBytes  + "]";
     }    
 
 }

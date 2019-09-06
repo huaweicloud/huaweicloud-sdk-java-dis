@@ -67,10 +67,19 @@ public class CommitCheckpointRequest
 
     /**
      * <p>
-     *     客户端ID，可选。若指定了客户端ID，提交时会校验该Consumer是否在线。
+     *     客户端ID，可选。若指定了客户端ID，提交时会校验该 Consumer 是否在线。
      * </p>
      */
+    @JsonProperty("client_id")
     private String clientId;
+
+    /**
+     * <p>
+     *     当前 Consumer Group 的版本号。
+     * </p>
+     */
+    @JsonProperty("generation_id")
+    private Long generationId;
 
     public String getAppName()
     {
@@ -140,12 +149,20 @@ public class CommitCheckpointRequest
         this.clientId = clientId;
     }
 
+    public Long getGenerationId() {
+        return generationId;
+    }
+
+    public void setGenerationId(Long generationId) {
+        this.generationId = generationId;
+    }
+
     @Override
     public String toString()
     {
         return "CommitCheckpointRequest [appName=" + appName + ", checkpointType=" + checkpointType + ", streamName="
             + streamName + ", partitionId=" + partitionId + ", sequenceNumber=" + sequenceNumber + ", metadata="
-            + metadata + ", clientId=" + clientId + "]";
+            + metadata + ", clientId=" + clientId + ", generationId=" + generationId + "]";
     }
 
 }
