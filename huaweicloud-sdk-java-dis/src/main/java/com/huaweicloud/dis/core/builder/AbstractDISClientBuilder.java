@@ -6,6 +6,7 @@ import java.util.Properties;
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.Protocol;
+import com.huaweicloud.dis.util.compress.CompressionType;
 
 public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, TypeToBuild> extends ClientBuilder<Subclass, TypeToBuild>{
 	
@@ -40,6 +41,10 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
 	protected String proxyDomain;
 	
 	protected String nonProxyHosts;
+
+    protected boolean bodyCompressEnabled;
+
+    protected CompressionType bodyCompressType;
 	
 
 	protected DISConfig configDISConfig(DISConfig disConfig){
@@ -116,7 +121,12 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
         {
             disConfig.setNonProxyHosts(nonProxyHosts);
         }
-        
+        disConfig.setBodyCompressEnabled(bodyCompressEnabled);
+        if (bodyCompressType != null)
+        {
+            disConfig.setBodyCompressType(bodyCompressType);
+        }
+
         Enumeration iter = extendProperties.propertyNames();// 得到配置文件的名字
         while (iter.hasMoreElements())
         {
@@ -223,6 +233,18 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
     public final Subclass withNonProxyHosts(String nonProxyHosts)
     {
         this.nonProxyHosts = nonProxyHosts;
+        return getSubclass();
+    }
+
+    public final Subclass withBodyCompressEnabled(boolean bodyCompressEnabled)
+    {
+        this.bodyCompressEnabled = bodyCompressEnabled;
+        return getSubclass();
+    }
+
+    public final Subclass withBodyCompressType(CompressionType compressType)
+    {
+        this.bodyCompressType = compressType;
         return getSubclass();
     }
 }

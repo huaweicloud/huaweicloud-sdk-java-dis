@@ -17,10 +17,10 @@
 package com.huaweicloud.dis.http;
 
 /**
- * Represents the communication protocol to use when sending requests to AWS.
+ * Represents the communication protocol to use when sending requests to DIS.
  * <p>
  * Communication over HTTPS is the default, and is more secure than HTTP, which
- * is why AWS recommends using HTTPS. HTTPS connections can use more system
+ * is why DIS recommends using HTTPS. HTTPS connections can use more system
  * resources because of the extra work to encrypt network traffic, so the option
  * to use HTTP is available in case users need it.
  */
@@ -29,13 +29,13 @@ public enum Protocol {
     /**
      * HTTP Protocol - Using the HTTP protocol is less secure than HTTPS, but
      * can slightly reduce the system resources used when communicating with
-     * AWS.
+     * DIS.
      */
     HTTP("http"),
 
     /**
      * HTTPS Protocol - Using the HTTPS protocol is more secure than using the
-     * HTTP protocol, but may use slightly more system resources. AWS recommends
+     * HTTP protocol, but may use slightly more system resources. DIS recommends
      * using HTTPS for maximize security.
      */
     HTTPS("https");

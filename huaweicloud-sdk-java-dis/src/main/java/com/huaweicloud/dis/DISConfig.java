@@ -21,6 +21,7 @@ import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
 import com.huaweicloud.dis.core.auth.credentials.Credentials;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.Protocol;
+import com.huaweicloud.dis.util.compress.CompressionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,9 +87,9 @@ public class DISConfig extends Properties implements ClientParams
     public static final String PROPERTY_IS_DEFAULT_TRUSTED_JKS_ENABLED = "IS_DEFAULT_TRUSTED_JKS_ENABLED";
 
     public static final String PROPERTY_IS_DEFAULT_DATA_ENCRYPT_ENABLED = "data.encrypt.enabled";
-    
+
     public static final String PROPERTY_DATA_COMPRESS_ENABLED = "data.compress.enabled";
-    
+
     public static final String PROPERTY_DATA_CACHE_ENABLED = "data.cache.enabled";
     
     public static final String PROPERTY_DATA_CACHE_DIR = "data.cache.dir";
@@ -710,6 +711,14 @@ public class DISConfig extends Properties implements ClientParams
     
     public DISConfig setDataCompressEnabled(boolean dataCompressEnabled){
         return set(PROPERTY_DATA_COMPRESS_ENABLED, String.valueOf(dataCompressEnabled));
+    }
+
+    public DISConfig setBodyCompressEnabled(boolean bodyCompressEnabled){
+        return set(PROPERTY_BODY_COMPRESS_ENABLED, String.valueOf(bodyCompressEnabled));
+    }
+
+    public DISConfig setBodyCompressType(CompressionType compressionType){
+        return set(PROPERTY_BODY_COMPRESS_TYPE, compressionType.toString());
     }
     
     public DISConfig setDataCacheEnabled(boolean dataCacheEnabled){
