@@ -196,6 +196,7 @@ public class DISProducer
     public Future<PutRecordsResult> putRecordsAsync(PutRecordsRequest putRecordsRequest, AsyncHandler<PutRecordsResult> callback) throws InterruptedException
     {
         String streamName = putRecordsRequest.getStreamName();
+        String streamId = putRecordsRequest.getStreamId();
         
         //不按partition排序的话，就不按partition分组,streamPartition表示的其实是流而不是分片，分片字段传固定的
         String partitionId = STABLE_PARTITION_ID;
@@ -214,7 +215,7 @@ public class DISProducer
             partitionId = Integer.toString(caledPartitionId);
         }
        
-        StreamPartition tp = new StreamPartition(streamName, partitionId);
+        StreamPartition tp = new StreamPartition(streamName, streamId, partitionId);
         
         long timestamp = System.currentTimeMillis();
         log.trace("Sending records {} with callback {} to streampartition ", putRecordsRequest, callback, tp);

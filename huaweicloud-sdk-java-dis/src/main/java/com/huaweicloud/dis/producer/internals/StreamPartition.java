@@ -26,10 +26,16 @@ public final class StreamPartition implements Serializable {
     private int hash = 0;
     private final String partitionId;
     private final String streamName;
+    private final String streamId;
 
-    public StreamPartition(String topic, String partitionId) {
+    public StreamPartition(String topic, String streamId, String partitionId) {
         this.partitionId = partitionId;
         this.streamName = topic;
+        this.streamId = streamId;
+    }
+
+    public StreamPartition(String topic, String partitionId) {
+        this(topic, null, partitionId);
     }
 
     public String partition() {
@@ -38,6 +44,10 @@ public final class StreamPartition implements Serializable {
 
     public String topic() {
         return streamName;
+    }
+
+    public String streamId() {
+        return streamId;
     }
 
     @Override

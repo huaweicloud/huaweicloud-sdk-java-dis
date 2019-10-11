@@ -184,6 +184,7 @@ public class Sender extends Thread
 
             PutRecordsRequest putRecordsParam = new PutRecordsRequest();
             putRecordsParam.setStreamName(tp.topic());
+            putRecordsParam.setStreamId(tp.streamId());
             putRecordsParam.setRecords(batch.getBatchPutRecordsRequestEntrys());
 
             totalSendTimes.incrementAndGet();
