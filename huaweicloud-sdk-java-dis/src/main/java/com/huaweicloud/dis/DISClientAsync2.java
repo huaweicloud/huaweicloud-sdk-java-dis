@@ -279,7 +279,7 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 		}
 
 		@Override
-		public void onSuccess(PutRecordsResult result) {
+		public void onSuccess(PutRecordsResult result) throws Exception {
 			PutRecordsTrafficLimitRetryFuture future = (PutRecordsTrafficLimitRetryFuture) this.futureAdapter;
 			
 			try {
@@ -295,7 +295,7 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 		}
 		
 		@Override
-		public void onError(Exception exception) {
+		public void onError(Exception exception) throws Exception {
 			PutRecordsTrafficLimitRetryFuture future = (PutRecordsTrafficLimitRetryFuture) this.futureAdapter;
 			
 			PutRecordsResult exRes = future.mergeException(exception, retryIndex);

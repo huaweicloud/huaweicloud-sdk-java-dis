@@ -4,8 +4,12 @@ import org.apache.http.HttpResponse;
 import org.apache.http.concurrent.FutureCallback;
 
 import com.huaweicloud.dis.core.handler.AsyncHandler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HttpFutureCallbackAdapter<T> implements FutureCallback<HttpResponse>{
+
+	private static final Logger LOG = LoggerFactory.getLogger(HttpFutureCallbackAdapter.class);
 
 	private AsyncHandler<T> asyncHandler;
 	private HttpFutureAdapter<T> httpFutureAdapter;
@@ -38,13 +42,22 @@ public class HttpFutureCallbackAdapter<T> implements FutureCallback<HttpResponse
 			failed(e);
 			return;
 		}
-		
-		asyncHandler.onSuccess(t);
+
+		try {
+			asyncHandler.onSuccess(t);
+		} catch (Exception e) {
+			failed(e);
+		}
 	}
 
 	@Override
 	public void failed(Exception ex) {
-		asyncHandler.onError(ex);
+		try {
+			asyncHandler.onError(ex);
+		} catch (Exception e) {
+			// 无需将异常抛出
+			LOG.error(ex.getMessage(), ex);
+		}
 	}
 
 	@Override

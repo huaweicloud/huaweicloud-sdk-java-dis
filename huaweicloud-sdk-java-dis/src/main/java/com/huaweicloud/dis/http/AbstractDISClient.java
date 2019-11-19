@@ -461,7 +461,7 @@ public class AbstractDISClient {
         }
 
         @Override
-        public void onError(Exception exception) {
+        public void onError(Exception exception) throws Exception {
             ConnectRetryFuture<T> connectRetryFuture = (ConnectRetryFuture<T>) futureAdapter;
             try {
                 connectRetryFuture.retryHandle(exception, true, retryIndex);

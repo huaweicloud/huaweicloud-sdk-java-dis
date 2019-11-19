@@ -100,7 +100,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public PutRecordsResult innerExecute(PutRecordsRequest putRecordsParam) {
                 return innerPutRecordsSupportingCache(putRecordsParam);
-            };
+            }
         });
     }
     
@@ -118,7 +118,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public GetPartitionCursorResult innerExecute(GetPartitionCursorRequest getPartitionCursorParam) {
                 return innerGetPartitionCursor(getPartitionCursorParam);
-            };
+            }
         });
     }
     
@@ -132,12 +132,7 @@ public class DISClientAsync extends DISClient implements DISAsync
     public Future<GetRecordsResult> getRecordsAsync(GetRecordsRequest getRecordsParam,
         AsyncHandler<GetRecordsResult> asyncHandler)
     {
-        return submit(getRecordsParam, asyncHandler, new InnerExecutor<GetRecordsRequest, GetRecordsResult>()
-        {
-            public GetRecordsResult innerExecute(GetRecordsRequest getRecordsParam) {
-                return innerGetRecords(getRecordsParam);
-            };
-        });
+        return submit(getRecordsParam, asyncHandler, getRecordsParam1 -> innerGetRecords(getRecordsParam1));
     }
     
     
@@ -151,12 +146,7 @@ public class DISClientAsync extends DISClient implements DISAsync
     public Future<DescribeStreamResult> describeStreamAsync(DescribeStreamRequest describeStreamRequest,
         AsyncHandler<DescribeStreamResult> asyncHandler)
     {
-        return submit(describeStreamRequest, asyncHandler, new InnerExecutor<DescribeStreamRequest, DescribeStreamResult>()
-        {
-            public DescribeStreamResult innerExecute(DescribeStreamRequest describeStreamRequest) {
-                return innerDescribeStream(describeStreamRequest);
-            };
-        });
+        return submit(describeStreamRequest, asyncHandler, describeStreamRequest1 -> innerDescribeStream(describeStreamRequest1));
     }
 
     @Override
@@ -169,15 +159,7 @@ public class DISClientAsync extends DISClient implements DISAsync
     public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest,
         AsyncHandler<CommitCheckpointResult> asyncHandler)
     {
-        return submit(commitCheckpointRequest,
-            asyncHandler,
-            new InnerExecutor<CommitCheckpointRequest, CommitCheckpointResult>()
-            {
-                public CommitCheckpointResult innerExecute(CommitCheckpointRequest commitCheckpointRequest)
-                {
-                    return innerCommitCheckpoint(commitCheckpointRequest);
-                }
-            });
+        return submit(commitCheckpointRequest, asyncHandler, commitCheckpointRequest1 -> innerCommitCheckpoint(commitCheckpointRequest1));
     }
     
     @Override
@@ -190,13 +172,7 @@ public class DISClientAsync extends DISClient implements DISAsync
     public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest,
         AsyncHandler<GetCheckpointResult> asyncHandler)
     {
-        return submit(getCheckpointRequest, asyncHandler, new InnerExecutor<GetCheckpointRequest, GetCheckpointResult>()
-        {
-            public GetCheckpointResult innerExecute(GetCheckpointRequest getCheckpointRequest)
-            {
-                return innerGetCheckpoint(getCheckpointRequest);
-            }
-        });
+        return submit(getCheckpointRequest, asyncHandler, getCheckpointRequest1 -> innerGetCheckpoint(getCheckpointRequest1));
     }
     
     @Override
@@ -318,6 +294,7 @@ public class DISClientAsync extends DISClient implements DISAsync
                     if (asyncHandler != null)
                     {
                         asyncHandler.onError(ex);
+                        return null;
                     } else {
                         // No Handler
                         throw ex;
@@ -410,7 +387,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public DeleteCheckpointResult innerExecute(DeleteCheckpointRequest deleteCheckpointRequest) {
                 return innerDeleteCheckpoint(deleteCheckpointRequest);
-            };
+            }
         });
 	}
 
@@ -428,7 +405,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public ListStreamConsumingStateResult innerExecute(ListStreamConsumingStateRequest listStreamConsumingStateRequest) {
                 return innerListStreamConsumingState(listStreamConsumingStateRequest);
-            };
+            }
         });
 	}
 
@@ -454,7 +431,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public CreateTransferTaskResult innerExecute(CreateTransferTaskRequest createTransferTaskRequest) {
                 return innerCreateTransferTask(createTransferTaskRequest);
-            };
+            }
         });
     }
     
@@ -471,7 +448,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public UpdateTransferTaskResult innerExecute(UpdateTransferTaskRequest updateTransferTaskRequest) {
                 return innerUpdateTransferTask(updateTransferTaskRequest);
-            };
+            }
         });
     }
     
@@ -487,7 +464,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public DeleteTransferTaskResult innerExecute(DeleteTransferTaskRequest deleteTransferTaskRequest) {
                 return innerDeleteTransferTask(deleteTransferTaskRequest);
-            };
+            }
         });
     }
     
@@ -503,7 +480,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public ListTransferTasksResult innerExecute(ListTransferTasksRquest listTransferTasksRequest) {
                 return innerListTransferTasks(listTransferTasksRequest);
-            };
+            }
         });
     }
     
@@ -521,7 +498,7 @@ public class DISClientAsync extends DISClient implements DISAsync
         {
             public DescribeTransferTaskResult innerExecute(DescribeTransferTaskRequest describeTransferTaskRequest) {
                 return innerDescribeTransferTask(describeTransferTaskRequest);
-            };
+            }
         });
     }
 }

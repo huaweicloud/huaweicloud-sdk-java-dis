@@ -17,12 +17,12 @@ public abstract class AbstractCallbackAdapter<InnerT, T> implements AsyncHandler
 	}
 	
 	@Override
-	public void onError(Exception exception) {
+	public void onError(Exception exception) throws Exception {
 		innerAsyncHandler.onError(exception);
 	}
 
 	@Override
-	public void onSuccess(InnerT result) {
+	public void onSuccess(InnerT result) throws Exception {
 		T t = null;
 		try {
 			if(futureAdapter != null) {

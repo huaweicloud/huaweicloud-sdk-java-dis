@@ -321,13 +321,13 @@ public class DISProducer
         }
 
         @Override
-        public void onError(Exception exception)
+        public void onError(Exception exception) throws Exception
         {
             asyncHandler.onError(exception);
         }
 
         @Override
-        public void onSuccess(PutRecordsResult result)
+        public void onSuccess(PutRecordsResult result) throws Exception
         {
             asyncHandler.onSuccess(result.getRecords().get(0));
             

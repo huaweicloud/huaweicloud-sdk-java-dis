@@ -23,8 +23,9 @@ public interface AsyncHandler<RESULT> {
 	/**
 	 * Invoked after an asynchronous request 
 	 * @param exception 异常对象
+	 * @throws Exception in case of I/O errors
 	 */
-	public void onError(Exception exception);
+	void onError(Exception exception) throws Exception;
 
 	/**
 	 * Invoked after an asynchronous request has completed successfully. Callers
@@ -33,7 +34,8 @@ public interface AsyncHandler<RESULT> {
 	 *
 	 * @param result
 	 *            The successful result of the executed operation.
+	 * @throws Exception in case of I/O errors
 	 */
-	public void onSuccess(RESULT result);
+	void onSuccess(RESULT result) throws Exception;
 
 }
