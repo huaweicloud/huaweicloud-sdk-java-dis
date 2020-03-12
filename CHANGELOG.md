@@ -28,3 +28,8 @@
 
 - Features
   * Support Lz4 compression
+  
+# 1.3.7
+
+- Bugfixs
+  * Update lz4-java version to 1.7.1

@@ -98,6 +98,11 @@ public interface Constants
     String ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE = "DIS.4224";
 
     /**
+     * 错误码: 拉取数据时位移超过范围
+     */
+    String ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE_GETTING_RECORDS = "DIS.4226";
+
+    /**
      * 错误码: 请求异常
      */
     String ERROR_CODE_REQUEST_ERROR = "DIS.4300";

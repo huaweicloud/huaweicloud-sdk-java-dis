@@ -874,6 +874,10 @@ public class AbstractDISClient {
                 {
                     throw new DISSequenceNumberOutOfRangeException(errorMsg, t);
                 }
+                else if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE_GETTING_RECORDS))
+                {
+                    throw new DISSeqNumberOutOfRangeGettingRecordsException(errorMsg, t);
+                }
                 else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_IS_EXPIRED))
                 {
                     throw new DISPartitionExpiredException(errorMsg, t);
