@@ -52,6 +52,10 @@ public class GetRecordsRequest
     @JsonProperty("max_fetch_bytes")
     private Long maxFetchBytes;
 
+    //分组ID
+    @JsonProperty("appName")
+    private String appName;
+
     public String getPartitionCursor()
     {
         return partitionCursor;
@@ -80,6 +84,14 @@ public class GetRecordsRequest
 
     public void setMaxFetchBytes(Long maxFetchBytes) {
         this.maxFetchBytes = maxFetchBytes;
+    }
+
+    public String getAppName() {
+        return appName;
+    }
+
+    public void setAppName(String appName) {
+        this.appName = appName;
     }
 
     @Override
