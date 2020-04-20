@@ -38,6 +38,10 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
     protected String projectId;
     
     protected String endpoint;
+
+    protected String authToken;
+
+    protected String authType;
     
     public final Subclass withCredentials(Credentials credentials) {
         setCredentials(credentials);
@@ -68,6 +72,16 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
         setEndpoint(endpoint);
         return getSubclass();
     }
+
+    public final Subclass withAuthToken(String authToken) {
+        setAuthToken(authToken);
+        return getSubclass();
+    }
+
+    public final Subclass withAuthType(String authType) {
+        setAuthType(authType);
+        return getSubclass();
+    }
     
     /*
      * Gets the AWSCredentialsProvider currently configured in the builder.
@@ -89,6 +103,14 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
     {
         this.ak = ak;
     }
+
+    public void setAuthType(String authType) {
+        this.authType = authType;
+    }
+
+    public String getAuthType() {
+        return authType;
+    }
     
     public final String getSk()
     {
@@ -108,6 +130,16 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
     public final void setRegion(String region)
     {
         this.region = region;
+    }
+
+    public final void setAuthToken(String authToken)
+    {
+        this.authToken = authToken;
+    }
+
+    public final String getAuthToken()
+    {
+        return authToken;
     }
 
     public final String getProjectId()

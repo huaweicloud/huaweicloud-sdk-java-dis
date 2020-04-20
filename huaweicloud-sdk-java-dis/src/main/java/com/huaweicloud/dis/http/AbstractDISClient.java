@@ -552,7 +552,6 @@ public class AbstractDISClient {
     private <T> T doRequest(Request<HttpRequest> request, Object requestContent, String ak, String sk, String region,
                             Class<T> returnType) {
         String uri = buildURI(request);
-        LOG.info("url:" + uri);
         int retryCount = -1;
         ExponentialBackOff backOff = null;
         do {
@@ -600,7 +599,6 @@ public class AbstractDISClient {
     private <T> T doRequest(Request<HttpRequest> request, Object requestContent, String authToken, String region,
                             Class<T> returnType) {
         String uri = buildURI(request);
-        LOG.info("authToken:" + authToken);
         int retryCount = -1;
         ExponentialBackOff backOff = null;
         do {

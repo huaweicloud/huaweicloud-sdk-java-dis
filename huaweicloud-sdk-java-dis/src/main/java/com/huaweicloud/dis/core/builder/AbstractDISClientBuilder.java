@@ -65,6 +65,10 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
             disConfig.setRegion(region);
         if (!StringUtils.isNullOrEmpty(endpoint))
             disConfig.setEndpoint(endpoint);
+        if(!StringUtils.isNullOrEmpty(authToken))
+            disConfig.setAuthToken(authToken);
+        if(!StringUtils.isNullOrEmpty(authType))
+            disConfig.setAuthType(authType);
         if (dataCacheEnabled) {
         	disConfig.setDataEncryptEnabled(dataEncryptEnabled);
 		}
