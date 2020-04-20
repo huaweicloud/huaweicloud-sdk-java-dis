@@ -606,12 +606,12 @@ public class DISConfig extends Properties implements ClientParams {
         return set(PROPERTY_SK, sk);
     }
 
-    public DISConfig setAuthToken() {
-        return set(PROPERTY_AUTH_TOKEN, null);
+    public DISConfig setAuthToken(String authToken) {
+        return set(PROPERTY_AUTH_TOKEN, authToken);
     }
 
-    public DISConfig setAuthType() {
-        return set(PROPERTY_AUTH_TYPE, null);
+    public DISConfig setAuthType(String authType) {
+        return set(PROPERTY_AUTH_TYPE, authType);
     }
 
     public DISConfig setRegion(String region) {
