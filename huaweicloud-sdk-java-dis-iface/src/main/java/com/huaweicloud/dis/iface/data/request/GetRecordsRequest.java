@@ -53,7 +53,7 @@ public class GetRecordsRequest
     private Long maxFetchBytes;
 
     //分组ID
-    @JsonProperty("appName")
+    @JsonProperty("app_name")
     private String appName;
 
     public String getPartitionCursor()

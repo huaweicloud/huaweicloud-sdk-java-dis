@@ -84,6 +84,7 @@ public class DISClientAsync extends DISClient implements DISAsync
     {
         super(disConfig);
         this.executorService = executorService == null ? new DefaultExecutorFactory().newExecutor() : executorService;
+
     }
     
     @Override
