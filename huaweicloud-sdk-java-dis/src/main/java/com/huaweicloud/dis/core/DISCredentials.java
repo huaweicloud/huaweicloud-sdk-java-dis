@@ -17,6 +17,7 @@
 package com.huaweicloud.dis.core;
 
 import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.auth.AuthType;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.exception.DISClientException;
 
@@ -36,7 +37,7 @@ public class DISCredentials implements Cloneable {
     private String authType;
 
     public DISCredentials(DISConfig disConfig) {
-        this(disConfig.getAK(), disConfig.getSK(), disConfig.getSecurityToken(), disConfig.getDataPassword(), disConfig.getAUTHTOKEN(), disConfig.getAUTHTYPE());
+        this(disConfig.getAK(), disConfig.getSK(), disConfig.getSecurityToken(), disConfig.getDataPassword(), disConfig.getAuthToken(), disConfig.getAuthType());
     }
 
     public DISCredentials(String accessKeyId, String secretKey) {
@@ -70,20 +71,17 @@ public class DISCredentials implements Cloneable {
             throw new IllegalArgumentException("Secret key cannot be null.");
         }*/
         if (StringUtils.isNullOrEmpty(authType)) {
-            throw new IllegalArgumentException("authType cannot be null.");
-        } else {
-            if (authType.equals("authtoken")) {
-                if (StringUtils.isNullOrEmpty(authToken)) {
-                    throw new IllegalArgumentException("x-auth-Token cannot be null.");
-                }
+            this.authType = AuthType.AKSK.getAuthType();
+            if (accessKeyId == null) {
+                throw new IllegalArgumentException("Access key cannot be null.");
             }
-            if (authType.equals("aksk")) {
-                if (accessKeyId == null) {
-                    throw new IllegalArgumentException("Access key cannot be null.");
-                }
-                if (secretKey == null) {
-                    throw new IllegalArgumentException("Secret key cannot be null.");
-                }
+            if (secretKey == null) {
+                throw new IllegalArgumentException("Secret key cannot be null.");
+            }
+        } else {
+            this.authType = AuthType.AUTHTOKEN.getAuthType();
+            if (StringUtils.isNullOrEmpty(authToken)) {
+                throw new IllegalArgumentException("authToken cannot be null.");
             }
         }
 
@@ -93,7 +91,7 @@ public class DISCredentials implements Cloneable {
         this.dataPassword = dataPassword;
         this.timestamp = timestamp;
         this.authToken = authToken;
-        this.authType = authType;
+        //this.authType = authType;
     }
 
     public String getAccessKeyId() {

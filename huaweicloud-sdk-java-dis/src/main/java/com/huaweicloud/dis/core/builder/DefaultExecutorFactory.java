@@ -21,49 +21,53 @@ import com.huaweicloud.dis.Constants;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class DefaultExecutorFactory implements ExecutorFactory {
+public class DefaultExecutorFactory implements ExecutorFactory
+{
     private static final AtomicInteger poolNumber = new AtomicInteger(1);
 
     private final AtomicInteger count = new AtomicInteger(1);
 
-    private static ExecutorService executorService;
+    private final ExecutorService executorService;
 
-    public DefaultExecutorFactory() {
+    public DefaultExecutorFactory()
+    {
         this(Constants.DEFAULT_THREAD_POOL_SIZE);
     }
 
-    public DefaultExecutorFactory(int poolSize) {
+    public DefaultExecutorFactory(int poolSize)
+    {
         this(poolSize, "dis-pool");
     }
 
-    public DefaultExecutorFactory(int poolSize, String namePrefix) {
-        if (namePrefix != null) {
+    public DefaultExecutorFactory(int poolSize, String namePrefix)
+    {
+        if (namePrefix != null)
+        {
             namePrefix += "-" + poolNumber.getAndIncrement() + "-";
         }
         final String finalNamePrefix = namePrefix;
-        //调用方案一：多个租户共享一个线程池，线程池大小可以配置，建议尽量配大一点
-        if (executorService == null) {
-            this.executorService = new ThreadPoolExecutor(poolSize, poolSize,
-                    0L, TimeUnit.MILLISECONDS,
-                    new LinkedBlockingQueue<Runnable>(),
-                    new ThreadFactory() {
-                        @Override
-                        public Thread newThread(Runnable r) {
-                            Thread thread = Executors.defaultThreadFactory().newThread(r);
-                            if (finalNamePrefix != null) {
-                                thread.setName(finalNamePrefix + String.format("%03d", count.getAndIncrement()));
-                            }
-                            thread.setDaemon(true);
-                            return thread;
+        this.executorService = new ThreadPoolExecutor(poolSize, poolSize,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                new ThreadFactory()
+                {
+                    @Override
+                    public Thread newThread(Runnable r)
+                    {
+                        Thread thread = Executors.defaultThreadFactory().newThread(r);
+                        if (finalNamePrefix != null)
+                        {
+                            thread.setName(finalNamePrefix + String.format("%03d", count.getAndIncrement()));
                         }
-                    });
-        }
-        //调用方案二：每个租户都有自己的线程池
-
+                        thread.setDaemon(true);
+                        return thread;
+                    }
+                });
     }
 
     @Override
-    public ExecutorService newExecutor() {
+    public ExecutorService newExecutor()
+    {
         return executorService;
     }
 }

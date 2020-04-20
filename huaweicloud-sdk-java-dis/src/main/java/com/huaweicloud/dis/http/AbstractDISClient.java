@@ -6,6 +6,7 @@ import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.auth.AuthType;
 import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
@@ -687,21 +688,17 @@ public class AbstractDISClient {
         if (credentials == null) {
             throw new DISClientException("credentials can not be null.");
         }
-        if (StringUtils.isNullOrEmpty(disConfig.getAUTHTYPE())) {
-            throw new IllegalArgumentException("authtype cannot be null.");
-        } else {
-            if (disConfig.getAUTHTYPE().equals("authtoken")) {
-                if (StringUtils.isNullOrEmpty(disConfig.getAUTHTOKEN())) {
-                    throw new IllegalArgumentException("x-auth-Token cannot be null.");
-                }
+        if (credentials.getAuthType().equals(AuthType.AUTHTOKEN.getAuthType())) {
+            if (StringUtils.isNullOrEmpty(disConfig.getAuthToken())) {
+                throw new IllegalArgumentException("authToken cannot be null.");
             }
-            if (disConfig.getAUTHTYPE().equals("aksk")) {
-                if (disConfig.getAK() == null) {
-                    throw new IllegalArgumentException("Access key cannot be null.");
-                }
-                if (disConfig.getSK() == null) {
-                    throw new IllegalArgumentException("Secret key cannot be null.");
-                }
+        }
+        if (credentials.getAuthType().equals(AuthType.AKSK.getAuthType())) {
+            if (disConfig.getAK() == null) {
+                throw new IllegalArgumentException("Access key cannot be null.");
+            }
+            if (disConfig.getSK() == null) {
+                throw new IllegalArgumentException("Secret key cannot be null.");
             }
         }
 

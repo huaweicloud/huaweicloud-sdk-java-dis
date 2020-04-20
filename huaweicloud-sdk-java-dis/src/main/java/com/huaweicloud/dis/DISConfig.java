@@ -143,9 +143,9 @@ public class DISConfig extends Properties implements ClientParams {
 
     public static final String PROPERTY_BODY_COMPRESS_TYPE = "body.compress.type";
 
-    public static final String AUTHTOKEN = "X-Auth-Token";
+    public static final String PROPERTY_AUTH_TOKEN = "auth.token";
 
-    public static final String AUTHTYPE = "Auth-Type";
+    public static final String PROPERTY_AUTH_TYPE = "auth.type";
 
     public String[] producerRecordsRetriableErrorCode;
 
@@ -229,12 +229,12 @@ public class DISConfig extends Properties implements ClientParams {
         return getInt(PROPERTY_CONNECTION_TIMEOUT, DEFAULT_VALUE_CONNECTION_TIMEOUT) * 1000;
     }
 
-    public String getAUTHTOKEN() {
-        return get(AUTHTOKEN, null);
+    public String getAuthToken() {
+        return get(PROPERTY_AUTH_TOKEN, null);
     }
 
-    public String getAUTHTYPE() {
-        return get(AUTHTYPE, null);
+    public String getAuthType() {
+        return get(PROPERTY_AUTH_TYPE, null);
     }
 
     public int getSocketTimeOut() {
@@ -606,12 +606,12 @@ public class DISConfig extends Properties implements ClientParams {
         return set(PROPERTY_SK, sk);
     }
 
-    public DISConfig setAUTHTOKEN() {
-        return set(AUTHTOKEN, null);
+    public DISConfig setAuthToken() {
+        return set(PROPERTY_AUTH_TOKEN, null);
     }
 
-    public DISConfig setAUTHTYPE() {
-        return set(AUTHTYPE, null);
+    public DISConfig setAuthType() {
+        return set(PROPERTY_AUTH_TYPE, null);
     }
 
     public DISConfig setRegion(String region) {
