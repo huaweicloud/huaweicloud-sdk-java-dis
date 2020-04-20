@@ -17,9 +17,11 @@
 package com.huaweicloud.dis.core;
 
 import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.auth.AuthType;
+import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
 
-public class DISCredentials implements Cloneable
-{
+public class DISCredentials implements Cloneable {
     private String accessKeyId;
 
     private String secretKey;
@@ -30,46 +32,57 @@ public class DISCredentials implements Cloneable
 
     private long timestamp;
 
-    public DISCredentials(DISConfig disConfig)
-    {
-        this(disConfig.getAK(), disConfig.getSK(), disConfig.getSecurityToken(), disConfig.getDataPassword());
+    private String authToken;
+
+    private String authType;
+
+    public DISCredentials(DISConfig disConfig) {
+        this(disConfig.getAK(), disConfig.getSK(), disConfig.getSecurityToken(), disConfig.getDataPassword(), disConfig.getAuthToken(), disConfig.getAuthType());
     }
 
-    public DISCredentials(String accessKeyId, String secretKey)
-    {
-        this(accessKeyId, secretKey, null, null, System.currentTimeMillis());
+    public DISCredentials(String accessKeyId, String secretKey) {
+        this(accessKeyId, secretKey, null, null, null, null, System.currentTimeMillis());
     }
 
-    public DISCredentials(String accessKeyId, String secretKey, long timestamp)
-    {
-        this(accessKeyId, secretKey, null, null, timestamp);
+    public DISCredentials(String accessKeyId, String secretKey, long timestamp) {
+        this(accessKeyId, secretKey, null, null, null, null, timestamp);
     }
 
-    public DISCredentials(String accessKeyId, String secretKey, String securityToken)
-    {
-        this(accessKeyId, secretKey, securityToken, null, System.currentTimeMillis());
+    public DISCredentials(String accessKeyId, String secretKey, String securityToken) {
+        this(accessKeyId, secretKey, securityToken, null, null, null, System.currentTimeMillis());
     }
 
-    public DISCredentials(String accessKeyId, String secretKey, String securityToken, long timestamp)
-    {
-        this(accessKeyId, secretKey, securityToken, null, timestamp);
+    public DISCredentials(String accessKeyId, String secretKey, String securityToken, long timestamp) {
+        this(accessKeyId, secretKey, securityToken, null, null, null, timestamp);
     }
 
-    public DISCredentials(String accessKeyId, String secretKey, String securityToken, String dataPassword)
-    {
-        this(accessKeyId, secretKey, securityToken, dataPassword, System.currentTimeMillis());
+    public DISCredentials(String accessKeyId, String secretKey, String securityToken, String dataPassword, String authToken, String authType) {
+        this(accessKeyId, secretKey, securityToken, dataPassword, authToken, authType, System.currentTimeMillis());
     }
 
-    public DISCredentials(String accessKeyId, String secretKey, String securityToken, String dataPassword,
-                          long timestamp)
-    {
-        if (accessKeyId == null)
+    public DISCredentials(String accessKeyId, String secretKey, String securityToken, String dataPassword, String authToken, String authType,
+                          long timestamp) {
+        /*if (accessKeyId == null)
         {
             throw new IllegalArgumentException("Access key cannot be null.");
         }
         if (secretKey == null)
         {
             throw new IllegalArgumentException("Secret key cannot be null.");
+        }*/
+        if (StringUtils.isNullOrEmpty(authType)) {
+            this.authType = AuthType.AKSK.getAuthType();
+            if (accessKeyId == null) {
+                throw new IllegalArgumentException("Access key cannot be null.");
+            }
+            if (secretKey == null) {
+                throw new IllegalArgumentException("Secret key cannot be null.");
+            }
+        } else {
+            this.authType = AuthType.AUTHTOKEN.getAuthType();
+            if (StringUtils.isNullOrEmpty(authToken)) {
+                throw new IllegalArgumentException("authToken cannot be null.");
+            }
         }
 
         this.accessKeyId = accessKeyId;
@@ -77,42 +90,52 @@ public class DISCredentials implements Cloneable
         this.securityToken = securityToken;
         this.dataPassword = dataPassword;
         this.timestamp = timestamp;
+        this.authToken = authToken;
+        //this.authType = authType;
     }
 
-    public String getAccessKeyId()
-    {
+    public String getAccessKeyId() {
         return accessKeyId;
     }
 
-    public String getSecretKey()
-    {
+    public String getSecretKey() {
         return secretKey;
     }
 
-    public String getSecurityToken()
-    {
+    public String getSecurityToken() {
         return securityToken;
     }
 
-    public String getDataPassword()
-    {
+    public String getDataPassword() {
         return dataPassword;
     }
 
-    public long getTimestamp()
-    {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    @Override
-    public DISCredentials clone()
-    {
-        try
-        {
-            return (DISCredentials)super.clone();
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    //需求：在消费过程中可以重置X-Auth-Token
+    public void setAuthToken(String authToken) {
+        if (StringUtils.isNullOrEmpty(authType)) {
+            throw new IllegalArgumentException("authType cannot be null.");
         }
-        catch (CloneNotSupportedException e)
-        {
+        this.authToken = authToken;
+    }
+
+
+    public String getAuthType() {
+        return authType;
+    }
+
+    @Override
+    public DISCredentials clone() {
+        try {
+            return (DISCredentials) super.clone();
+        } catch (CloneNotSupportedException e) {
             throw new UnsupportedOperationException("clone error.");
         }
     }

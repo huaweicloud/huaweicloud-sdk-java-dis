@@ -6,6 +6,7 @@ import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.DISCredentials;
 import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.core.auth.AuthType;
 import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
@@ -76,13 +77,12 @@ public class AbstractDISClient {
 
     protected ICredentialsProvider credentialsProvider;
 
-    public AbstractDISClient(DISConfig disConfig)
-    {
+    public AbstractDISClient(DISConfig disConfig) {
         this.disConfig = DISConfig.buildConfig(disConfig);
         init();
     }
 
-    private void init(){
+    private void init() {
         this.credentials = new DISCredentials(this.disConfig);
         this.region = this.disConfig.getRegion();
         check();
@@ -92,13 +92,12 @@ public class AbstractDISClient {
     /**
      * @deprecated use {@link DISClientBuilder#defaultClient()}
      */
-    public AbstractDISClient()
-    {
+    public AbstractDISClient() {
         this.disConfig = DISConfig.buildDefaultConfig();
         init();
     }
 
-    protected Request<HttpRequest> buildRequest(HttpMethodName httpMethod, String endpoint, String resourcePath){
+    protected Request<HttpRequest> buildRequest(HttpMethodName httpMethod, String endpoint, String resourcePath) {
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
         request.setHttpMethod(httpMethod);
 
@@ -114,23 +113,16 @@ public class AbstractDISClient {
      * @param putRecordsParam A <code>PutRecords</code> request.
      * @return A <code>PutRecords</code> request after decorating.
      */
-    protected PutRecordsRequest decorateRecords(PutRecordsRequest putRecordsParam)
-    {
+    protected PutRecordsRequest decorateRecords(PutRecordsRequest putRecordsParam) {
         // compress with snappy-java
-        if (disConfig.isDataCompressEnabled())
-        {
-            if (putRecordsParam.getRecords() != null)
-            {
-                for (PutRecordsRequestEntry record : putRecordsParam.getRecords())
-                {
+        if (disConfig.isDataCompressEnabled()) {
+            if (putRecordsParam.getRecords() != null) {
+                for (PutRecordsRequestEntry record : putRecordsParam.getRecords()) {
                     byte[] input = record.getData().array();
-                    try
-                    {
+                    try {
                         byte[] compressedInput = SnappyUtils.compress(input);
                         record.setData(ByteBuffer.wrap(compressedInput));
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         LOG.error(e.getMessage(), e);
                         throw new RuntimeException(e);
                     }
@@ -139,12 +131,9 @@ public class AbstractDISClient {
         }
 
         // encrypt
-        if (isEncrypt())
-        {
-            if (putRecordsParam.getRecords() != null)
-            {
-                for (PutRecordsRequestEntry record : putRecordsParam.getRecords())
-                {
+        if (isEncrypt()) {
+            if (putRecordsParam.getRecords() != null) {
+                for (PutRecordsRequestEntry record : putRecordsParam.getRecords()) {
                     record.setData(encrypt(record.getData()));
                 }
             }
@@ -159,35 +148,25 @@ public class AbstractDISClient {
      * @param getRecordsResult A <code>GetRecords</code> response.
      * @return A <code>GetRecords</code> response after decorating.
      */
-    protected GetRecordsResult decorateRecords(GetRecordsResult getRecordsResult)
-    {
+    protected GetRecordsResult decorateRecords(GetRecordsResult getRecordsResult) {
         // decrypt
-        if (isEncrypt())
-        {
-            if (getRecordsResult.getRecords() != null)
-            {
-                for (Record record : getRecordsResult.getRecords())
-                {
+        if (isEncrypt()) {
+            if (getRecordsResult.getRecords() != null) {
+                for (Record record : getRecordsResult.getRecords()) {
                     record.setData(decrypt(record.getData()));
                 }
             }
         }
 
         // uncompress with snappy-java
-        if (disConfig.isDataCompressEnabled())
-        {
-            if (getRecordsResult.getRecords() != null)
-            {
-                for (Record record : getRecordsResult.getRecords())
-                {
+        if (disConfig.isDataCompressEnabled()) {
+            if (getRecordsResult.getRecords() != null) {
+                for (Record record : getRecordsResult.getRecords()) {
                     byte[] input = record.getData().array();
-                    try
-                    {
+                    try {
                         byte[] uncompressedInput = SnappyUtils.uncompress(input);
                         record.setData(ByteBuffer.wrap(uncompressedInput));
-                    }
-                    catch (IOException e)
-                    {
+                    } catch (IOException e) {
                         LOG.error(e.getMessage(), e);
                         throw new RuntimeException(e);
                     }
@@ -198,38 +177,29 @@ public class AbstractDISClient {
         return getRecordsResult;
     }
 
-    protected boolean isEncrypt()
-    {
+    protected boolean isEncrypt() {
         return disConfig.getIsDefaultDataEncryptEnabled() && !StringUtils.isNullOrEmpty(disConfig.getDataPassword());
     }
 
-    protected ByteBuffer encrypt(ByteBuffer src)
-    {
+    protected ByteBuffer encrypt(ByteBuffer src) {
         String cipher = null;
-        try
-        {
-            cipher = EncryptUtils.gen(new String[] {disConfig.getDataPassword()}, src.array());
-        }
-        catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
-                | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e)
-        {
+        try {
+            cipher = EncryptUtils.gen(new String[]{disConfig.getDataPassword()}, src.array());
+        } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
+                | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             LOG.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
         return ByteBuffer.wrap(cipher.getBytes());
     }
 
-    protected ByteBuffer decrypt(ByteBuffer cipher)
-    {
+    protected ByteBuffer decrypt(ByteBuffer cipher) {
         Charset utf8 = Charset.forName("UTF-8");
         String src;
-        try
-        {
-            src = EncryptUtils.dec(new String[] {disConfig.getDataPassword()}, new String(cipher.array(), utf8));
-        }
-        catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
-                | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e)
-        {
+        try {
+            src = EncryptUtils.dec(new String[]{disConfig.getDataPassword()}, new String(cipher.array(), utf8));
+        } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
+                | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             LOG.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -237,12 +207,10 @@ public class AbstractDISClient {
         return ByteBuffer.wrap(src.getBytes(utf8));
     }
 
-    private byte[] beforeRequest(Request<HttpRequest> request, Object requestContent, String region, String projectId, String securityToken)
-    {
+    private byte[] beforeRequest(Request<HttpRequest> request, Object requestContent, String region, String projectId, String securityToken) {
         request.addHeader(HTTP_X_PROJECT_ID, projectId);
 
-        if (!StringUtils.isNullOrEmpty(securityToken))
-        {
+        if (!StringUtils.isNullOrEmpty(securityToken)) {
             request.addHeader(HTTP_X_SECURITY_TOKEN, securityToken);
         }
 
@@ -257,23 +225,16 @@ public class AbstractDISClient {
         return setContent(request, requestContent);
     }
 
-    private byte[] setContent(Request<HttpRequest> request, Object requestContent)
-    {
+    private byte[] setContent(Request<HttpRequest> request, Object requestContent) {
         HttpMethodName methodName = request.getHttpMethod();
-        if (methodName.equals(HttpMethodName.POST) || methodName.equals(HttpMethodName.PUT))
-        {
+        if (methodName.equals(HttpMethodName.POST) || methodName.equals(HttpMethodName.PUT)) {
 
             byte[] content = null;
-            if (requestContent instanceof byte[])
-            {
-                content = (byte[])requestContent;
-            }
-            else if (requestContent instanceof String || requestContent instanceof Integer)
-            {
+            if (requestContent instanceof byte[]) {
+                content = (byte[]) requestContent;
+            } else if (requestContent instanceof String || requestContent instanceof Integer) {
                 content = Utils.encodingBytes(requestContent.toString());
-            }
-            else
-            {
+            } else {
                 String reqJson = JsonUtils.objToJson(requestContent);
                 content = Utils.encodingBytes(reqJson);
             }
@@ -287,38 +248,28 @@ public class AbstractDISClient {
         return null;
     }
 
-    private byte[] compressBody(Request<HttpRequest> request, byte[] source)
-    {
-        if (!disConfig.getBoolean(DISConfig.PROPERTY_BODY_COMPRESS_ENABLED, false))
-        {
+    private byte[] compressBody(Request<HttpRequest> request, byte[] source) {
+        if (!disConfig.getBoolean(DISConfig.PROPERTY_BODY_COMPRESS_ENABLED, false)) {
             return source;
         }
 
         String compressType = disConfig.get(DISConfig.PROPERTY_BODY_COMPRESS_TYPE, Constants.COMPRESS_LZ4);
 
         byte[] target = null;
-        if (Constants.COMPRESS_LZ4.equals(compressType))
-        {
+        if (Constants.COMPRESS_LZ4.equals(compressType)) {
             request.addHeader("Content-Encoding", Constants.COMPRESS_LZ4);
             request.addHeader("Accept-Encoding", Constants.COMPRESS_LZ4);
             request.addHeader(Constants.COMPRESS_LZ4_CONTENT_LENGTH, String.valueOf(source.length));
             target = Lz4Util.compressedByte(source);
-        }
-        else if (Constants.COMPRESS_SNAPPY.equals(compressType))
-        {
+        } else if (Constants.COMPRESS_SNAPPY.equals(compressType)) {
             request.addHeader("Content-Encoding", Constants.COMPRESS_SNAPPY);
             request.addHeader("Accept-Encoding", Constants.COMPRESS_SNAPPY);
-            try
-            {
+            try {
                 target = SnappyUtils.compress(source);
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 throw new DISClientException(e);
             }
-        }
-        else if (Constants.COMPRESS_ZSTD.equals(compressType))
-        {
+        } else if (Constants.COMPRESS_ZSTD.equals(compressType)) {
             request.addHeader("Content-Encoding", Constants.COMPRESS_ZSTD);
             request.addHeader("Accept-Encoding", Constants.COMPRESS_ZSTD);
             request.addHeader(Constants.COMPRESS_ZSTD_CONTENT_LENGTH, String.valueOf(source.length));
@@ -328,50 +279,37 @@ public class AbstractDISClient {
         return target;
     }
 
-    private void setContentType(Request<HttpRequest> request)
-    {
+    private void setContentType(Request<HttpRequest> request) {
         // 默认为json格式
-        if (!request.getHeaders().containsKey("Content-Type"))
-        {
+        if (!request.getHeaders().containsKey("Content-Type")) {
             request.addHeader("Content-Type", "application/json; charset=utf-8");
         }
 
-        if (!request.getHeaders().containsKey("accept"))
-        {
+        if (!request.getHeaders().containsKey("accept")) {
             request.addHeader("accept", "*/*; charset=utf-8");
         }
     }
 
-    private void setSdkVersion(Request<HttpRequest> request)
-    {
+    private void setSdkVersion(Request<HttpRequest> request) {
         request.addHeader(HEADER_SDK_VERSION, VersionUtils.getVersion() + "/" + VersionUtils.getPlatform());
     }
 
-    private void setParameters(Request<HttpRequest> request, Object requestContent)
-    {
-        if (request.getHttpMethod().equals(HttpMethodName.GET) || request.getHttpMethod().equals(HttpMethodName.DELETE))
-        {
-            if (requestContent != null)
-            {
+    private void setParameters(Request<HttpRequest> request, Object requestContent) {
+        if (request.getHttpMethod().equals(HttpMethodName.GET) || request.getHttpMethod().equals(HttpMethodName.DELETE)) {
+            if (requestContent != null) {
                 Map<String, String> parametersMap = new HashMap<String, String>();
                 Map<String, Object> getParamsObj = null;
-                if (requestContent instanceof Map)
-                {
-                    getParamsObj = (Map<String, Object>)requestContent;
-                }
-                else
-                {
+                if (requestContent instanceof Map) {
+                    getParamsObj = (Map<String, Object>) requestContent;
+                } else {
                     String tmpJson = JsonUtils.objToJson(requestContent);
                     getParamsObj = JsonUtils.jsonToObj(tmpJson, HashMap.class);
                 }
 
-                if (getParamsObj.size() != 0)
-                {
-                    for (Map.Entry<String, Object> temp : getParamsObj.entrySet())
-                    {
+                if (getParamsObj.size() != 0) {
+                    for (Map.Entry<String, Object> temp : getParamsObj.entrySet()) {
                         Object value = temp.getValue();
-                        if (value == null)
-                        {
+                        if (value == null) {
                             continue;
                         }
 
@@ -379,8 +317,7 @@ public class AbstractDISClient {
                     }
                 }
 
-                if (null != parametersMap && parametersMap.size() > 0)
-                {
+                if (null != parametersMap && parametersMap.size() > 0) {
                     request.setParameters(parametersMap);
                 }
             }
@@ -388,34 +325,33 @@ public class AbstractDISClient {
 
     }
 
-    protected <T> T request(Object param, Request<HttpRequest> request, Class<T> clazz)
-    {
+    protected <T> T request(Object param, Request<HttpRequest> request, Class<T> clazz) {
         DISCredentials credentials = this.credentials;
-        if (credentialsProvider != null)
-        {
+        if (credentialsProvider != null) {
             DISCredentials cloneCredentials = this.credentials.clone();
             credentials = credentialsProvider.updateCredentials(cloneCredentials);
-            if (credentials != cloneCredentials)
-            {
+            if (credentials != cloneCredentials) {
                 this.credentials = credentials;
             }
         }
 
         byte[] bodyBytes = beforeRequest(request, param, region, disConfig.getProjectId(), credentials.getSecurityToken());
 
-        // 发送请求
-        return doRequest(request, bodyBytes, credentials.getAccessKeyId(), credentials.getSecretKey(), region, clazz);
+        if (credentials.getAuthToken() == null) {
+            // 发送请求--通过ak sk
+            return doRequest(request, bodyBytes, credentials.getAccessKeyId(), credentials.getSecretKey(), region, clazz);
+        } else { //发送请求--通过x-auth-token
+            return doRequest(request, bodyBytes, credentials.getAuthToken(), region, clazz);
+        }
+
     }
 
-    protected <T> Future<T> requestAsync(Object param, Request<HttpRequest> request, Class<T> clazz, AsyncHandler<T> callback)
-    {
+    protected <T> Future<T> requestAsync(Object param, Request<HttpRequest> request, Class<T> clazz, AsyncHandler<T> callback) {
         DISCredentials credentials = this.credentials;
-        if (credentialsProvider != null)
-        {
+        if (credentialsProvider != null) {
             DISCredentials cloneCredentials = this.credentials.clone();
             credentials = credentialsProvider.updateCredentials(cloneCredentials);
-            if (credentials != cloneCredentials)
-            {
+            if (credentials != cloneCredentials) {
                 this.credentials = credentials;
             }
         }
@@ -435,7 +371,7 @@ public class AbstractDISClient {
         ConnectRetryFuture<T> connectRetryFuture = new ConnectRetryFuture<T>(request, ak, sk, requestContent, callback, uri, returnType);
 
         ConnectRetryCallback<T> connectRetryCallback = null;
-        if(callback != null){
+        if (callback != null) {
             connectRetryCallback = new ConnectRetryCallback<T>(callback, connectRetryFuture, 0);
         }
 
@@ -447,7 +383,7 @@ public class AbstractDISClient {
         return connectRetryFuture;
     }
 
-    private static class ConnectRetryCallback<T> extends AbstractCallbackAdapter<T, T> implements AsyncHandler<T>{
+    private static class ConnectRetryCallback<T> extends AbstractCallbackAdapter<T, T> implements AsyncHandler<T> {
         private final int retryIndex;
 
         public ConnectRetryCallback(AsyncHandler<T> innerAsyncHandler, AbstractFutureAdapter<T, T> futureAdapter, int retryIndex) {
@@ -491,7 +427,7 @@ public class AbstractDISClient {
                                   Object requestContent,
                                   AsyncHandler<T> callback,
                                   String uri,
-                                  Class<T> returnType){
+                                  Class<T> returnType) {
             super();
             this.request = request;
             this.ak = ak;
@@ -502,32 +438,30 @@ public class AbstractDISClient {
             this.returnType = returnType;
         }
 
-        public void retryHandle(Throwable t, boolean tryLock, int retryIndex) throws ExecutionException, InterruptedException{
+        public void retryHandle(Throwable t, boolean tryLock, int retryIndex) throws ExecutionException, InterruptedException {
             String errorMsg = t.getMessage();
-            if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException)
-            {
-                errorMsg = ((RestClientResponseException)t).getRawStatusCode() + " : "
-                        + ((RestClientResponseException)t).getResponseBodyAsString();
+            if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException) {
+                errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : "
+                        + ((RestClientResponseException) t).getResponseBodyAsString();
             }
 
             // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
             boolean isRetriable = isRetriableSendException(t, request);
-            if (!isRetriable || retryIndex >= disConfig.getExceptionRetries())
-            {
+            if (!isRetriable || retryIndex >= disConfig.getExceptionRetries()) {
                 handleError(t, errorMsg, isRetriable);
             }
 
             // 重试
-            if(tryLock) {
-                if(!retryLock.tryLock()) {
+            if (tryLock) {
+                if (!retryLock.tryLock()) {
                     return;
                 }
-            }else {
+            } else {
                 retryLock.lock();
             }
 
             try {
-                if(retryIndex != retryCount.get()) {
+                if (retryIndex != retryCount.get()) {
                     return;
                 }
 
@@ -537,7 +471,7 @@ public class AbstractDISClient {
                 request = SignUtil.sign(request, ak, sk, region, disConfig);
 
                 ConnectRetryCallback<T> connectRetryCallback = null;
-                if(callback != null){
+                if (callback != null) {
                     connectRetryCallback = new ConnectRetryCallback<T>(callback, this, tmpRetryIndex);
                 }
 
@@ -546,7 +480,7 @@ public class AbstractDISClient {
                         request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
 
                 this.setInnerFuture(restFuture);
-            }finally {
+            } finally {
                 retryLock.unlock();
             }
 
@@ -557,21 +491,15 @@ public class AbstractDISClient {
             retryLock.lock();
 
             int getThreadRetryIndex = retryCount.get();
-            try
-            {
+            try {
                 return super.get();
-            }
-            catch (ExecutionException e)
-            {
-                if (e.getCause() == null)
-                {
+            } catch (ExecutionException e) {
+                if (e.getCause() == null) {
                     throw e;
                 }
                 retryHandle(e.getCause(), false, getThreadRetryIndex);
                 return this.get();
-            }
-            finally
-            {
+            } finally {
                 retryLock.unlock();
             }
         }
@@ -581,21 +509,15 @@ public class AbstractDISClient {
             retryLock.lock();
 
             int getThreadRetryIndex = retryCount.get();
-            try
-            {
+            try {
                 return super.get(timeout, unit);
-            }
-            catch (ExecutionException e)
-            {
-                if (e.getCause() == null)
-                {
+            } catch (ExecutionException e) {
+                if (e.getCause() == null) {
                     throw e;
                 }
                 retryHandle(e.getCause(), false, getThreadRetryIndex);
                 return this.get(timeout, unit);
-            }
-            finally
-            {
+            } finally {
                 retryLock.unlock();
             }
 
@@ -607,17 +529,15 @@ public class AbstractDISClient {
         }
     }
 
-    private String buildURI(Request<HttpRequest> request){
+    private String buildURI(Request<HttpRequest> request) {
         Map<String, String> parameters = request.getParameters();
 
         StringBuilder uri = new StringBuilder(request.getEndpoint().toString()).append(request.getResourcePath());
 
         // Set<String> paramKeys = getParams.keySet();
-        if (parameters != null && !parameters.isEmpty())
-        {
+        if (parameters != null && !parameters.isEmpty()) {
             uri.append("?");
-            for (Map.Entry<String, String> temp : parameters.entrySet())
-            {
+            for (Map.Entry<String, String> temp : parameters.entrySet()) {
                 uri.append(temp.getKey());
                 uri.append("=");
                 uri.append(temp.getValue());
@@ -630,47 +550,84 @@ public class AbstractDISClient {
 
     // 将Request转为restTemplate的请求参数.由于请求需要签名，故请求的body直接传byte[]，响应的反序列化，可以直接利用spring的messageConvert机制
     private <T> T doRequest(Request<HttpRequest> request, Object requestContent, String ak, String sk, String region,
-                            Class<T> returnType)
-    {
+                            Class<T> returnType) {
         String uri = buildURI(request);
-
+        LOG.info("url:" + uri);
         int retryCount = -1;
         ExponentialBackOff backOff = null;
-        do
-        {
+        do {
             retryCount++;
-            if (retryCount > 0)
-            {
+            if (retryCount > 0) {
                 // 等待一段时间再发起重试
-                if (backOff == null)
-                {
+                if (backOff == null) {
                     backOff = new ExponentialBackOff(250, 2.0, disConfig.getBackOffMaxIntervalMs(),
                             ExponentialBackOff.DEFAULT_MAX_ELAPSED_TIME);
                 }
                 backOff.backOff(backOff.getNextBackOff());
             }
 
-            try
-            {
+            try {
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
                 // 每次重传需要重新签名
-                request = SignUtil.sign(request, ak, sk, region,disConfig);
+                request = SignUtil.sign(request, ak, sk, region, disConfig);
                 return RestClient.getInstance(disConfig).exchange(uri,
                         request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
-            }
-            catch (Throwable t)
-            {
+            } catch (Throwable t) {
                 String errorMsg = t.getMessage();
-                if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException)
-                {
+                if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException) {
                     errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : "
                             + ((RestClientResponseException) t).getResponseBodyAsString();
                 }
 
                 // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
                 boolean isRetriable = isRetriableSendException(t, request);
-                if (!isRetriable || retryCount >= disConfig.getExceptionRetries())
-                {
+                if (!isRetriable || retryCount >= disConfig.getExceptionRetries()) {
+                    handleError(t, errorMsg, isRetriable);
+                }
+
+                LOG.warn("Find Retriable Exception [{}], url [{} {}], currRetryCount is {}",
+                        errorMsg.replaceAll("[\\r\\n]", ""),
+                        request.getHttpMethod(),
+                        uri,
+                        retryCount);
+            }
+        } while (retryCount < disConfig.getExceptionRetries());
+
+        return null;
+    }
+
+    //通过X-Auth-Token请求数据
+    private <T> T doRequest(Request<HttpRequest> request, Object requestContent, String authToken, String region,
+                            Class<T> returnType) {
+        String uri = buildURI(request);
+        LOG.info("authToken:" + authToken);
+        int retryCount = -1;
+        ExponentialBackOff backOff = null;
+        do {
+            retryCount++;
+            if (retryCount > 0) {
+                // 等待一段时间再发起重试
+                if (backOff == null) {
+                    backOff = new ExponentialBackOff(250, 2.0, disConfig.getBackOffMaxIntervalMs(),
+                            ExponentialBackOff.DEFAULT_MAX_ELAPSED_TIME);
+                }
+                backOff.backOff(backOff.getNextBackOff());
+            }
+
+            try {
+                request.addHeader("X-Auth-Token", authToken);
+                return RestClient.getInstance(disConfig).exchange(uri,
+                        request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
+            } catch (Throwable t) {
+                String errorMsg = t.getMessage();
+                if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException) {
+                    errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : "
+                            + ((RestClientResponseException) t).getResponseBodyAsString();
+                }
+
+                // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
+                boolean isRetriable = isRetriableSendException(t, request);
+                if (!isRetriable || retryCount >= disConfig.getExceptionRetries()) {
                     handleError(t, errorMsg, isRetriable);
                 }
 
@@ -688,13 +645,11 @@ public class AbstractDISClient {
     /**
      * 判断此异常是否可以重试
      *
-     * @param t
-     *            throwable exception
+     * @param t       throwable exception
      * @param request HttpReuest
      * @return {@code true} retriable {@code false} not retriable
      */
-    protected boolean isRetriableSendException(Throwable t, Request<HttpRequest> request)
-    {
+    protected boolean isRetriableSendException(Throwable t, Request<HttpRequest> request) {
         // 对于连接超时/网络闪断/Socket异常/服务端5xx错误进行重试
         return t instanceof ConnectTimeoutException || t instanceof NoHttpResponseException
                 || t instanceof HttpHostConnectException || t instanceof SocketException || t instanceof SSLException
@@ -706,20 +661,17 @@ public class AbstractDISClient {
 
     /**
      * 根据异常中响应的DIS错误码来判断此异常是否可以重试
+     *
      * @param t throwable exception
      * @return
      */
-    protected boolean isRetriableErrorCodeException(Throwable t)
-    {
+    protected boolean isRetriableErrorCodeException(Throwable t) {
         if (disConfig.getExceptionRetriesErrorCode().length > 0 && t instanceof RestClientResponseException
-                && ((RestClientResponseException) t).getRawStatusCode() / 100 == 4)
-        {
+                && ((RestClientResponseException) t).getRawStatusCode() / 100 == 4) {
             String responseBody = ((RestClientResponseException) t).getResponseBodyAsString();
             ErrorMessage errorMessage = JsonUtils.jsonToObj(responseBody, ErrorMessage.class);
-            for (String item : disConfig.getExceptionRetriesErrorCode())
-            {
-                if (errorMessage.getErrorCode().contains(item))
-                {
+            for (String item : disConfig.getExceptionRetriesErrorCode()) {
+                if (errorMessage.getErrorCode().contains(item)) {
                     return true;
                 }
             }
@@ -727,61 +679,54 @@ public class AbstractDISClient {
         return false;
     }
 
-    protected void check()
-    {
-        if (credentials == null)
-        {
+    protected void check() {
+        if (credentials == null) {
             throw new DISClientException("credentials can not be null.");
         }
-
-        if (StringUtils.isNullOrEmpty(credentials.getAccessKeyId()))
-        {
-            throw new DISClientException("credentials ak can not be null.");
+        if (credentials.getAuthType().equals(AuthType.AUTHTOKEN.getAuthType())) {
+            if (StringUtils.isNullOrEmpty(disConfig.getAuthToken())) {
+                throw new IllegalArgumentException("authToken cannot be null.");
+            }
+        }
+        if (credentials.getAuthType().equals(AuthType.AKSK.getAuthType())) {
+            if (disConfig.getAK() == null) {
+                throw new IllegalArgumentException("Access key cannot be null.");
+            }
+            if (disConfig.getSK() == null) {
+                throw new IllegalArgumentException("Secret key cannot be null.");
+            }
         }
 
-        if (StringUtils.isNullOrEmpty(credentials.getSecretKey()))
-        {
-            throw new DISClientException("credentials sk can not be null.");
-        }
 
-        if (StringUtils.isNullOrEmpty(region))
-        {
+        if (StringUtils.isNullOrEmpty(region)) {
             throw new DISClientException("region can not be null.");
         }
 
-        if (StringUtils.isNullOrEmpty(disConfig.getProjectId()))
-        {
+        if (StringUtils.isNullOrEmpty(disConfig.getProjectId())) {
             throw new RuntimeException("project id can not be null.");
         }
 
         String endpoint = disConfig.getEndpoint();
-        if (StringUtils.isNullOrEmpty(endpoint))
-        {
+        if (StringUtils.isNullOrEmpty(endpoint)) {
             throw new DISClientException("endpoint can not be null.");
         }
-        if (!Utils.isValidEndpoint(endpoint))
-        {
+        if (!Utils.isValidEndpoint(endpoint)) {
             throw new DISClientException("invalid endpoint.");
         }
     }
 
-    protected void setEndpoint(Request<HttpRequest> request, String endpointStr)
-    {
+    protected void setEndpoint(Request<HttpRequest> request, String endpointStr) {
         URI endpoint;
-        try
-        {
+        try {
             endpoint = new URI(endpointStr);
-        }
-        catch (URISyntaxException e)
-        {
+        } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
 
         request.setEndpoint(endpoint);
     }
 
-    protected PutRecordsRequest toPutRecordsRequest(PutRecordRequest putRecordRequest)
-    {
+    protected PutRecordsRequest toPutRecordsRequest(PutRecordRequest putRecordRequest) {
         PutRecordsRequest putRecordsRequest = new PutRecordsRequest();
         putRecordsRequest.setStreamName(putRecordRequest.getStreamName());
         putRecordRequest.setStreamId(putRecordRequest.getStreamId());
@@ -798,10 +743,8 @@ public class AbstractDISClient {
         return putRecordsRequest;
     }
 
-    protected PutRecordResult toPutRecordResult(PutRecordsResult putRecordsResult)
-    {
-        if (null != putRecordsResult && null != putRecordsResult.getRecords() && putRecordsResult.getRecords().size() > 0)
-        {
+    protected PutRecordResult toPutRecordResult(PutRecordsResult putRecordsResult) {
+        if (null != putRecordsResult && null != putRecordsResult.getRecords() && putRecordsResult.getRecords().size() > 0) {
             List<PutRecordsResultEntry> records = putRecordsResult.getRecords();
             PutRecordsResultEntry record = records.get(0);
 
@@ -818,118 +761,85 @@ public class AbstractDISClient {
     /**
      * 开放认证修改接口，用户自定义实现ICredentialsProvider，更新认证信息
      */
-    protected void initCredentialsProvider()
-    {
+    protected void initCredentialsProvider() {
         // Provider转换
         String credentialsProviderClass = disConfig.get(DISConfig.PROPERTY_CONFIG_PROVIDER_CLASS, null);
-        if (!StringUtils.isNullOrEmpty(credentialsProviderClass))
-        {
-            try
-            {
-                this.credentialsProvider = (ICredentialsProvider)Class.forName(credentialsProviderClass).newInstance();
+        if (!StringUtils.isNullOrEmpty(credentialsProviderClass)) {
+            try {
+                this.credentialsProvider = (ICredentialsProvider) Class.forName(credentialsProviderClass).newInstance();
                 this.credentials = credentialsProvider.updateCredentials(this.credentials.clone());
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 throw new IllegalArgumentException("Failed to call ICredentialsProvider[" + credentialsProviderClass
                         + "], error [" + e.toString() + "]", e);
             }
         }
     }
 
-    protected boolean isRecordsRetriableErrorCode(String errorCode)
-    {
-        for (String item : disConfig.getRecordsRetriesErrorCode())
-        {
-            if (errorCode.contains(item))
-            {
+    protected boolean isRecordsRetriableErrorCode(String errorCode) {
+        for (String item : disConfig.getRecordsRetriesErrorCode()) {
+            if (errorCode.contains(item)) {
                 return true;
             }
         }
         return false;
     }
 
-    protected void innerUpdateCredentials(DISCredentials credentials)
-    {
-        if (credentials != null)
-        {
+    protected void innerUpdateCredentials(DISCredentials credentials) {
+        if (credentials != null) {
             this.credentials = credentials.clone();
         }
     }
 
-    protected void handleError(final Throwable t, String errorMsg, final boolean isRetriableException)
-    {
-        if (t instanceof HttpStatusCodeException)
-        {
+    //更新认证token
+    protected void innerUpdateAuthToken(String authToken) {
+        this.credentials.setAuthToken(authToken);
+    }
+
+    protected void handleError(final Throwable t, String errorMsg, final boolean isRetriableException) {
+        if (t instanceof HttpStatusCodeException) {
             int statusCode = ((HttpStatusCodeException) t).getRawStatusCode();
             // 401
-            if (Constants.HTTP_CODE_DIS_AUTHENTICATION_FAILED == statusCode)
-            {
+            if (Constants.HTTP_CODE_DIS_AUTHENTICATION_FAILED == statusCode) {
                 throw new DISAuthenticationException(errorMsg, t);
             }
             // 400
-            else if (Constants.HTTP_CODE_BAD_REQUEST == statusCode)
-            {
-                if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE))
-                {
+            else if (Constants.HTTP_CODE_BAD_REQUEST == statusCode) {
+                if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE)) {
                     throw new DISSequenceNumberOutOfRangeException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE_GETTING_RECORDS))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE_GETTING_RECORDS)) {
                     throw new DISSeqNumberOutOfRangeGettingRecordsException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_IS_EXPIRED))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_IS_EXPIRED)) {
                     throw new DISPartitionExpiredException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_NOT_EXISTS))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_NOT_EXISTS)) {
                     throw new DISPartitionNotExistsException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_STREAM_NOT_EXISTS))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_STREAM_NOT_EXISTS)) {
                     throw new DISStreamNotExistsException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_TRAFFIC_CONTROL_LIMIT))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_TRAFFIC_CONTROL_LIMIT)) {
                     throw new DISTrafficControlException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_MEMBER_NOT_EXIST))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_MEMBER_NOT_EXIST)) {
                     throw new DISConsumerMemberNotExistsException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_REBALANCE_IN_PROGRESS))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_REBALANCE_IN_PROGRESS)) {
                     throw new DISConsumerGroupRebalanceInProgressException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_ILLEGAL_GENERATION))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_ILLEGAL_GENERATION)) {
                     throw new DISConsumerGroupIllegalGenerationException(errorMsg, t);
-                }
-                else if (errorMsg.contains(Constants.ERROR_INFO_TIMESTAMP_IS_EXPIRED))
-                {
+                } else if (errorMsg.contains(Constants.ERROR_INFO_TIMESTAMP_IS_EXPIRED)) {
                     throw new DISTimestampOutOfRangeException(errorMsg, t);
                 }
             }
             // 410
-            else if (Constants.HTTP_CODE_GONE == statusCode)
-            {
+            else if (Constants.HTTP_CODE_GONE == statusCode) {
                 // 410 will be reported when putRecords
                 throw new DISStreamNotExistsException(errorMsg, t);
             }
             // 413
-            else if (Constants.HTTP_CODE_REQUEST_ENTITY_TOO_LARGE == statusCode)
-            {
+            else if (Constants.HTTP_CODE_REQUEST_ENTITY_TOO_LARGE == statusCode) {
                 throw new DISRequestEntityTooLargeException(errorMsg, t);
             }
         }
 
-        if (isRetriableException)
-        {
+        if (isRetriableException) {
             throw new DISClientRetriableException(errorMsg, t);
-        }
-        else
-        {
+        } else {
             throw new DISClientException(errorMsg, t);
         }
     }
