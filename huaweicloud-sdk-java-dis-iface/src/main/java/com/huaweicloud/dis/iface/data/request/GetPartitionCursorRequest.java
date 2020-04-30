@@ -33,7 +33,14 @@ public class GetPartitionCursorRequest
      */
     @JsonProperty("stream-name")
     private String streamName;
-    
+
+    /**
+     * <p>
+     * 通道ID，当消费被授权通道时必选
+     * </p>
+     * */
+    @JsonProperty("stream-id")
+    private String streamId;
     /**
      * <p>
      * 分区值。
@@ -115,6 +122,15 @@ public class GetPartitionCursorRequest
     public void setStreamName(String streamName)
     {
         this.streamName = streamName;
+    }
+
+
+    public String getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
     }
 
     public String getPartitionId()
