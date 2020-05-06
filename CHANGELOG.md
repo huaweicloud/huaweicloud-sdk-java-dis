@@ -33,3 +33,8 @@
 
 - Bugfixs
   * Update lz4-java version to 1.7.1
+  
+# 1.3.8
+
+- Features
+  * 支持下载被授权的通道数据
