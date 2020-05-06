@@ -23,24 +23,21 @@ import java.util.regex.Pattern;
 
 /**
  * SequenceNumber超过范围异常
+ *
  * @see Constants#HTTP_CODE_BAD_REQUEST
  * @see Constants#ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE_GETTING_RECORDS
  */
-public class DISSeqNumberOutOfRangeGettingRecordsException extends DISClientException
-{
+public class DISSeqNumberOutOfRangeGettingRecordsException extends DISClientException {
 
-    public DISSeqNumberOutOfRangeGettingRecordsException(String message)
-    {
+    public DISSeqNumberOutOfRangeGettingRecordsException(String message) {
         super(message);
     }
 
-    public DISSeqNumberOutOfRangeGettingRecordsException(String message, Throwable cause)
-    {
+    public DISSeqNumberOutOfRangeGettingRecordsException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public DISSeqNumberOutOfRangeGettingRecordsException(Throwable cause)
-    {
+    public DISSeqNumberOutOfRangeGettingRecordsException(Throwable cause) {
         super(cause);
     }
 

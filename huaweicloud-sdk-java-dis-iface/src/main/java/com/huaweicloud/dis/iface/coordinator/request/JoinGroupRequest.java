@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -24,6 +23,11 @@ public class JoinGroupRequest {
      * 是否加速分配，建议只有单一Consumer时开启，加速服务端分区分配
      */
     private Boolean accelerateAssignEnabled;
+
+    /**
+     * 加入消费组的超时时间
+     */
+    private Long rebalanceTimeoutMs;
 
     public String getProjectId() {
         return projectId;
@@ -71,5 +75,13 @@ public class JoinGroupRequest {
 
     public void setAccelerateAssignEnabled(Boolean accelerateAssignEnabled) {
         this.accelerateAssignEnabled = accelerateAssignEnabled;
+    }
+
+    public Long getRebalanceTimeoutMs() {
+        return rebalanceTimeoutMs;
+    }
+
+    public void setRebalanceTimeoutMs(Long rebalanceTimeoutMs) {
+        this.rebalanceTimeoutMs = rebalanceTimeoutMs;
     }
 }
