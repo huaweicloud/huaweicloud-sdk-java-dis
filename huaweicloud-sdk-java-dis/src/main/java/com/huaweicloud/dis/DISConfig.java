@@ -147,6 +147,8 @@ public class DISConfig extends Properties implements ClientParams {
 
     public static final String PROPERTY_AUTH_TYPE = "auth.type";
 
+    public static final String PROPERTY_STREAM_ID = "stream.id";
+
     public String[] producerRecordsRetriableErrorCode;
 
     public String[] producerExceptionRetriableErrorCode;
@@ -236,6 +238,11 @@ public class DISConfig extends Properties implements ClientParams {
     public String getAuthType() {
         return get(PROPERTY_AUTH_TYPE, null);
     }
+
+    public String getStreamId() {
+        return get(PROPERTY_STREAM_ID, null);
+    }
+
 
     public int getSocketTimeOut() {
         return getInt(PROPERTY_SOCKET_TIMEOUT, DEFAULT_VALUE_SOCKET_TIMEOUT) * 1000;
@@ -613,6 +620,12 @@ public class DISConfig extends Properties implements ClientParams {
     public DISConfig setAuthType(String authType) {
         return set(PROPERTY_AUTH_TYPE, authType);
     }
+
+
+    public DISConfig setStreamId(String streamId) {
+        return set(PROPERTY_STREAM_ID, streamId);
+    }
+
 
     public DISConfig setRegion(String region) {
         return set(PROPERTY_REGION_ID, region);

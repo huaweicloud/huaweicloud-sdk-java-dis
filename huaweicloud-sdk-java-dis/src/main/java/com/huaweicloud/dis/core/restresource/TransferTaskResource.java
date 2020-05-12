@@ -20,7 +20,7 @@ import com.huaweicloud.dis.core.util.StringUtils;
 
 public class TransferTaskResource extends RestResource
 {
-    private static final String DEFAULT_RESOURCE_NAME = "transfer-tasks";
+    public static final String DEFAULT_RESOURCE_NAME = "transfer-tasks";
     
     private String resourceName;
     

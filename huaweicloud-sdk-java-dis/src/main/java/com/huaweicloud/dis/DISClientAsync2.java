@@ -12,6 +12,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.huaweicloud.dis.iface.transfertask.request.*;
+import com.huaweicloud.dis.iface.transfertask.response.*;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,16 +67,6 @@ import com.huaweicloud.dis.iface.stream.response.DescribeStreamResult;
 import com.huaweicloud.dis.iface.stream.response.ListStreamsResult;
 import com.huaweicloud.dis.iface.stream.response.UpdatePartitionCountResult;
 import com.huaweicloud.dis.iface.stream.response.UpdateStreamResult;
-import com.huaweicloud.dis.iface.transfertask.request.CreateTransferTaskRequest;
-import com.huaweicloud.dis.iface.transfertask.request.DeleteTransferTaskRequest;
-import com.huaweicloud.dis.iface.transfertask.request.DescribeTransferTaskRequest;
-import com.huaweicloud.dis.iface.transfertask.request.ListTransferTasksRquest;
-import com.huaweicloud.dis.iface.transfertask.request.UpdateTransferTaskRequest;
-import com.huaweicloud.dis.iface.transfertask.response.CreateTransferTaskResult;
-import com.huaweicloud.dis.iface.transfertask.response.DeleteTransferTaskResult;
-import com.huaweicloud.dis.iface.transfertask.response.DescribeTransferTaskResult;
-import com.huaweicloud.dis.iface.transfertask.response.ListTransferTasksResult;
-import com.huaweicloud.dis.iface.transfertask.response.UpdateTransferTaskResult;
 import com.huaweicloud.dis.util.Utils;
 
 public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
@@ -138,8 +130,8 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         getRecordsDecorateFuture.setInnerFuture(result);
         return getRecordsDecorateFuture;
     }
-	
-    private class GetRecordsDecorateFuture extends AbstractFutureAdapter<GetRecordsResult, GetRecordsResult> implements Future<GetRecordsResult>{
+
+	private class GetRecordsDecorateFuture extends AbstractFutureAdapter<GetRecordsResult, GetRecordsResult> implements Future<GetRecordsResult>{
 		private GetRecordsResult finalResult = null;
     	
     	public GetRecordsDecorateFuture() {
@@ -878,5 +870,10 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         
         return requestAsync(describeTransferTaskRequest, request, DescribeTransferTaskResult.class, asyncHandler);
     }
+
+	@Override
+	public BatchTransferTaskResult batchTransferTask(BatchTransferTaskRequest batchTransferTaskRequest) {
+		return null;
+	}
     
 }
