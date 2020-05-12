@@ -51,6 +51,8 @@ public class DescribeStreamRequest
     @JsonProperty("limit_partitions")
     private int limitPartitions = PARTITION_LIMITS;
 
+    @JsonProperty("stream_id")
+    private String streamId;
 
     public String getStreamName()
     {
@@ -80,6 +82,15 @@ public class DescribeStreamRequest
     public void setLimitPartitions(int limitPartitions)
     {
         this.limitPartitions = limitPartitions;
+    }
+
+
+    public String getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
     }
 
     @Override

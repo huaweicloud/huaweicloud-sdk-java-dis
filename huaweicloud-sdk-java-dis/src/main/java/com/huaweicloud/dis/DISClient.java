@@ -750,4 +750,26 @@ public class DISClient extends AbstractDISClient implements DIS {
         ListTransferTasksResult result = request(listTransferTasksRquest, request, ListTransferTasksResult.class);
         return result;
     }
+
+    @Override
+    public BatchTransferTaskResult batchTransferTask(BatchTransferTaskRequest batchTransferTaskRequest) {
+        return innerBatchTransferTask(batchTransferTaskRequest);
+    }
+
+    public final BatchTransferTaskResult innerBatchTransferTask(BatchTransferTaskRequest batchTransferTaskRequest) {
+        Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        request.setHttpMethod(HttpMethodName.POST);
+
+        final String resourcePath = ResourcePathBuilder.standard()
+                .withProjectId(disConfig.getProjectId())
+                .withResource(new StreamResource(null, batchTransferTaskRequest.getStreamName()))
+                .withResource(new TransferTaskResource(TransferTaskResource.DEFAULT_RESOURCE_NAME, null, "action"))
+                .build();
+
+        request.setResourcePath(resourcePath);
+        setEndpoint(request, disConfig.getManagerEndpoint());
+
+        BatchTransferTaskResult result = request(batchTransferTaskRequest, request, BatchTransferTaskResult.class);
+        return result;
+    }
 }
