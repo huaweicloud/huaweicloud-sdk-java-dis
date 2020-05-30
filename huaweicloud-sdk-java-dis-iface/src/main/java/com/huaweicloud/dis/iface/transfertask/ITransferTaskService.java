@@ -58,4 +58,6 @@ public interface ITransferTaskService
      * </p>
      */
     DescribeTransferTaskResult describeTransferTask(DescribeTransferTaskRequest describeTransferTaskRequest);
+
+    BatchTransferTaskResult batchTransferTask(BatchTransferTaskRequest batchTransferTaskRequest);
 }
