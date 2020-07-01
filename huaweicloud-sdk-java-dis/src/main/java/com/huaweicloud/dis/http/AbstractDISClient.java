@@ -26,7 +26,6 @@ import com.huaweicloud.dis.util.compress.ZstdUtil;
 import com.huaweicloud.dis.util.config.ICredentialsProvider;
 import com.huaweicloud.dis.util.encrypt.EncryptUtils;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpStatus;
 import org.apache.http.NoHttpResponseException;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
@@ -260,7 +259,7 @@ public class AbstractDISClient {
             request.addHeader("Content-Encoding", Constants.COMPRESS_LZ4);
             request.addHeader("Accept-Encoding", Constants.COMPRESS_LZ4);
             request.addHeader(Constants.COMPRESS_LZ4_CONTENT_LENGTH, String.valueOf(source.length));
-            target = Lz4Util.compressedByte(source);
+            target = Lz4Util.compressByte(source);
         } else if (Constants.COMPRESS_SNAPPY.equals(compressType)) {
             request.addHeader("Content-Encoding", Constants.COMPRESS_SNAPPY);
             request.addHeader("Accept-Encoding", Constants.COMPRESS_SNAPPY);
@@ -273,7 +272,7 @@ public class AbstractDISClient {
             request.addHeader("Content-Encoding", Constants.COMPRESS_ZSTD);
             request.addHeader("Accept-Encoding", Constants.COMPRESS_ZSTD);
             request.addHeader(Constants.COMPRESS_ZSTD_CONTENT_LENGTH, String.valueOf(source.length));
-            target = ZstdUtil.compressedByte(source);
+            target = ZstdUtil.compressByte(source);
         }
 
         return target;

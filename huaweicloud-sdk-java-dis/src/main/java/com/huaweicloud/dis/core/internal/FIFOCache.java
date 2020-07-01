@@ -16,7 +16,8 @@
 
 package com.huaweicloud.dis.core.internal;
 
-import org.apache.http.annotation.ThreadSafe;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock.ReadLock;
@@ -28,7 +29,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
  * @param <T>
  *            value type
  */
-@ThreadSafe
+@Contract(threading = ThreadingBehavior.SAFE)
 public final class FIFOCache<T> {
     private final BoundedLinkedHashMap<String, T> map;
     private final ReadLock rlock;

@@ -14,33 +14,27 @@
  * limitations under the License.
  */
 
-package com.huaweicloud.dis.core.internal.config;
+package com.huaweicloud.dis.util.compress;
 
-import org.apache.http.annotation.Contract;
-import org.apache.http.annotation.ThreadingBehavior;
+import com.github.luben.zstd.Zstd;
 
-/**
- * Signer configuration.
- */
-@Contract(threading = ThreadingBehavior.IMMUTABLE)
-public class SignerConfig {
+import org.junit.Assert;
+import org.junit.Test;
 
-    private final String signerType;
+import java.io.IOException;
 
-    SignerConfig(String signerType) {
-        this.signerType = signerType;
+public class ZstdUtilTest {
+
+    @Test
+    public void testCompressByte() throws IOException {
+        String input =
+            "Hello, I'm compressing using Zstd!";
+        byte[] compressed = ZstdUtil.compressByte(input.getBytes("UTF-8"));
+        byte[] decompressed = Zstd.decompress(compressed, input.length());
+
+        String result = new String(decompressed, "UTF-8");
+
+        Assert.assertEquals(input, result);
     }
 
-    SignerConfig(SignerConfig from) {
-        this.signerType = from.getSignerType();
-    }
-
-    public String getSignerType() {
-        return signerType;
-    }
-
-    @Override
-    public String toString() {
-        return signerType;
-    }
 }

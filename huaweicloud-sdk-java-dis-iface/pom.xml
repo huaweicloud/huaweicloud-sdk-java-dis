@@ -15,14 +15,14 @@
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jackson.version>2.9.8</jackson.version>
+		<jackson.databind.version>2.10.3</jackson.databind.version>
 		<protobuf.version>2.5.0</protobuf.version>
 	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
 			<artifactId>jackson-databind</artifactId>
-			<version>${jackson.version}</version>
+			<version>${jackson.databind.version}</version>
 		</dependency>
 		
 		<dependency>

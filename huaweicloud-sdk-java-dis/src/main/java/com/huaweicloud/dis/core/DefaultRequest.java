@@ -22,7 +22,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.apache.http.annotation.NotThreadSafe;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 
 import com.huaweicloud.dis.core.http.HttpMethodName;
 
@@ -33,7 +34,7 @@ import com.huaweicloud.dis.core.http.HttpMethodName;
  * This class is only intended for internal use inside the AWS client libraries.
  * Callers shouldn't ever interact directly with objects of this class.
  */
-@NotThreadSafe
+@Contract()
 public class DefaultRequest<T> implements Request<T> {
 
     /**

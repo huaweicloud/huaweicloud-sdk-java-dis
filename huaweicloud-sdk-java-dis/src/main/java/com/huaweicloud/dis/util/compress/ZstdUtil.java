@@ -8,7 +8,7 @@ public class ZstdUtil
      * @param srcByte 原始数据
      * @return 压缩后的数据
      */
-    public static byte[] compressedByte(byte[] srcByte)
+    public static byte[] compressByte(byte[] srcByte)
     {
         return Zstd.compress(srcByte);
     }

@@ -22,7 +22,7 @@ public class Lz4Util {
      * @param srcByte 原始数据
      * @return 压缩后的数据
      */
-    public static byte[] compressedByte(byte[] srcByte) {
+    public static byte[] compressByte(byte[] srcByte) {
         LZ4Factory factory = LZ4Factory.fastestInstance();
         LZ4Compressor compressor = factory.fastCompressor();
         return compressor.compress(srcByte);
@@ -33,7 +33,7 @@ public class Lz4Util {
      * @param srcLength      压缩前的数据长度
      * @return
      */
-    public static byte[] decompressorByte(byte[] compressorByte, int srcLength) {
+    public static byte[] decompressByte(byte[] compressorByte, int srcLength) {
         LZ4Factory factory = LZ4Factory.fastestInstance();
         LZ4FastDecompressor decompressor = factory.fastDecompressor();
         return decompressor.decompress(compressorByte, srcLength);

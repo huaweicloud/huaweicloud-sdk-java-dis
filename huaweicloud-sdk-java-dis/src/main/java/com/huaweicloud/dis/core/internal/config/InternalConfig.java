@@ -16,6 +16,15 @@
 
 package com.huaweicloud.dis.core.internal.config;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.huaweicloud.dis.core.util.ClassLoaderHelper;
+import com.huaweicloud.dis.core.util.json.Jackson;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -23,18 +32,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.http.annotation.Immutable;
-
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.huaweicloud.dis.core.util.ClassLoaderHelper;
-import com.huaweicloud.dis.core.util.json.Jackson;
-
 /**
  * Internal configuration for Java SDK.
  */
-@Immutable
+@Contract(threading = ThreadingBehavior.IMMUTABLE)
 public class InternalConfig {
 
     private static final Log log = LogFactory.getLog(InternalConfig.class);

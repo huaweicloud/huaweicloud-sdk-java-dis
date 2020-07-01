@@ -20,14 +20,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.annotation.NotThreadSafe;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 
 import com.huaweicloud.dis.core.auth.credentials.Credentials;
 
 /**
  * Base class for all user facing web service requests.
  */
-@NotThreadSafe
+@Contract()
 public abstract class WebServiceRequest implements Cloneable {
     public static final WebServiceRequest NOOP = new WebServiceRequest() {
     };

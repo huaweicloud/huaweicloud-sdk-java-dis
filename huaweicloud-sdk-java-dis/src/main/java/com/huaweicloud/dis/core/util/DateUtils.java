@@ -16,24 +16,25 @@
 
 package com.huaweicloud.dis.core.util;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
+import com.huaweicloud.dis.core.ClientException;
 
-import org.apache.http.annotation.ThreadSafe;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.tz.FixedDateTimeZone;
 
-import com.huaweicloud.dis.core.ClientException;
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Utilities for parsing and formatting dates.
  */
-@ThreadSafe
+@Contract(threading = ThreadingBehavior.SAFE)
 public class DateUtils {
     private static final DateTimeZone GMT = new FixedDateTimeZone("GMT", "GMT", 0, 0);
     private static final long MILLI_SECONDS_OF_365_DAYS = 365L*24*60*60*1000;

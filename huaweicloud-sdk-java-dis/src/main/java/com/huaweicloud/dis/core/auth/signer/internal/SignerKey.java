@@ -16,13 +16,14 @@
 
 package com.huaweicloud.dis.core.auth.signer.internal;
 
-import org.apache.http.annotation.Immutable;
+import org.apache.http.annotation.Contract;
+import org.apache.http.annotation.ThreadingBehavior;
 
 /**
  * Holds the signing key and the number of days since epoch for the date for
  * which the signing key was generated.
  */
-@Immutable
+@Contract(threading = ThreadingBehavior.IMMUTABLE)
 public final class SignerKey {
     private final long numberOfDaysSinceEpoch;
     private final byte[] signingKey;
