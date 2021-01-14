@@ -243,8 +243,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     protected final PutRecordsResult innerPutRecords(PutRecordsRequest putRecordsParam) {
         // Decorate PutRecordsRequest if needed
         putRecordsParam = decorateRecords(putRecordsParam);
-
+        String epsId = Utils.getStreamEpsId(putRecordsParam.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.POST);
 
         final String resourcePath =
@@ -280,7 +283,11 @@ public class DISClient extends AbstractDISClient implements DIS {
      * Internal API
      */
     protected final GetPartitionCursorResult innerGetPartitionCursor(GetPartitionCursorRequest getPartitionCursorParam) {
+        String epsId = Utils.getStreamEpsId(getPartitionCursorParam.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.GET);
 
         final String resourcePath =
@@ -386,7 +393,11 @@ public class DISClient extends AbstractDISClient implements DIS {
 
     protected final UpdatePartitionCountResult innerUpdatePartitionCount(
             UpdatePartitionCountRequest updatePartitionCountRequest) {
+        String epsId = Utils.getStreamEpsId(updatePartitionCountRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.PUT);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -404,7 +415,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     protected final DeleteStreamResult innerDeleteStream(DeleteStreamRequest deleteStreamRequest) {
+        String epsId = Utils.getStreamEpsId(deleteStreamRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.DELETE);
 
         final String resourcePath =
@@ -546,7 +561,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     protected final CommitCheckpointResult innerCommitCheckpoint(CommitCheckpointRequest commitCheckpointParam) {
+        String epsId = Utils.getStreamEpsId(commitCheckpointParam.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.POST);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -563,7 +582,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     protected final GetCheckpointResult innerGetCheckpoint(GetCheckpointRequest getCheckpointRequest) {
+        String epsId = Utils.getStreamEpsId(getCheckpointRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.GET);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -581,7 +604,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     protected final DeleteCheckpointResult innerDeleteCheckpoint(DeleteCheckpointRequest deleteCheckpointRequest) {
+        String epsId = Utils.getStreamEpsId(deleteCheckpointRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.DELETE);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -618,7 +645,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     protected UpdateStreamResult innerUpdateStream(UpdateStreamRequest updateStreamRequest) {
+        String epsId = Utils.getStreamEpsId(updateStreamRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.PUT);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -647,7 +678,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     public final CreateTransferTaskResult innerCreateTransferTask(CreateTransferTaskRequest createTransferTaskRequest) {
+        String epsId = Utils.getStreamEpsId(createTransferTaskRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.POST);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -668,7 +703,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     public final UpdateTransferTaskResult innerUpdateTransferTask(UpdateTransferTaskRequest updateTransferTaskRequest) {
+        String epsId = Utils.getStreamEpsId(updateTransferTaskRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.PUT);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -689,7 +728,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     public final DeleteTransferTaskResult innerDeleteTransferTask(DeleteTransferTaskRequest deleteTransferTaskRequest) {
+        String epsId = Utils.getStreamEpsId(deleteTransferTaskRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.DELETE);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -712,7 +755,11 @@ public class DISClient extends AbstractDISClient implements DIS {
 
     public final DescribeTransferTaskResult innerDescribeTransferTask(
             DescribeTransferTaskRequest describeTransferTaskRequest) {
+        String epsId = Utils.getStreamEpsId(describeTransferTaskRequest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.GET);
 
         final String resourcePath = ResourcePathBuilder.standard()
@@ -735,7 +782,11 @@ public class DISClient extends AbstractDISClient implements DIS {
     }
 
     public final ListTransferTasksResult innerListTransferTasks(ListTransferTasksRquest listTransferTasksRquest) {
+        String epsId = Utils.getStreamEpsId(listTransferTasksRquest.getStreamName(), disConfig);
         Request<HttpRequest> request = new DefaultRequest<>(Constants.SERVICENAME);
+        if (epsId != null) {
+            request.addHeader("X-EPSPROJECT-ID", epsId);
+        }
         request.setHttpMethod(HttpMethodName.GET);
 
         final String resourcePath = ResourcePathBuilder.standard()

@@ -28,6 +28,36 @@
             <version>1.3.13-SNAPSHOT</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.huawei.hwclouds.bigdata</groupId>
+            <artifactId>cloud-api-client</artifactId>
+            <version>1.0.8</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.codehaus.jackson</groupId>
+                    <artifactId>jackson-core-asl</artifactId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>htrace-core</artifactId>
+                    <groupId>org.apache.htrace</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hadoop-mapreduce-client-app</artifactId>
+                    <groupId>org.apache.hadoop</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>jetty-util</artifactId>
+                    <groupId>org.mortbay.jetty</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.75</version>
+        </dependency>
+
         <!-- sdk签名方法 -->
         <!-- <dependency>
             <groupId>com.huawei.apigateway</groupId>
