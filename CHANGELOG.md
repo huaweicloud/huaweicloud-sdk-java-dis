@@ -43,3 +43,8 @@
 
 - Features
   * 支持通过通道ID查询被授权通道的详情
+  
+# 1.3.13
+
+- Features
+  * 修复通过非配置文件方式配置参数`records.retriable.error.code`和`exception.retriable.error.code`不生效的问题

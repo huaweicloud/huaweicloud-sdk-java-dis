@@ -562,6 +562,23 @@ public class DISConfig extends Properties implements ClientParams {
             }
         }
 
+        disConfig = buildRecordsRetryableErrorCode(disConfig);
+        disConfig = buildExceptionRetryableErrorCode(disConfig);
+
+        return disConfig;
+    }
+
+    public static DISConfig buildConfig(DISConfig disConfig) {
+        DISConfig fileConfig = buildDefaultConfig();
+
+        fileConfig.putAll(disConfig);
+        disConfig = buildRecordsRetryableErrorCode(disConfig);
+        fileConfig = buildExceptionRetryableErrorCode(disConfig);
+
+        return fileConfig;
+    }
+
+    private static DISConfig buildRecordsRetryableErrorCode(DISConfig disConfig) {
         // 默认只对流控与服务端错误重试
         String recordsRetriableErrorCode = disConfig.get(PROPERTY_PRODUCER_RECORDS_RETRIABLE_ERROR_CODE, "DIS.4303,DIS.5");
         if (StringUtils.isNullOrEmpty(recordsRetriableErrorCode)) {
@@ -573,7 +590,10 @@ public class DISConfig extends Properties implements ClientParams {
             }
             disConfig.producerRecordsRetriableErrorCode = items;
         }
+        return disConfig;
+    }
 
+    private static DISConfig buildExceptionRetryableErrorCode(DISConfig disConfig) {
         // 默认情况下，发生4XX错误都不进行重试
         String exceptionRetriableErrorCode = disConfig.get(PROPERTY_PRODUCER_EXCEPTION_RETRIABLE_ERROR_CODE, "");
         if (StringUtils.isNullOrEmpty(exceptionRetriableErrorCode)) {
@@ -587,14 +607,6 @@ public class DISConfig extends Properties implements ClientParams {
         }
 
         return disConfig;
-    }
-
-    public static DISConfig buildConfig(DISConfig disConfig) {
-        DISConfig fileConfig = buildDefaultConfig();
-
-        fileConfig.putAll(disConfig);
-
-        return fileConfig;
     }
 
 
