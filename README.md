@@ -18,7 +18,7 @@ The recommended way to use the DIS SDK for Java in your project is to consume it
     <dependency>
         <groupId>com.huaweicloud.dis</groupId>
         <artifactId>huaweicloud-sdk-java-dis</artifactId>
-        <version>1.3.12</version>
+        <version>1.3.13</version>
         <scope>compile</scope>
     </dependency>
 
