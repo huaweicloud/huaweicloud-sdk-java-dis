@@ -19,7 +19,7 @@
         <slf4j.version>1.7.26</slf4j.version>
         <httpclient.version>4.5.13</httpclient.version>
         <httpasyncclient.version>4.1.4</httpasyncclient.version>
-        <log4j.version>2.13.3</log4j.version>
+        <log4j.version>2.16.0</log4j.version>
     </properties>
     <dependencies>
         <dependency>
