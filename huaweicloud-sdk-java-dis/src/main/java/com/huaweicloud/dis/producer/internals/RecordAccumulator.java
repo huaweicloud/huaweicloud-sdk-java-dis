@@ -137,9 +137,8 @@ public final class RecordAccumulator {
                     long elapsed = System.currentTimeMillis() - start;
                     if (elapsed >= maxTimeToBlock)
                     {
-                        throw new RuntimeException(
-                            "The BufferSize(total:" + maxBufferSize + ", current:" + currentBufferSize + "+"
-                                + newRequestSize + ") is still full after blocking " + maxTimeToBlock + " ms.");
+                        log.warn("The BufferSize(total:" + maxBufferSize + ", current:" + currentBufferSize + "+"
+                            + newRequestSize + ") is still full after blocking " + maxTimeToBlock + " ms.");
                     }
                     log.warn("Send unblocked after blocking {}ms", (System.currentTimeMillis() - start));
                 }
@@ -168,7 +167,7 @@ public final class RecordAccumulator {
                     long elapsed = System.currentTimeMillis() - start;
                     if (elapsed >= maxTimeToBlock)
                     {
-                        throw new RuntimeException(
+                        log.warn(
                             "The BufferSize(total:" + maxBufferSize + ", current:" + currentBufferSize + "+"
                                 + newRequestSize + ") or BufferCount(total:" + maxBufferCount + ", current:"
                                 + currentBufferCount + ") is still full after blocking " + maxTimeToBlock + " ms.");
