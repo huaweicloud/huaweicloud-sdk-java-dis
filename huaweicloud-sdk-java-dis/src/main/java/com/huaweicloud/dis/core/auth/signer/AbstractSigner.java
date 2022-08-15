@@ -25,7 +25,6 @@ import com.huaweicloud.dis.core.WebServiceRequest;
 import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
 import com.huaweicloud.dis.core.auth.credentials.Credentials;
 import com.huaweicloud.dis.core.internal.SdkDigestInputStream;
-import com.huaweicloud.dis.core.util.Base64;
 import com.huaweicloud.dis.core.util.HttpUtils;
 import com.huaweicloud.dis.core.util.StringUtils;
 
@@ -52,27 +51,6 @@ public abstract class AbstractSigner implements Signer {
     protected void setProvider(String provider)
     {
         this.provider = provider;
-    }
-
-    /**
-     * Computes an RFC 2104-compliant HMAC signature and returns the result as a
-     * Base64 encoded string.
-     */
-    protected String signAndBase64Encode(String data, String key, SigningAlgorithm algorithm) throws ClientException {
-        return signAndBase64Encode(data.getBytes(UTF8), key, algorithm);
-    }
-
-    /**
-     * Computes an RFC 2104-compliant HMAC signature for an array of bytes and
-     * returns the result as a Base64 encoded string.
-     */
-    protected String signAndBase64Encode(byte[] data, String key, SigningAlgorithm algorithm) throws ClientException {
-        try {
-            byte[] signature = sign(data, key.getBytes(UTF8), algorithm);
-            return Base64.encodeAsString(signature);
-        } catch (Exception e) {
-            throw new ClientException("Unable to calculate a request signature: " + e.getMessage(), e);
-        }
     }
 
     public byte[] sign(String stringData, byte[] key, SigningAlgorithm algorithm) throws ClientException {
