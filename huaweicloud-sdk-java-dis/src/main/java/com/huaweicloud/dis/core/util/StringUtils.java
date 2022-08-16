@@ -119,21 +119,6 @@ public class StringUtils {
         return Byte.toString(b);
     }
 
-    /**
-     * Base64 encodes the data in the specified byte buffer (from the current
-     * position to the buffer's limit) and returns it as a base64 encoded
-     * string.
-     *
-     * @param byteBuffer
-     *            The data to base64 encode and return as a string; must not be
-     *            null.
-     *
-     * @return The base64 encoded contents of the specified byte buffer.
-     */
-    public static String fromByteBuffer(ByteBuffer byteBuffer) {
-        return Base64.encodeAsString(BinaryUtils.copyBytesFrom(byteBuffer));
-    }
-
     public static String replace( String originalString, String partToMatch, String replacement ) {
         StringBuffer buffer = new StringBuffer( originalString.length() );
         buffer.append( originalString );

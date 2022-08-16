@@ -70,29 +70,6 @@ public class BinaryUtils {
     }
     
     /**
-     * Converts byte data to a Base64-encoded string.
-     *
-     * @param data
-     *            data to Base64 encode.
-     * @return encoded Base64 string.
-     */
-    public static String toBase64(byte[] data) {
-        return Base64.encodeAsString(data);
-    }
-    
-    /**
-     * Converts a Base64-encoded string to the original byte data.
-     *
-     * @param b64Data
-     *            a Base64-encoded string to decode.
-     *
-     * @return bytes decoded from a Base64 string.
-     */
-    public static byte[] fromBase64(String b64Data) {
-        return b64Data == null ? null : Base64.decode(b64Data);
-    }
-    
-    /**
      * @deprecated not used; to be removed in future releases.
      * 
      * Wraps a ByteBuffer in an InputStream.
