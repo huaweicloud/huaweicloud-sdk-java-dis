@@ -14,7 +14,7 @@ The recommended way to use the DIS SDK for Java in your project is to consume it
     <dependency>
         <groupId>com.otccloud.dis</groupId>
         <artifactId>otccloud-sdk-java-dis</artifactId>
-        <version>1.3.14</version>
+        <version>1.3.14-snapshot</version>
         <scope>compile</scope>
     </dependency>
 
