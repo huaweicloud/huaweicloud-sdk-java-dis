@@ -114,10 +114,7 @@ public final class ProducerBatch {
     }
     
     public void reenqueued(long now) {
-//        attempts.getAndIncrement();
-//        lastAttemptMs = Math.max(lastAppendTime, now);
-//        lastAppendTime = Math.max(lastAppendTime, now);
-//        retry = true;
+
         lastAttemptMs = now;
     }
     

@@ -20,7 +20,7 @@ import com.huaweicloud.dis.core.util.StringUtils;
 
 /**
  * Fluent builder for Restful resource path.
- * 
+ *
  * @see RestResource
  */
 public final class ResourcePathBuilder
@@ -48,7 +48,7 @@ public final class ResourcePathBuilder
 
     /**
      * 绑定资源并按照绑定顺序生成RESTful资源路径，生成形式：/pResource/pResourceId/cResource/cResourceId...
-     * 
+     *
      * @param restResource 对应的<code>RestRestouce</code>对象
      * @return
      */
@@ -104,11 +104,6 @@ public final class ResourcePathBuilder
         version = (StringUtils.isNullOrEmpty(version)) ? VERSION : version;
         String prefix = "/" + version;
         
-        // FIXME 暂时取消校验
-        /*if (!StringUtils.isNullOrEmpty(projectId))
-        {
-            prefix = prefix + "/" + projectId;
-        }*/
         prefix = prefix + "/" + projectId;
         
         return prefix + resourcePath.toString();

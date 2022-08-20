@@ -43,9 +43,9 @@ import javax.crypto.spec.SecretKeySpec;
  * <p>
  * padding: Nopadding/PKCS5Padding/ISO10126Padding/
  * </p>
- * 
+ *
  * @author Aub
- *         
+ *
  */
 public class AESCoder
 {
@@ -59,7 +59,7 @@ public class AESCoder
     
     /**
      * 初始化密钥
-     * 
+     *
      * @return byte[] 密钥
      * @throws NoSuchAlgorithmException @
      */
@@ -78,7 +78,7 @@ public class AESCoder
     
     /**
      * 转换密钥
-     * 
+     *
      * @param key 二进制密钥
      * @return 密钥
      */
@@ -90,7 +90,7 @@ public class AESCoder
     
     /**
      * 加密
-     * 
+     *
      * @param data 待加密数据
      * @param key 二进制密钥
      * @param ivbs 加密向量
@@ -111,7 +111,7 @@ public class AESCoder
     
     /**
      * 加密
-     * 
+     *
      * @param data 待加密数据
      * @param keybs 密钥
      * @param cipherAlgorithm 加密算法/工作模式/填充方式
@@ -142,7 +142,7 @@ public class AESCoder
     
     /**
      * 解密
-     * 
+     *
      * @param data 待解密数据
      * @param key 二进制密钥
      * @param ivbs 加密向量
@@ -163,7 +163,7 @@ public class AESCoder
     
     /**
      * 解密
-     * 
+     *
      * @param data 待解密数据
      * @param keybs 密钥
      * @param cipherAlgorithm 加密算法/工作模式/填充方式
@@ -189,40 +189,4 @@ public class AESCoder
         return cipher.doFinal(data);
     }
     
-    // private static String showByteArray(byte[] data){
-    // if(null == data){
-    // return null;
-    // }
-    // StringBuilder sb = new StringBuilder("{");
-    // for(byte b:data){
-    // sb.append(b).append(",");
-    // }
-    // sb.deleteCharAt(sb.length()-1);
-    // sb.append("}");
-    // return sb.toString();
-    // }
-    
-    // public static void main(String[] args) throws InvalidKeyException, NoSuchAlgorithmException,
-    // NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException {
-    // byte[] key = initSecretKey();
-    // System.out.println("key："+showByteArray(key));
-    // System.out.println(Hex.encodeHexStr(key));
-    //
-    // Key k = toKey(key);
-    //
-    // byte[] ivbs = Hex.decodeHex(EncryptUtils.randomHex(16).toCharArray());
-    //
-    // String data ="AES数据";
-    // System.out.println("加密前数据: string:"+data);
-    // System.out.println("加密前数据: byte[]:"+showByteArray(data.getBytes()));
-    // System.out.println();
-    // byte[] encryptData = encrypt(data.getBytes(), key, ivbs);
-    // System.out.println("加密后数据: byte[]:"+showByteArray(encryptData));
-    // System.out.println("加密后数据: hexStr:"+Hex.encodeHexStr(encryptData));
-    // System.out.println();
-    // byte[] decryptData = decrypt(encryptData, key, ivbs);
-    // System.out.println("解密后数据: byte[]:"+showByteArray(decryptData));
-    // System.out.println("解密后数据: string:"+new String(decryptData));
-    //
-    // }
 }

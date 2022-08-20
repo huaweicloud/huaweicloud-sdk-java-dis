@@ -27,7 +27,6 @@ public final class Message {
   public interface PutRecordsRequestOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional string streamName = 1;
     /**
      * <code>optional string streamName = 1;</code>
      */
@@ -42,7 +41,6 @@ public final class Message {
     com.google.protobuf.ByteString
         getStreamNameBytes();
 
-    // optional string streamId = 30;
     /**
      * <code>optional string streamId = 30;</code>
      */
@@ -57,7 +55,6 @@ public final class Message {
     com.google.protobuf.ByteString
         getStreamIdBytes();
 
-    // repeated .PutRecordsRequestEntry records = 2;
     /**
      * <code>repeated .PutRecordsRequestEntry records = 2;</code>
      */
@@ -194,7 +191,6 @@ public final class Message {
     }
 
     private int bitField0_;
-    // optional string streamName = 1;
     public static final int STREAMNAME_FIELD_NUMBER = 1;
     private java.lang.Object streamName_;
     /**
@@ -237,18 +233,14 @@ public final class Message {
       }
     }
 
-    // optional string streamId = 30;
+
     public static final int STREAMID_FIELD_NUMBER = 30;
     private java.lang.Object streamId_;
-    /**
-     * <code>optional string streamId = 30;</code>
-     */
+
     public boolean hasStreamId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    /**
-     * <code>optional string streamId = 30;</code>
-     */
+
     public java.lang.String getStreamId() {
       java.lang.Object ref = streamId_;
       if (ref instanceof java.lang.String) {
@@ -263,9 +255,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string streamId = 30;</code>
-     */
+
     public com.google.protobuf.ByteString
         getStreamIdBytes() {
       java.lang.Object ref = streamId_;
@@ -280,37 +270,27 @@ public final class Message {
       }
     }
 
-    // repeated .PutRecordsRequestEntry records = 2;
+
     public static final int RECORDS_FIELD_NUMBER = 2;
     private java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry> records_;
-    /**
-     * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-     */
+
     public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry> getRecordsList() {
       return records_;
     }
-    /**
-     * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-     */
+
     public java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryOrBuilder> 
         getRecordsOrBuilderList() {
       return records_;
     }
-    /**
-     * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-     */
+
     public int getRecordsCount() {
       return records_.size();
     }
-    /**
-     * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-     */
+
     public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry getRecords(int index) {
       return records_.get(index);
     }
-    /**
-     * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-     */
+
     public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryOrBuilder getRecordsOrBuilder(
         int index) {
       return records_.get(index);
@@ -626,17 +606,13 @@ public final class Message {
       }
       private int bitField0_;
 
-      // optional string streamName = 1;
+
       private java.lang.Object streamName_ = "";
-      /**
-       * <code>optional string streamName = 1;</code>
-       */
+
       public boolean hasStreamName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>optional string streamName = 1;</code>
-       */
+
       public java.lang.String getStreamName() {
         java.lang.Object ref = streamName_;
         if (!(ref instanceof java.lang.String)) {
@@ -648,9 +624,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string streamName = 1;</code>
-       */
+
       public com.google.protobuf.ByteString
           getStreamNameBytes() {
         java.lang.Object ref = streamName_;
@@ -664,9 +638,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string streamName = 1;</code>
-       */
+
       public Builder setStreamName(
           java.lang.String value) {
         if (value == null) {
@@ -677,18 +649,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string streamName = 1;</code>
-       */
+
       public Builder clearStreamName() {
         bitField0_ = (bitField0_ & ~0x00000001);
         streamName_ = getDefaultInstance().getStreamName();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string streamName = 1;</code>
-       */
+
       public Builder setStreamNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -700,17 +668,13 @@ public final class Message {
         return this;
       }
 
-      // optional string streamId = 30;
+
       private java.lang.Object streamId_ = "";
-      /**
-       * <code>optional string streamId = 30;</code>
-       */
+
       public boolean hasStreamId() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      /**
-       * <code>optional string streamId = 30;</code>
-       */
+
       public java.lang.String getStreamId() {
         java.lang.Object ref = streamId_;
         if (!(ref instanceof java.lang.String)) {
@@ -722,9 +686,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string streamId = 30;</code>
-       */
+
       public com.google.protobuf.ByteString
           getStreamIdBytes() {
         java.lang.Object ref = streamId_;
@@ -738,9 +700,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string streamId = 30;</code>
-       */
+
       public Builder setStreamId(
           java.lang.String value) {
         if (value == null) {
@@ -751,18 +711,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string streamId = 30;</code>
-       */
+
       public Builder clearStreamId() {
         bitField0_ = (bitField0_ & ~0x00000002);
         streamId_ = getDefaultInstance().getStreamId();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string streamId = 30;</code>
-       */
+
       public Builder setStreamIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -774,7 +730,7 @@ public final class Message {
         return this;
       }
 
-      // repeated .PutRecordsRequestEntry records = 2;
+
       private java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry> records_ =
         java.util.Collections.emptyList();
       private void ensureRecordsIsMutable() {
@@ -787,9 +743,7 @@ public final class Message {
       private com.google.protobuf.RepeatedFieldBuilder<
           com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryOrBuilder> recordsBuilder_;
 
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+
       public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry> getRecordsList() {
         if (recordsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(records_);
@@ -797,9 +751,7 @@ public final class Message {
           return recordsBuilder_.getMessageList();
         }
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public int getRecordsCount() {
         if (recordsBuilder_ == null) {
           return records_.size();
@@ -807,9 +759,7 @@ public final class Message {
           return recordsBuilder_.getCount();
         }
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry getRecords(int index) {
         if (recordsBuilder_ == null) {
           return records_.get(index);
@@ -817,9 +767,7 @@ public final class Message {
           return recordsBuilder_.getMessage(index);
         }
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder setRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry value) {
         if (recordsBuilder_ == null) {
@@ -834,9 +782,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder setRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -848,9 +794,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder addRecords(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry value) {
         if (recordsBuilder_ == null) {
           if (value == null) {
@@ -864,9 +808,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder addRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry value) {
         if (recordsBuilder_ == null) {
@@ -881,9 +823,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder addRecords(
           com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -895,9 +835,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder addRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -909,9 +847,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder addAllRecords(
           java.lang.Iterable<? extends com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry> values) {
         if (recordsBuilder_ == null) {
@@ -923,9 +859,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder clearRecords() {
         if (recordsBuilder_ == null) {
           records_ = java.util.Collections.emptyList();
@@ -936,9 +870,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public Builder removeRecords(int index) {
         if (recordsBuilder_ == null) {
           ensureRecordsIsMutable();
@@ -949,16 +881,12 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder getRecordsBuilder(
           int index) {
         return getRecordsFieldBuilder().getBuilder(index);
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryOrBuilder getRecordsOrBuilder(
           int index) {
         if (recordsBuilder_ == null) {
@@ -966,9 +894,7 @@ public final class Message {
           return recordsBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryOrBuilder> 
            getRecordsOrBuilderList() {
         if (recordsBuilder_ != null) {
@@ -977,24 +903,18 @@ public final class Message {
           return java.util.Collections.unmodifiableList(records_);
         }
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder addRecordsBuilder() {
         return getRecordsFieldBuilder().addBuilder(
             com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.getDefaultInstance());
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder addRecordsBuilder(
           int index) {
         return getRecordsFieldBuilder().addBuilder(
             index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.getDefaultInstance());
       }
-      /**
-       * <code>repeated .PutRecordsRequestEntry records = 2;</code>
-       */
+      
       public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder> 
            getRecordsBuilderList() {
         return getRecordsFieldBuilder().getBuilderList();
@@ -1014,7 +934,7 @@ public final class Message {
         return recordsBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:PutRecordsRequest)
+
     }
 
     static {
@@ -1022,89 +942,57 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:PutRecordsRequest)
+
   }
 
   public interface PutRecordsRequestEntryOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional bytes data = 3;
-    /**
-     * <code>optional bytes data = 3;</code>
-     */
+
+    
     boolean hasData();
-    /**
-     * <code>optional bytes data = 3;</code>
-     */
+    
     com.google.protobuf.ByteString getData();
 
-    // optional string explicitHashKey = 4;
-    /**
-     * <code>optional string explicitHashKey = 4;</code>
-     */
+
+    
     boolean hasExplicitHashKey();
-    /**
-     * <code>optional string explicitHashKey = 4;</code>
-     */
+    
     java.lang.String getExplicitHashKey();
-    /**
-     * <code>optional string explicitHashKey = 4;</code>
-     */
+    
     com.google.protobuf.ByteString
         getExplicitHashKeyBytes();
 
-    // optional string partitionKey = 5;
-    /**
-     * <code>optional string partitionKey = 5;</code>
-     */
+
+    
     boolean hasPartitionKey();
-    /**
-     * <code>optional string partitionKey = 5;</code>
-     */
+    
     java.lang.String getPartitionKey();
-    /**
-     * <code>optional string partitionKey = 5;</code>
-     */
+    
     com.google.protobuf.ByteString
         getPartitionKeyBytes();
 
-    // optional string partitionId = 6;
-    /**
-     * <code>optional string partitionId = 6;</code>
-     */
+
+    
     boolean hasPartitionId();
-    /**
-     * <code>optional string partitionId = 6;</code>
-     */
+    
     java.lang.String getPartitionId();
-    /**
-     * <code>optional string partitionId = 6;</code>
-     */
+    
     com.google.protobuf.ByteString
         getPartitionIdBytes();
 
-    // optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;
-    /**
-     * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-     */
+
+    
     boolean hasExtendedInfo();
-    /**
-     * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-     */
+    
     com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo getExtendedInfo();
-    /**
-     * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-     */
+    
     com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfoOrBuilder getExtendedInfoOrBuilder();
 
-    // optional int64 timestamp = 29;
-    /**
-     * <code>optional int64 timestamp = 29;</code>
-     */
+
+    
     boolean hasTimestamp();
-    /**
-     * <code>optional int64 timestamp = 29;</code>
-     */
+    
     long getTimestamp();
   }
   /**
@@ -1113,7 +1001,7 @@ public final class Message {
   public static final class PutRecordsRequestEntry extends
       com.google.protobuf.GeneratedMessage
       implements PutRecordsRequestEntryOrBuilder {
-    // Use PutRecordsRequestEntry.newBuilder() to construct.
+
     private PutRecordsRequestEntry(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
@@ -1236,34 +1124,26 @@ public final class Message {
     }
 
     private int bitField0_;
-    // optional bytes data = 3;
+
     public static final int DATA_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString data_;
-    /**
-     * <code>optional bytes data = 3;</code>
-     */
+    
     public boolean hasData() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    /**
-     * <code>optional bytes data = 3;</code>
-     */
+    
     public com.google.protobuf.ByteString getData() {
       return data_;
     }
 
-    // optional string explicitHashKey = 4;
+
     public static final int EXPLICITHASHKEY_FIELD_NUMBER = 4;
     private java.lang.Object explicitHashKey_;
-    /**
-     * <code>optional string explicitHashKey = 4;</code>
-     */
+    
     public boolean hasExplicitHashKey() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    /**
-     * <code>optional string explicitHashKey = 4;</code>
-     */
+    
     public java.lang.String getExplicitHashKey() {
       java.lang.Object ref = explicitHashKey_;
       if (ref instanceof java.lang.String) {
@@ -1278,9 +1158,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string explicitHashKey = 4;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getExplicitHashKeyBytes() {
       java.lang.Object ref = explicitHashKey_;
@@ -1295,18 +1173,14 @@ public final class Message {
       }
     }
 
-    // optional string partitionKey = 5;
+
     public static final int PARTITIONKEY_FIELD_NUMBER = 5;
     private java.lang.Object partitionKey_;
-    /**
-     * <code>optional string partitionKey = 5;</code>
-     */
+    
     public boolean hasPartitionKey() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    /**
-     * <code>optional string partitionKey = 5;</code>
-     */
+    
     public java.lang.String getPartitionKey() {
       java.lang.Object ref = partitionKey_;
       if (ref instanceof java.lang.String) {
@@ -1321,9 +1195,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string partitionKey = 5;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getPartitionKeyBytes() {
       java.lang.Object ref = partitionKey_;
@@ -1338,18 +1210,14 @@ public final class Message {
       }
     }
 
-    // optional string partitionId = 6;
+
     public static final int PARTITIONID_FIELD_NUMBER = 6;
     private java.lang.Object partitionId_;
-    /**
-     * <code>optional string partitionId = 6;</code>
-     */
+    
     public boolean hasPartitionId() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    /**
-     * <code>optional string partitionId = 6;</code>
-     */
+    
     public java.lang.String getPartitionId() {
       java.lang.Object ref = partitionId_;
       if (ref instanceof java.lang.String) {
@@ -1364,9 +1232,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string partitionId = 6;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getPartitionIdBytes() {
       java.lang.Object ref = partitionId_;
@@ -1381,40 +1247,30 @@ public final class Message {
       }
     }
 
-    // optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;
+
     public static final int EXTENDEDINFO_FIELD_NUMBER = 7;
     private com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo extendedInfo_;
-    /**
-     * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-     */
+    
     public boolean hasExtendedInfo() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
-    /**
-     * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-     */
+    
     public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo getExtendedInfo() {
       return extendedInfo_;
     }
-    /**
-     * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-     */
+    
     public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfoOrBuilder getExtendedInfoOrBuilder() {
       return extendedInfo_;
     }
 
-    // optional int64 timestamp = 29;
+
     public static final int TIMESTAMP_FIELD_NUMBER = 29;
     private long timestamp_;
-    /**
-     * <code>optional int64 timestamp = 29;</code>
-     */
+    
     public boolean hasTimestamp() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
-    /**
-     * <code>optional int64 timestamp = 29;</code>
-     */
+    
     public long getTimestamp() {
       return timestamp_;
     }
@@ -1592,7 +1448,7 @@ public final class Message {
                 com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.class, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.Builder.class);
       }
 
-      // Construct using com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntry.newBuilder()
+
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1758,23 +1614,17 @@ public final class Message {
       }
       private int bitField0_;
 
-      // optional bytes data = 3;
+
       private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>optional bytes data = 3;</code>
-       */
+      
       public boolean hasData() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>optional bytes data = 3;</code>
-       */
+      
       public com.google.protobuf.ByteString getData() {
         return data_;
       }
-      /**
-       * <code>optional bytes data = 3;</code>
-       */
+      
       public Builder setData(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -1784,9 +1634,7 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional bytes data = 3;</code>
-       */
+      
       public Builder clearData() {
         bitField0_ = (bitField0_ & ~0x00000001);
         data_ = getDefaultInstance().getData();
@@ -1794,17 +1642,13 @@ public final class Message {
         return this;
       }
 
-      // optional string explicitHashKey = 4;
+
       private java.lang.Object explicitHashKey_ = "";
-      /**
-       * <code>optional string explicitHashKey = 4;</code>
-       */
+      
       public boolean hasExplicitHashKey() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      /**
-       * <code>optional string explicitHashKey = 4;</code>
-       */
+      
       public java.lang.String getExplicitHashKey() {
         java.lang.Object ref = explicitHashKey_;
         if (!(ref instanceof java.lang.String)) {
@@ -1816,9 +1660,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string explicitHashKey = 4;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getExplicitHashKeyBytes() {
         java.lang.Object ref = explicitHashKey_;
@@ -1832,9 +1674,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string explicitHashKey = 4;</code>
-       */
+      
       public Builder setExplicitHashKey(
           java.lang.String value) {
         if (value == null) {
@@ -1845,18 +1685,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string explicitHashKey = 4;</code>
-       */
+      
       public Builder clearExplicitHashKey() {
         bitField0_ = (bitField0_ & ~0x00000002);
         explicitHashKey_ = getDefaultInstance().getExplicitHashKey();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string explicitHashKey = 4;</code>
-       */
+      
       public Builder setExplicitHashKeyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -1868,17 +1704,13 @@ public final class Message {
         return this;
       }
 
-      // optional string partitionKey = 5;
+
       private java.lang.Object partitionKey_ = "";
-      /**
-       * <code>optional string partitionKey = 5;</code>
-       */
+      
       public boolean hasPartitionKey() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      /**
-       * <code>optional string partitionKey = 5;</code>
-       */
+      
       public java.lang.String getPartitionKey() {
         java.lang.Object ref = partitionKey_;
         if (!(ref instanceof java.lang.String)) {
@@ -1890,9 +1722,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string partitionKey = 5;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getPartitionKeyBytes() {
         java.lang.Object ref = partitionKey_;
@@ -1906,9 +1736,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string partitionKey = 5;</code>
-       */
+      
       public Builder setPartitionKey(
           java.lang.String value) {
         if (value == null) {
@@ -1919,18 +1747,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string partitionKey = 5;</code>
-       */
+      
       public Builder clearPartitionKey() {
         bitField0_ = (bitField0_ & ~0x00000004);
         partitionKey_ = getDefaultInstance().getPartitionKey();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string partitionKey = 5;</code>
-       */
+      
       public Builder setPartitionKeyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -1942,17 +1766,13 @@ public final class Message {
         return this;
       }
 
-      // optional string partitionId = 6;
+
       private java.lang.Object partitionId_ = "";
-      /**
-       * <code>optional string partitionId = 6;</code>
-       */
+      
       public boolean hasPartitionId() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      /**
-       * <code>optional string partitionId = 6;</code>
-       */
+      
       public java.lang.String getPartitionId() {
         java.lang.Object ref = partitionId_;
         if (!(ref instanceof java.lang.String)) {
@@ -1964,9 +1784,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string partitionId = 6;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getPartitionIdBytes() {
         java.lang.Object ref = partitionId_;
@@ -1980,9 +1798,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string partitionId = 6;</code>
-       */
+      
       public Builder setPartitionId(
           java.lang.String value) {
         if (value == null) {
@@ -1993,18 +1809,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string partitionId = 6;</code>
-       */
+      
       public Builder clearPartitionId() {
         bitField0_ = (bitField0_ & ~0x00000008);
         partitionId_ = getDefaultInstance().getPartitionId();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string partitionId = 6;</code>
-       */
+      
       public Builder setPartitionIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -2016,19 +1828,15 @@ public final class Message {
         return this;
       }
 
-      // optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;
+
       private com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo extendedInfo_ = com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.Builder, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfoOrBuilder> extendedInfoBuilder_;
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public boolean hasExtendedInfo() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo getExtendedInfo() {
         if (extendedInfoBuilder_ == null) {
           return extendedInfo_;
@@ -2036,9 +1844,7 @@ public final class Message {
           return extendedInfoBuilder_.getMessage();
         }
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public Builder setExtendedInfo(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo value) {
         if (extendedInfoBuilder_ == null) {
           if (value == null) {
@@ -2052,9 +1858,7 @@ public final class Message {
         bitField0_ |= 0x00000010;
         return this;
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public Builder setExtendedInfo(
           com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.Builder builderForValue) {
         if (extendedInfoBuilder_ == null) {
@@ -2066,9 +1870,7 @@ public final class Message {
         bitField0_ |= 0x00000010;
         return this;
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public Builder mergeExtendedInfo(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo value) {
         if (extendedInfoBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
@@ -2085,9 +1887,7 @@ public final class Message {
         bitField0_ |= 0x00000010;
         return this;
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public Builder clearExtendedInfo() {
         if (extendedInfoBuilder_ == null) {
           extendedInfo_ = com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.getDefaultInstance();
@@ -2098,17 +1898,13 @@ public final class Message {
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.Builder getExtendedInfoBuilder() {
         bitField0_ |= 0x00000010;
         onChanged();
         return getExtendedInfoFieldBuilder().getBuilder();
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfoOrBuilder getExtendedInfoOrBuilder() {
         if (extendedInfoBuilder_ != null) {
           return extendedInfoBuilder_.getMessageOrBuilder();
@@ -2116,9 +1912,7 @@ public final class Message {
           return extendedInfo_;
         }
       }
-      /**
-       * <code>optional .PutRecordsRequestEntryExtendedInfo extendedInfo = 7;</code>
-       */
+      
       private com.google.protobuf.SingleFieldBuilder<
           com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.Builder, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfoOrBuilder> 
           getExtendedInfoFieldBuilder() {
@@ -2133,32 +1927,24 @@ public final class Message {
         return extendedInfoBuilder_;
       }
 
-      // optional int64 timestamp = 29;
+
       private long timestamp_ ;
-      /**
-       * <code>optional int64 timestamp = 29;</code>
-       */
+      
       public boolean hasTimestamp() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
-      /**
-       * <code>optional int64 timestamp = 29;</code>
-       */
+      
       public long getTimestamp() {
         return timestamp_;
       }
-      /**
-       * <code>optional int64 timestamp = 29;</code>
-       */
+      
       public Builder setTimestamp(long value) {
         bitField0_ |= 0x00000020;
         timestamp_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <code>optional int64 timestamp = 29;</code>
-       */
+      
       public Builder clearTimestamp() {
         bitField0_ = (bitField0_ & ~0x00000020);
         timestamp_ = 0L;
@@ -2166,7 +1952,7 @@ public final class Message {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:PutRecordsRequestEntry)
+
     }
 
     static {
@@ -2174,69 +1960,47 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:PutRecordsRequestEntry)
+
   }
 
   public interface PutRecordsRequestEntryExtendedInfoOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string fileName = 8;
-    /**
-     * <code>required string fileName = 8;</code>
-     */
+
+    
     boolean hasFileName();
-    /**
-     * <code>required string fileName = 8;</code>
-     */
+    
     java.lang.String getFileName();
-    /**
-     * <code>required string fileName = 8;</code>
-     */
+    
     com.google.protobuf.ByteString
         getFileNameBytes();
 
-    // required string deliverDataId = 9;
-    /**
-     * <code>required string deliverDataId = 9;</code>
-     */
+
+    
     boolean hasDeliverDataId();
-    /**
-     * <code>required string deliverDataId = 9;</code>
-     */
+    
     java.lang.String getDeliverDataId();
-    /**
-     * <code>required string deliverDataId = 9;</code>
-     */
+    
     com.google.protobuf.ByteString
         getDeliverDataIdBytes();
 
-    // optional bool endFlag = 10 [default = false];
-    /**
-     * <code>optional bool endFlag = 10 [default = false];</code>
-     */
+
+    
     boolean hasEndFlag();
-    /**
-     * <code>optional bool endFlag = 10 [default = false];</code>
-     */
+    
     boolean getEndFlag();
 
-    // required int64 seqNum = 11;
-    /**
-     * <code>required int64 seqNum = 11;</code>
-     */
+
+    
     boolean hasSeqNum();
-    /**
-     * <code>required int64 seqNum = 11;</code>
-     */
+    
     long getSeqNum();
   }
-  /**
-   * Protobuf type {@code PutRecordsRequestEntryExtendedInfo}
-   */
+  
   public static final class PutRecordsRequestEntryExtendedInfo extends
       com.google.protobuf.GeneratedMessage
       implements PutRecordsRequestEntryExtendedInfoOrBuilder {
-    // Use PutRecordsRequestEntryExtendedInfo.newBuilder() to construct.
+
     private PutRecordsRequestEntryExtendedInfo(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
@@ -2341,18 +2105,14 @@ public final class Message {
     }
 
     private int bitField0_;
-    // required string fileName = 8;
+
     public static final int FILENAME_FIELD_NUMBER = 8;
     private java.lang.Object fileName_;
-    /**
-     * <code>required string fileName = 8;</code>
-     */
+    
     public boolean hasFileName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    /**
-     * <code>required string fileName = 8;</code>
-     */
+    
     public java.lang.String getFileName() {
       java.lang.Object ref = fileName_;
       if (ref instanceof java.lang.String) {
@@ -2367,9 +2127,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>required string fileName = 8;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getFileNameBytes() {
       java.lang.Object ref = fileName_;
@@ -2384,18 +2142,14 @@ public final class Message {
       }
     }
 
-    // required string deliverDataId = 9;
+
     public static final int DELIVERDATAID_FIELD_NUMBER = 9;
     private java.lang.Object deliverDataId_;
-    /**
-     * <code>required string deliverDataId = 9;</code>
-     */
+    
     public boolean hasDeliverDataId() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    /**
-     * <code>required string deliverDataId = 9;</code>
-     */
+    
     public java.lang.String getDeliverDataId() {
       java.lang.Object ref = deliverDataId_;
       if (ref instanceof java.lang.String) {
@@ -2410,9 +2164,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>required string deliverDataId = 9;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getDeliverDataIdBytes() {
       java.lang.Object ref = deliverDataId_;
@@ -2427,34 +2179,26 @@ public final class Message {
       }
     }
 
-    // optional bool endFlag = 10 [default = false];
+
     public static final int ENDFLAG_FIELD_NUMBER = 10;
     private boolean endFlag_;
-    /**
-     * <code>optional bool endFlag = 10 [default = false];</code>
-     */
+    
     public boolean hasEndFlag() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    /**
-     * <code>optional bool endFlag = 10 [default = false];</code>
-     */
+    
     public boolean getEndFlag() {
       return endFlag_;
     }
 
-    // required int64 seqNum = 11;
+
     public static final int SEQNUM_FIELD_NUMBER = 11;
     private long seqNum_;
-    /**
-     * <code>required int64 seqNum = 11;</code>
-     */
+    
     public boolean hasSeqNum() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    /**
-     * <code>required int64 seqNum = 11;</code>
-     */
+    
     public long getSeqNum() {
       return seqNum_;
     }
@@ -2622,7 +2366,7 @@ public final class Message {
                 com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.class, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.Builder.class);
       }
 
-      // Construct using com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsRequestEntryExtendedInfo.newBuilder()
+
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -2765,17 +2509,13 @@ public final class Message {
       }
       private int bitField0_;
 
-      // required string fileName = 8;
+
       private java.lang.Object fileName_ = "";
-      /**
-       * <code>required string fileName = 8;</code>
-       */
+      
       public boolean hasFileName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>required string fileName = 8;</code>
-       */
+      
       public java.lang.String getFileName() {
         java.lang.Object ref = fileName_;
         if (!(ref instanceof java.lang.String)) {
@@ -2787,9 +2527,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>required string fileName = 8;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getFileNameBytes() {
         java.lang.Object ref = fileName_;
@@ -2803,9 +2541,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>required string fileName = 8;</code>
-       */
+      
       public Builder setFileName(
           java.lang.String value) {
         if (value == null) {
@@ -2816,18 +2552,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>required string fileName = 8;</code>
-       */
+      
       public Builder clearFileName() {
         bitField0_ = (bitField0_ & ~0x00000001);
         fileName_ = getDefaultInstance().getFileName();
         onChanged();
         return this;
       }
-      /**
-       * <code>required string fileName = 8;</code>
-       */
+      
       public Builder setFileNameBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -2839,17 +2571,13 @@ public final class Message {
         return this;
       }
 
-      // required string deliverDataId = 9;
+
       private java.lang.Object deliverDataId_ = "";
-      /**
-       * <code>required string deliverDataId = 9;</code>
-       */
+      
       public boolean hasDeliverDataId() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      /**
-       * <code>required string deliverDataId = 9;</code>
-       */
+      
       public java.lang.String getDeliverDataId() {
         java.lang.Object ref = deliverDataId_;
         if (!(ref instanceof java.lang.String)) {
@@ -2861,9 +2589,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>required string deliverDataId = 9;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getDeliverDataIdBytes() {
         java.lang.Object ref = deliverDataId_;
@@ -2877,9 +2603,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>required string deliverDataId = 9;</code>
-       */
+      
       public Builder setDeliverDataId(
           java.lang.String value) {
         if (value == null) {
@@ -2890,18 +2614,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>required string deliverDataId = 9;</code>
-       */
+      
       public Builder clearDeliverDataId() {
         bitField0_ = (bitField0_ & ~0x00000002);
         deliverDataId_ = getDefaultInstance().getDeliverDataId();
         onChanged();
         return this;
       }
-      /**
-       * <code>required string deliverDataId = 9;</code>
-       */
+      
       public Builder setDeliverDataIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -2913,32 +2633,24 @@ public final class Message {
         return this;
       }
 
-      // optional bool endFlag = 10 [default = false];
+
       private boolean endFlag_ ;
-      /**
-       * <code>optional bool endFlag = 10 [default = false];</code>
-       */
+      
       public boolean hasEndFlag() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      /**
-       * <code>optional bool endFlag = 10 [default = false];</code>
-       */
+      
       public boolean getEndFlag() {
         return endFlag_;
       }
-      /**
-       * <code>optional bool endFlag = 10 [default = false];</code>
-       */
+      
       public Builder setEndFlag(boolean value) {
         bitField0_ |= 0x00000004;
         endFlag_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <code>optional bool endFlag = 10 [default = false];</code>
-       */
+      
       public Builder clearEndFlag() {
         bitField0_ = (bitField0_ & ~0x00000004);
         endFlag_ = false;
@@ -2946,32 +2658,24 @@ public final class Message {
         return this;
       }
 
-      // required int64 seqNum = 11;
+
       private long seqNum_ ;
-      /**
-       * <code>required int64 seqNum = 11;</code>
-       */
+      
       public boolean hasSeqNum() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      /**
-       * <code>required int64 seqNum = 11;</code>
-       */
+      
       public long getSeqNum() {
         return seqNum_;
       }
-      /**
-       * <code>required int64 seqNum = 11;</code>
-       */
+      
       public Builder setSeqNum(long value) {
         bitField0_ |= 0x00000008;
         seqNum_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <code>required int64 seqNum = 11;</code>
-       */
+      
       public Builder clearSeqNum() {
         bitField0_ = (bitField0_ & ~0x00000008);
         seqNum_ = 0L;
@@ -2979,7 +2683,7 @@ public final class Message {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:PutRecordsRequestEntryExtendedInfo)
+
     }
 
     static {
@@ -2987,44 +2691,30 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:PutRecordsRequestEntryExtendedInfo)
+
   }
 
   public interface PutRecordsResultOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required int32 failedRecordCount = 21;
-    /**
-     * <code>required int32 failedRecordCount = 21;</code>
-     */
+
+    
     boolean hasFailedRecordCount();
-    /**
-     * <code>required int32 failedRecordCount = 21;</code>
-     */
+    
     int getFailedRecordCount();
 
-    // repeated .PutRecordsResultEntry records = 22;
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+
+    
     java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry> 
         getRecordsList();
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry getRecords(int index);
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     int getRecordsCount();
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntryOrBuilder> 
         getRecordsOrBuilderList();
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntryOrBuilder getRecordsOrBuilder(
         int index);
   }
@@ -3135,53 +2825,39 @@ public final class Message {
     }
 
     private int bitField0_;
-    // required int32 failedRecordCount = 21;
+
     public static final int FAILEDRECORDCOUNT_FIELD_NUMBER = 21;
     private int failedRecordCount_;
-    /**
-     * <code>required int32 failedRecordCount = 21;</code>
-     */
+    
     public boolean hasFailedRecordCount() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    /**
-     * <code>required int32 failedRecordCount = 21;</code>
-     */
+    
     public int getFailedRecordCount() {
       return failedRecordCount_;
     }
 
-    // repeated .PutRecordsResultEntry records = 22;
+
     public static final int RECORDS_FIELD_NUMBER = 22;
     private java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry> records_;
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry> getRecordsList() {
       return records_;
     }
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     public java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntryOrBuilder> 
         getRecordsOrBuilderList() {
       return records_;
     }
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     public int getRecordsCount() {
       return records_.size();
     }
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry getRecords(int index) {
       return records_.get(index);
     }
-    /**
-     * <code>repeated .PutRecordsResultEntry records = 22;</code>
-     */
+    
     public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntryOrBuilder getRecordsOrBuilder(
         int index) {
       return records_.get(index);
@@ -3326,7 +3002,7 @@ public final class Message {
                 com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult.class, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult.Builder.class);
       }
 
-      // Construct using com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResult.newBuilder()
+
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -3472,32 +3148,24 @@ public final class Message {
       }
       private int bitField0_;
 
-      // required int32 failedRecordCount = 21;
+
       private int failedRecordCount_ ;
-      /**
-       * <code>required int32 failedRecordCount = 21;</code>
-       */
+      
       public boolean hasFailedRecordCount() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>required int32 failedRecordCount = 21;</code>
-       */
+      
       public int getFailedRecordCount() {
         return failedRecordCount_;
       }
-      /**
-       * <code>required int32 failedRecordCount = 21;</code>
-       */
+      
       public Builder setFailedRecordCount(int value) {
         bitField0_ |= 0x00000001;
         failedRecordCount_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <code>required int32 failedRecordCount = 21;</code>
-       */
+      
       public Builder clearFailedRecordCount() {
         bitField0_ = (bitField0_ & ~0x00000001);
         failedRecordCount_ = 0;
@@ -3505,7 +3173,7 @@ public final class Message {
         return this;
       }
 
-      // repeated .PutRecordsResultEntry records = 22;
+
       private java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry> records_ =
         java.util.Collections.emptyList();
       private void ensureRecordsIsMutable() {
@@ -3518,9 +3186,7 @@ public final class Message {
       private com.google.protobuf.RepeatedFieldBuilder<
           com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntryOrBuilder> recordsBuilder_;
 
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry> getRecordsList() {
         if (recordsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(records_);
@@ -3528,9 +3194,7 @@ public final class Message {
           return recordsBuilder_.getMessageList();
         }
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public int getRecordsCount() {
         if (recordsBuilder_ == null) {
           return records_.size();
@@ -3538,9 +3202,7 @@ public final class Message {
           return recordsBuilder_.getCount();
         }
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry getRecords(int index) {
         if (recordsBuilder_ == null) {
           return records_.get(index);
@@ -3548,9 +3210,7 @@ public final class Message {
           return recordsBuilder_.getMessage(index);
         }
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder setRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry value) {
         if (recordsBuilder_ == null) {
@@ -3565,9 +3225,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder setRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -3579,9 +3237,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder addRecords(com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry value) {
         if (recordsBuilder_ == null) {
           if (value == null) {
@@ -3595,9 +3251,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder addRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry value) {
         if (recordsBuilder_ == null) {
@@ -3612,9 +3266,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder addRecords(
           com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -3626,9 +3278,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder addRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -3640,9 +3290,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder addAllRecords(
           java.lang.Iterable<? extends com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry> values) {
         if (recordsBuilder_ == null) {
@@ -3654,9 +3302,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder clearRecords() {
         if (recordsBuilder_ == null) {
           records_ = java.util.Collections.emptyList();
@@ -3667,9 +3313,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public Builder removeRecords(int index) {
         if (recordsBuilder_ == null) {
           ensureRecordsIsMutable();
@@ -3680,16 +3324,12 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder getRecordsBuilder(
           int index) {
         return getRecordsFieldBuilder().getBuilder(index);
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntryOrBuilder getRecordsOrBuilder(
           int index) {
         if (recordsBuilder_ == null) {
@@ -3697,9 +3337,7 @@ public final class Message {
           return recordsBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntryOrBuilder> 
            getRecordsOrBuilderList() {
         if (recordsBuilder_ != null) {
@@ -3708,24 +3346,18 @@ public final class Message {
           return java.util.Collections.unmodifiableList(records_);
         }
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder addRecordsBuilder() {
         return getRecordsFieldBuilder().addBuilder(
             com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.getDefaultInstance());
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder addRecordsBuilder(
           int index) {
         return getRecordsFieldBuilder().addBuilder(
             index, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.getDefaultInstance());
       }
-      /**
-       * <code>repeated .PutRecordsResultEntry records = 22;</code>
-       */
+      
       public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder> 
            getRecordsBuilderList() {
         return getRecordsFieldBuilder().getBuilderList();
@@ -3745,7 +3377,7 @@ public final class Message {
         return recordsBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:PutRecordsResult)
+
     }
 
     static {
@@ -3753,69 +3385,45 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:PutRecordsResult)
+
   }
 
   public interface PutRecordsResultEntryOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional string shardId = 23;
-    /**
-     * <code>optional string shardId = 23;</code>
-     */
+
+    
     boolean hasShardId();
-    /**
-     * <code>optional string shardId = 23;</code>
-     */
+    
     java.lang.String getShardId();
-    /**
-     * <code>optional string shardId = 23;</code>
-     */
+    
     com.google.protobuf.ByteString
         getShardIdBytes();
 
-    // optional string sequenceNumber = 24;
-    /**
-     * <code>optional string sequenceNumber = 24;</code>
-     */
+
+    
     boolean hasSequenceNumber();
-    /**
-     * <code>optional string sequenceNumber = 24;</code>
-     */
+    
     java.lang.String getSequenceNumber();
-    /**
-     * <code>optional string sequenceNumber = 24;</code>
-     */
+    
     com.google.protobuf.ByteString
         getSequenceNumberBytes();
 
-    // optional string errorCode = 25;
-    /**
-     * <code>optional string errorCode = 25;</code>
-     */
+
+    
     boolean hasErrorCode();
-    /**
-     * <code>optional string errorCode = 25;</code>
-     */
+    
     java.lang.String getErrorCode();
-    /**
-     * <code>optional string errorCode = 25;</code>
-     */
+    
     com.google.protobuf.ByteString
         getErrorCodeBytes();
 
-    // optional string errorMessage = 26;
-    /**
-     * <code>optional string errorMessage = 26;</code>
-     */
+
+    
     boolean hasErrorMessage();
-    /**
-     * <code>optional string errorMessage = 26;</code>
-     */
+    
     java.lang.String getErrorMessage();
-    /**
-     * <code>optional string errorMessage = 26;</code>
-     */
+    
     com.google.protobuf.ByteString
         getErrorMessageBytes();
   }
@@ -3825,7 +3433,7 @@ public final class Message {
   public static final class PutRecordsResultEntry extends
       com.google.protobuf.GeneratedMessage
       implements PutRecordsResultEntryOrBuilder {
-    // Use PutRecordsResultEntry.newBuilder() to construct.
+
     private PutRecordsResultEntry(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
@@ -3930,18 +3538,14 @@ public final class Message {
     }
 
     private int bitField0_;
-    // optional string shardId = 23;
+
     public static final int SHARDID_FIELD_NUMBER = 23;
     private java.lang.Object shardId_;
-    /**
-     * <code>optional string shardId = 23;</code>
-     */
+    
     public boolean hasShardId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    /**
-     * <code>optional string shardId = 23;</code>
-     */
+    
     public java.lang.String getShardId() {
       java.lang.Object ref = shardId_;
       if (ref instanceof java.lang.String) {
@@ -3956,9 +3560,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string shardId = 23;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getShardIdBytes() {
       java.lang.Object ref = shardId_;
@@ -3973,18 +3575,14 @@ public final class Message {
       }
     }
 
-    // optional string sequenceNumber = 24;
+
     public static final int SEQUENCENUMBER_FIELD_NUMBER = 24;
     private java.lang.Object sequenceNumber_;
-    /**
-     * <code>optional string sequenceNumber = 24;</code>
-     */
+    
     public boolean hasSequenceNumber() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    /**
-     * <code>optional string sequenceNumber = 24;</code>
-     */
+    
     public java.lang.String getSequenceNumber() {
       java.lang.Object ref = sequenceNumber_;
       if (ref instanceof java.lang.String) {
@@ -3999,9 +3597,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string sequenceNumber = 24;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getSequenceNumberBytes() {
       java.lang.Object ref = sequenceNumber_;
@@ -4016,18 +3612,14 @@ public final class Message {
       }
     }
 
-    // optional string errorCode = 25;
+
     public static final int ERRORCODE_FIELD_NUMBER = 25;
     private java.lang.Object errorCode_;
-    /**
-     * <code>optional string errorCode = 25;</code>
-     */
+    
     public boolean hasErrorCode() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    /**
-     * <code>optional string errorCode = 25;</code>
-     */
+    
     public java.lang.String getErrorCode() {
       java.lang.Object ref = errorCode_;
       if (ref instanceof java.lang.String) {
@@ -4042,9 +3634,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string errorCode = 25;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getErrorCodeBytes() {
       java.lang.Object ref = errorCode_;
@@ -4059,18 +3649,14 @@ public final class Message {
       }
     }
 
-    // optional string errorMessage = 26;
+
     public static final int ERRORMESSAGE_FIELD_NUMBER = 26;
     private java.lang.Object errorMessage_;
-    /**
-     * <code>optional string errorMessage = 26;</code>
-     */
+    
     public boolean hasErrorMessage() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    /**
-     * <code>optional string errorMessage = 26;</code>
-     */
+    
     public java.lang.String getErrorMessage() {
       java.lang.Object ref = errorMessage_;
       if (ref instanceof java.lang.String) {
@@ -4085,9 +3671,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string errorMessage = 26;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getErrorMessageBytes() {
       java.lang.Object ref = errorMessage_;
@@ -4253,7 +3837,7 @@ public final class Message {
                 com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.class, com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.Builder.class);
       }
 
-      // Construct using com.huaweicloud.dis.iface.api.protobuf.Message.PutRecordsResultEntry.newBuilder()
+
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -4388,17 +3972,13 @@ public final class Message {
       }
       private int bitField0_;
 
-      // optional string shardId = 23;
+
       private java.lang.Object shardId_ = "";
-      /**
-       * <code>optional string shardId = 23;</code>
-       */
+      
       public boolean hasShardId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>optional string shardId = 23;</code>
-       */
+      
       public java.lang.String getShardId() {
         java.lang.Object ref = shardId_;
         if (!(ref instanceof java.lang.String)) {
@@ -4410,9 +3990,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string shardId = 23;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getShardIdBytes() {
         java.lang.Object ref = shardId_;
@@ -4426,9 +4004,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string shardId = 23;</code>
-       */
+      
       public Builder setShardId(
           java.lang.String value) {
         if (value == null) {
@@ -4439,18 +4015,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string shardId = 23;</code>
-       */
+      
       public Builder clearShardId() {
         bitField0_ = (bitField0_ & ~0x00000001);
         shardId_ = getDefaultInstance().getShardId();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string shardId = 23;</code>
-       */
+      
       public Builder setShardIdBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -4462,17 +4034,13 @@ public final class Message {
         return this;
       }
 
-      // optional string sequenceNumber = 24;
+
       private java.lang.Object sequenceNumber_ = "";
-      /**
-       * <code>optional string sequenceNumber = 24;</code>
-       */
+      
       public boolean hasSequenceNumber() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      /**
-       * <code>optional string sequenceNumber = 24;</code>
-       */
+      
       public java.lang.String getSequenceNumber() {
         java.lang.Object ref = sequenceNumber_;
         if (!(ref instanceof java.lang.String)) {
@@ -4484,9 +4052,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string sequenceNumber = 24;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getSequenceNumberBytes() {
         java.lang.Object ref = sequenceNumber_;
@@ -4500,9 +4066,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string sequenceNumber = 24;</code>
-       */
+      
       public Builder setSequenceNumber(
           java.lang.String value) {
         if (value == null) {
@@ -4513,18 +4077,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string sequenceNumber = 24;</code>
-       */
+      
       public Builder clearSequenceNumber() {
         bitField0_ = (bitField0_ & ~0x00000002);
         sequenceNumber_ = getDefaultInstance().getSequenceNumber();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string sequenceNumber = 24;</code>
-       */
+      
       public Builder setSequenceNumberBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -4536,17 +4096,13 @@ public final class Message {
         return this;
       }
 
-      // optional string errorCode = 25;
+
       private java.lang.Object errorCode_ = "";
-      /**
-       * <code>optional string errorCode = 25;</code>
-       */
+      
       public boolean hasErrorCode() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      /**
-       * <code>optional string errorCode = 25;</code>
-       */
+      
       public java.lang.String getErrorCode() {
         java.lang.Object ref = errorCode_;
         if (!(ref instanceof java.lang.String)) {
@@ -4558,9 +4114,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string errorCode = 25;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getErrorCodeBytes() {
         java.lang.Object ref = errorCode_;
@@ -4574,9 +4128,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string errorCode = 25;</code>
-       */
+      
       public Builder setErrorCode(
           java.lang.String value) {
         if (value == null) {
@@ -4587,18 +4139,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string errorCode = 25;</code>
-       */
+      
       public Builder clearErrorCode() {
         bitField0_ = (bitField0_ & ~0x00000004);
         errorCode_ = getDefaultInstance().getErrorCode();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string errorCode = 25;</code>
-       */
+      
       public Builder setErrorCodeBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -4610,17 +4158,13 @@ public final class Message {
         return this;
       }
 
-      // optional string errorMessage = 26;
+
       private java.lang.Object errorMessage_ = "";
-      /**
-       * <code>optional string errorMessage = 26;</code>
-       */
+      
       public boolean hasErrorMessage() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      /**
-       * <code>optional string errorMessage = 26;</code>
-       */
+      
       public java.lang.String getErrorMessage() {
         java.lang.Object ref = errorMessage_;
         if (!(ref instanceof java.lang.String)) {
@@ -4632,9 +4176,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string errorMessage = 26;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getErrorMessageBytes() {
         java.lang.Object ref = errorMessage_;
@@ -4648,9 +4190,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string errorMessage = 26;</code>
-       */
+      
       public Builder setErrorMessage(
           java.lang.String value) {
         if (value == null) {
@@ -4661,18 +4201,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string errorMessage = 26;</code>
-       */
+      
       public Builder clearErrorMessage() {
         bitField0_ = (bitField0_ & ~0x00000008);
         errorMessage_ = getDefaultInstance().getErrorMessage();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string errorMessage = 26;</code>
-       */
+      
       public Builder setErrorMessageBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -4684,7 +4220,7 @@ public final class Message {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:PutRecordsResultEntry)
+
     }
 
     static {
@@ -4692,35 +4228,25 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:PutRecordsResultEntry)
+
   }
 
   public interface GetRecordsRequestOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string shardIterator = 12;
-    /**
-     * <code>required string shardIterator = 12;</code>
-     */
+
+    
     boolean hasShardIterator();
-    /**
-     * <code>required string shardIterator = 12;</code>
-     */
+    
     java.lang.String getShardIterator();
-    /**
-     * <code>required string shardIterator = 12;</code>
-     */
+    
     com.google.protobuf.ByteString
         getShardIteratorBytes();
 
-    // optional int32 limit = 13;
-    /**
-     * <code>optional int32 limit = 13;</code>
-     */
+
+    
     boolean hasLimit();
-    /**
-     * <code>optional int32 limit = 13;</code>
-     */
+    
     int getLimit();
   }
   /**
@@ -4729,7 +4255,7 @@ public final class Message {
   public static final class GetRecordsRequest extends
       com.google.protobuf.GeneratedMessage
       implements GetRecordsRequestOrBuilder {
-    // Use GetRecordsRequest.newBuilder() to construct.
+
     private GetRecordsRequest(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
@@ -4824,18 +4350,14 @@ public final class Message {
     }
 
     private int bitField0_;
-    // required string shardIterator = 12;
+
     public static final int SHARDITERATOR_FIELD_NUMBER = 12;
     private java.lang.Object shardIterator_;
-    /**
-     * <code>required string shardIterator = 12;</code>
-     */
+    
     public boolean hasShardIterator() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    /**
-     * <code>required string shardIterator = 12;</code>
-     */
+    
     public java.lang.String getShardIterator() {
       java.lang.Object ref = shardIterator_;
       if (ref instanceof java.lang.String) {
@@ -4850,9 +4372,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>required string shardIterator = 12;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getShardIteratorBytes() {
       java.lang.Object ref = shardIterator_;
@@ -4867,18 +4387,14 @@ public final class Message {
       }
     }
 
-    // optional int32 limit = 13;
+
     public static final int LIMIT_FIELD_NUMBER = 13;
     private int limit_;
-    /**
-     * <code>optional int32 limit = 13;</code>
-     */
+    
     public boolean hasLimit() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    /**
-     * <code>optional int32 limit = 13;</code>
-     */
+    
     public int getLimit() {
       return limit_;
     }
@@ -5022,7 +4538,7 @@ public final class Message {
                 com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsRequest.class, com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsRequest.Builder.class);
       }
 
-      // Construct using com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsRequest.newBuilder()
+
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -5137,17 +4653,13 @@ public final class Message {
       }
       private int bitField0_;
 
-      // required string shardIterator = 12;
+
       private java.lang.Object shardIterator_ = "";
-      /**
-       * <code>required string shardIterator = 12;</code>
-       */
+      
       public boolean hasShardIterator() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>required string shardIterator = 12;</code>
-       */
+      
       public java.lang.String getShardIterator() {
         java.lang.Object ref = shardIterator_;
         if (!(ref instanceof java.lang.String)) {
@@ -5159,9 +4671,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>required string shardIterator = 12;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getShardIteratorBytes() {
         java.lang.Object ref = shardIterator_;
@@ -5175,9 +4685,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>required string shardIterator = 12;</code>
-       */
+      
       public Builder setShardIterator(
           java.lang.String value) {
         if (value == null) {
@@ -5188,18 +4696,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>required string shardIterator = 12;</code>
-       */
+      
       public Builder clearShardIterator() {
         bitField0_ = (bitField0_ & ~0x00000001);
         shardIterator_ = getDefaultInstance().getShardIterator();
         onChanged();
         return this;
       }
-      /**
-       * <code>required string shardIterator = 12;</code>
-       */
+      
       public Builder setShardIteratorBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -5211,32 +4715,24 @@ public final class Message {
         return this;
       }
 
-      // optional int32 limit = 13;
+
       private int limit_ ;
-      /**
-       * <code>optional int32 limit = 13;</code>
-       */
+      
       public boolean hasLimit() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      /**
-       * <code>optional int32 limit = 13;</code>
-       */
+      
       public int getLimit() {
         return limit_;
       }
-      /**
-       * <code>optional int32 limit = 13;</code>
-       */
+      
       public Builder setLimit(int value) {
         bitField0_ |= 0x00000002;
         limit_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <code>optional int32 limit = 13;</code>
-       */
+      
       public Builder clearLimit() {
         bitField0_ = (bitField0_ & ~0x00000002);
         limit_ = 0;
@@ -5244,7 +4740,7 @@ public final class Message {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:GetRecordsRequest)
+
     }
 
     static {
@@ -5252,69 +4748,33 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:GetRecordsRequest)
+
   }
 
   public interface GetRecordsResultOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string nextShardIterator = 14;
-    /**
-     * <code>required string nextShardIterator = 14;</code>
-     */
+
+    
     boolean hasNextShardIterator();
-    /**
-     * <code>required string nextShardIterator = 14;</code>
-     */
+    
     java.lang.String getNextShardIterator();
-    /**
-     * <code>required string nextShardIterator = 14;</code>
-     */
+    
     com.google.protobuf.ByteString
         getNextShardIteratorBytes();
 
-    // repeated .Record records = 16;
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+
+    
     java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.Record> 
         getRecordsList();
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     com.huaweicloud.dis.iface.api.protobuf.Message.Record getRecords(int index);
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     int getRecordsCount();
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.RecordOrBuilder> 
         getRecordsOrBuilderList();
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     com.huaweicloud.dis.iface.api.protobuf.Message.RecordOrBuilder getRecordsOrBuilder(
         int index);
   }
@@ -5324,7 +4784,7 @@ public final class Message {
   public static final class GetRecordsResult extends
       com.google.protobuf.GeneratedMessage
       implements GetRecordsResultOrBuilder {
-    // Use GetRecordsResult.newBuilder() to construct.
+
     private GetRecordsResult(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
@@ -5425,18 +4885,14 @@ public final class Message {
     }
 
     private int bitField0_;
-    // required string nextShardIterator = 14;
+
     public static final int NEXTSHARDITERATOR_FIELD_NUMBER = 14;
     private java.lang.Object nextShardIterator_;
-    /**
-     * <code>required string nextShardIterator = 14;</code>
-     */
+    
     public boolean hasNextShardIterator() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    /**
-     * <code>required string nextShardIterator = 14;</code>
-     */
+    
     public java.lang.String getNextShardIterator() {
       java.lang.Object ref = nextShardIterator_;
       if (ref instanceof java.lang.String) {
@@ -5451,9 +4907,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>required string nextShardIterator = 14;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getNextShardIteratorBytes() {
       java.lang.Object ref = nextShardIterator_;
@@ -5468,57 +4922,27 @@ public final class Message {
       }
     }
 
-    // repeated .Record records = 16;
+
     public static final int RECORDS_FIELD_NUMBER = 16;
     private java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.Record> records_;
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.Record> getRecordsList() {
       return records_;
     }
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     public java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.RecordOrBuilder> 
         getRecordsOrBuilderList() {
       return records_;
     }
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     public int getRecordsCount() {
       return records_.size();
     }
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     public com.huaweicloud.dis.iface.api.protobuf.Message.Record getRecords(int index) {
       return records_.get(index);
     }
-    /**
-     * <code>repeated .Record records = 16;</code>
-     *
-     * <pre>
-     *    int64 millisBehindLatest =15;
-     * </pre>
-     */
+    
     public com.huaweicloud.dis.iface.api.protobuf.Message.RecordOrBuilder getRecordsOrBuilder(
         int index) {
       return records_.get(index);
@@ -5669,7 +5093,7 @@ public final class Message {
                 com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsResult.class, com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsResult.Builder.class);
       }
 
-      // Construct using com.huaweicloud.dis.iface.api.protobuf.Message.GetRecordsResult.newBuilder()
+
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -5823,17 +5247,13 @@ public final class Message {
       }
       private int bitField0_;
 
-      // required string nextShardIterator = 14;
+
       private java.lang.Object nextShardIterator_ = "";
-      /**
-       * <code>required string nextShardIterator = 14;</code>
-       */
+      
       public boolean hasNextShardIterator() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>required string nextShardIterator = 14;</code>
-       */
+      
       public java.lang.String getNextShardIterator() {
         java.lang.Object ref = nextShardIterator_;
         if (!(ref instanceof java.lang.String)) {
@@ -5845,9 +5265,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>required string nextShardIterator = 14;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getNextShardIteratorBytes() {
         java.lang.Object ref = nextShardIterator_;
@@ -5861,9 +5279,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>required string nextShardIterator = 14;</code>
-       */
+      
       public Builder setNextShardIterator(
           java.lang.String value) {
         if (value == null) {
@@ -5874,18 +5290,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>required string nextShardIterator = 14;</code>
-       */
+      
       public Builder clearNextShardIterator() {
         bitField0_ = (bitField0_ & ~0x00000001);
         nextShardIterator_ = getDefaultInstance().getNextShardIterator();
         onChanged();
         return this;
       }
-      /**
-       * <code>required string nextShardIterator = 14;</code>
-       */
+      
       public Builder setNextShardIteratorBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -5897,7 +5309,7 @@ public final class Message {
         return this;
       }
 
-      // repeated .Record records = 16;
+
       private java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.Record> records_ =
         java.util.Collections.emptyList();
       private void ensureRecordsIsMutable() {
@@ -5910,13 +5322,7 @@ public final class Message {
       private com.google.protobuf.RepeatedFieldBuilder<
           com.huaweicloud.dis.iface.api.protobuf.Message.Record, com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder, com.huaweicloud.dis.iface.api.protobuf.Message.RecordOrBuilder> recordsBuilder_;
 
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.Record> getRecordsList() {
         if (recordsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(records_);
@@ -5924,13 +5330,7 @@ public final class Message {
           return recordsBuilder_.getMessageList();
         }
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public int getRecordsCount() {
         if (recordsBuilder_ == null) {
           return records_.size();
@@ -5938,13 +5338,7 @@ public final class Message {
           return recordsBuilder_.getCount();
         }
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.Record getRecords(int index) {
         if (recordsBuilder_ == null) {
           return records_.get(index);
@@ -5952,13 +5346,7 @@ public final class Message {
           return recordsBuilder_.getMessage(index);
         }
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder setRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.Record value) {
         if (recordsBuilder_ == null) {
@@ -5973,13 +5361,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder setRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -5991,13 +5373,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder addRecords(com.huaweicloud.dis.iface.api.protobuf.Message.Record value) {
         if (recordsBuilder_ == null) {
           if (value == null) {
@@ -6011,13 +5387,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder addRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.Record value) {
         if (recordsBuilder_ == null) {
@@ -6032,13 +5402,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder addRecords(
           com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -6050,13 +5414,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder addRecords(
           int index, com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder builderForValue) {
         if (recordsBuilder_ == null) {
@@ -6068,13 +5426,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder addAllRecords(
           java.lang.Iterable<? extends com.huaweicloud.dis.iface.api.protobuf.Message.Record> values) {
         if (recordsBuilder_ == null) {
@@ -6086,13 +5438,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder clearRecords() {
         if (recordsBuilder_ == null) {
           records_ = java.util.Collections.emptyList();
@@ -6103,13 +5449,7 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public Builder removeRecords(int index) {
         if (recordsBuilder_ == null) {
           ensureRecordsIsMutable();
@@ -6120,24 +5460,12 @@ public final class Message {
         }
         return this;
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder getRecordsBuilder(
           int index) {
         return getRecordsFieldBuilder().getBuilder(index);
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.RecordOrBuilder getRecordsOrBuilder(
           int index) {
         if (recordsBuilder_ == null) {
@@ -6145,13 +5473,7 @@ public final class Message {
           return recordsBuilder_.getMessageOrBuilder(index);
         }
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public java.util.List<? extends com.huaweicloud.dis.iface.api.protobuf.Message.RecordOrBuilder> 
            getRecordsOrBuilderList() {
         if (recordsBuilder_ != null) {
@@ -6160,36 +5482,18 @@ public final class Message {
           return java.util.Collections.unmodifiableList(records_);
         }
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder addRecordsBuilder() {
         return getRecordsFieldBuilder().addBuilder(
             com.huaweicloud.dis.iface.api.protobuf.Message.Record.getDefaultInstance());
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder addRecordsBuilder(
           int index) {
         return getRecordsFieldBuilder().addBuilder(
             index, com.huaweicloud.dis.iface.api.protobuf.Message.Record.getDefaultInstance());
       }
-      /**
-       * <code>repeated .Record records = 16;</code>
-       *
-       * <pre>
-       *    int64 millisBehindLatest =15;
-       * </pre>
-       */
+      
       public java.util.List<com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder> 
            getRecordsBuilderList() {
         return getRecordsFieldBuilder().getBuilderList();
@@ -6209,7 +5513,7 @@ public final class Message {
         return recordsBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:GetRecordsResult)
+
     }
 
     static {
@@ -6217,82 +5521,48 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:GetRecordsResult)
+
   }
 
   public interface RecordOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional string partitionKey = 17;
-    /**
-     * <code>optional string partitionKey = 17;</code>
-     */
+
+    
     boolean hasPartitionKey();
-    /**
-     * <code>optional string partitionKey = 17;</code>
-     */
+    
     java.lang.String getPartitionKey();
-    /**
-     * <code>optional string partitionKey = 17;</code>
-     */
+    
     com.google.protobuf.ByteString
         getPartitionKeyBytes();
 
-    // required string sequenceNumber = 18;
-    /**
-     * <code>required string sequenceNumber = 18;</code>
-     */
+
+    
     boolean hasSequenceNumber();
-    /**
-     * <code>required string sequenceNumber = 18;</code>
-     */
+    
     java.lang.String getSequenceNumber();
-    /**
-     * <code>required string sequenceNumber = 18;</code>
-     */
+    
     com.google.protobuf.ByteString
         getSequenceNumberBytes();
 
-    // optional bytes data = 19;
-    /**
-     * <code>optional bytes data = 19;</code>
-     */
+
+    
     boolean hasData();
-    /**
-     * <code>optional bytes data = 19;</code>
-     */
+    
     com.google.protobuf.ByteString getData();
 
-    // optional int64 timestamp = 27;
-    /**
-     * <code>optional int64 timestamp = 27;</code>
-     *
-     * <pre>
-     *	approximateArrivalTimestamp = 20;
-     * </pre>
-     */
+
+    
     boolean hasTimestamp();
-    /**
-     * <code>optional int64 timestamp = 27;</code>
-     *
-     * <pre>
-     *	approximateArrivalTimestamp = 20;
-     * </pre>
-     */
+    
     long getTimestamp();
 
-    // optional string timestampType = 28;
-    /**
-     * <code>optional string timestampType = 28;</code>
-     */
+
+    
     boolean hasTimestampType();
-    /**
-     * <code>optional string timestampType = 28;</code>
-     */
+    
     java.lang.String getTimestampType();
-    /**
-     * <code>optional string timestampType = 28;</code>
-     */
+    
     com.google.protobuf.ByteString
         getTimestampTypeBytes();
   }
@@ -6302,7 +5572,7 @@ public final class Message {
   public static final class Record extends
       com.google.protobuf.GeneratedMessage
       implements RecordOrBuilder {
-    // Use Record.newBuilder() to construct.
+
     private Record(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
@@ -6412,18 +5682,14 @@ public final class Message {
     }
 
     private int bitField0_;
-    // optional string partitionKey = 17;
+
     public static final int PARTITIONKEY_FIELD_NUMBER = 17;
     private java.lang.Object partitionKey_;
-    /**
-     * <code>optional string partitionKey = 17;</code>
-     */
+    
     public boolean hasPartitionKey() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    /**
-     * <code>optional string partitionKey = 17;</code>
-     */
+    
     public java.lang.String getPartitionKey() {
       java.lang.Object ref = partitionKey_;
       if (ref instanceof java.lang.String) {
@@ -6438,9 +5704,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string partitionKey = 17;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getPartitionKeyBytes() {
       java.lang.Object ref = partitionKey_;
@@ -6455,18 +5719,14 @@ public final class Message {
       }
     }
 
-    // required string sequenceNumber = 18;
+
     public static final int SEQUENCENUMBER_FIELD_NUMBER = 18;
     private java.lang.Object sequenceNumber_;
-    /**
-     * <code>required string sequenceNumber = 18;</code>
-     */
+    
     public boolean hasSequenceNumber() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    /**
-     * <code>required string sequenceNumber = 18;</code>
-     */
+    
     public java.lang.String getSequenceNumber() {
       java.lang.Object ref = sequenceNumber_;
       if (ref instanceof java.lang.String) {
@@ -6481,9 +5741,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>required string sequenceNumber = 18;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getSequenceNumberBytes() {
       java.lang.Object ref = sequenceNumber_;
@@ -6498,58 +5756,38 @@ public final class Message {
       }
     }
 
-    // optional bytes data = 19;
+
     public static final int DATA_FIELD_NUMBER = 19;
     private com.google.protobuf.ByteString data_;
-    /**
-     * <code>optional bytes data = 19;</code>
-     */
+    
     public boolean hasData() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    /**
-     * <code>optional bytes data = 19;</code>
-     */
+    
     public com.google.protobuf.ByteString getData() {
       return data_;
     }
 
-    // optional int64 timestamp = 27;
+
     public static final int TIMESTAMP_FIELD_NUMBER = 27;
     private long timestamp_;
-    /**
-     * <code>optional int64 timestamp = 27;</code>
-     *
-     * <pre>
-     *	approximateArrivalTimestamp = 20;
-     * </pre>
-     */
+    
     public boolean hasTimestamp() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    /**
-     * <code>optional int64 timestamp = 27;</code>
-     *
-     * <pre>
-     *	approximateArrivalTimestamp = 20;
-     * </pre>
-     */
+    
     public long getTimestamp() {
       return timestamp_;
     }
 
-    // optional string timestampType = 28;
+
     public static final int TIMESTAMPTYPE_FIELD_NUMBER = 28;
     private java.lang.Object timestampType_;
-    /**
-     * <code>optional string timestampType = 28;</code>
-     */
+    
     public boolean hasTimestampType() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
-    /**
-     * <code>optional string timestampType = 28;</code>
-     */
+    
     public java.lang.String getTimestampType() {
       java.lang.Object ref = timestampType_;
       if (ref instanceof java.lang.String) {
@@ -6564,9 +5802,7 @@ public final class Message {
         return s;
       }
     }
-    /**
-     * <code>optional string timestampType = 28;</code>
-     */
+    
     public com.google.protobuf.ByteString
         getTimestampTypeBytes() {
       java.lang.Object ref = timestampType_;
@@ -6744,7 +5980,7 @@ public final class Message {
                 com.huaweicloud.dis.iface.api.protobuf.Message.Record.class, com.huaweicloud.dis.iface.api.protobuf.Message.Record.Builder.class);
       }
 
-      // Construct using com.huaweicloud.dis.iface.api.protobuf.Message.Record.newBuilder()
+
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -6890,17 +6126,13 @@ public final class Message {
       }
       private int bitField0_;
 
-      // optional string partitionKey = 17;
+
       private java.lang.Object partitionKey_ = "";
-      /**
-       * <code>optional string partitionKey = 17;</code>
-       */
+      
       public boolean hasPartitionKey() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      /**
-       * <code>optional string partitionKey = 17;</code>
-       */
+      
       public java.lang.String getPartitionKey() {
         java.lang.Object ref = partitionKey_;
         if (!(ref instanceof java.lang.String)) {
@@ -6912,9 +6144,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string partitionKey = 17;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getPartitionKeyBytes() {
         java.lang.Object ref = partitionKey_;
@@ -6928,9 +6158,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string partitionKey = 17;</code>
-       */
+      
       public Builder setPartitionKey(
           java.lang.String value) {
         if (value == null) {
@@ -6941,18 +6169,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string partitionKey = 17;</code>
-       */
+      
       public Builder clearPartitionKey() {
         bitField0_ = (bitField0_ & ~0x00000001);
         partitionKey_ = getDefaultInstance().getPartitionKey();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string partitionKey = 17;</code>
-       */
+      
       public Builder setPartitionKeyBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -6964,17 +6188,13 @@ public final class Message {
         return this;
       }
 
-      // required string sequenceNumber = 18;
+
       private java.lang.Object sequenceNumber_ = "";
-      /**
-       * <code>required string sequenceNumber = 18;</code>
-       */
+      
       public boolean hasSequenceNumber() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      /**
-       * <code>required string sequenceNumber = 18;</code>
-       */
+      
       public java.lang.String getSequenceNumber() {
         java.lang.Object ref = sequenceNumber_;
         if (!(ref instanceof java.lang.String)) {
@@ -6986,9 +6206,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>required string sequenceNumber = 18;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getSequenceNumberBytes() {
         java.lang.Object ref = sequenceNumber_;
@@ -7002,9 +6220,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>required string sequenceNumber = 18;</code>
-       */
+      
       public Builder setSequenceNumber(
           java.lang.String value) {
         if (value == null) {
@@ -7015,18 +6231,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>required string sequenceNumber = 18;</code>
-       */
+      
       public Builder clearSequenceNumber() {
         bitField0_ = (bitField0_ & ~0x00000002);
         sequenceNumber_ = getDefaultInstance().getSequenceNumber();
         onChanged();
         return this;
       }
-      /**
-       * <code>required string sequenceNumber = 18;</code>
-       */
+      
       public Builder setSequenceNumberBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -7038,23 +6250,17 @@ public final class Message {
         return this;
       }
 
-      // optional bytes data = 19;
+
       private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
-      /**
-       * <code>optional bytes data = 19;</code>
-       */
+      
       public boolean hasData() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      /**
-       * <code>optional bytes data = 19;</code>
-       */
+      
       public com.google.protobuf.ByteString getData() {
         return data_;
       }
-      /**
-       * <code>optional bytes data = 19;</code>
-       */
+      
       public Builder setData(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
@@ -7064,9 +6270,7 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional bytes data = 19;</code>
-       */
+      
       public Builder clearData() {
         bitField0_ = (bitField0_ & ~0x00000004);
         data_ = getDefaultInstance().getData();
@@ -7074,48 +6278,24 @@ public final class Message {
         return this;
       }
 
-      // optional int64 timestamp = 27;
+
       private long timestamp_ ;
-      /**
-       * <code>optional int64 timestamp = 27;</code>
-       *
-       * <pre>
-       *	approximateArrivalTimestamp = 20;
-       * </pre>
-       */
+      
       public boolean hasTimestamp() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      /**
-       * <code>optional int64 timestamp = 27;</code>
-       *
-       * <pre>
-       *	approximateArrivalTimestamp = 20;
-       * </pre>
-       */
+      
       public long getTimestamp() {
         return timestamp_;
       }
-      /**
-       * <code>optional int64 timestamp = 27;</code>
-       *
-       * <pre>
-       *	approximateArrivalTimestamp = 20;
-       * </pre>
-       */
+      
       public Builder setTimestamp(long value) {
         bitField0_ |= 0x00000008;
         timestamp_ = value;
         onChanged();
         return this;
       }
-      /**
-       * <code>optional int64 timestamp = 27;</code>
-       *
-       * <pre>
-       *	approximateArrivalTimestamp = 20;
-       * </pre>
-       */
+      
       public Builder clearTimestamp() {
         bitField0_ = (bitField0_ & ~0x00000008);
         timestamp_ = 0L;
@@ -7123,17 +6303,13 @@ public final class Message {
         return this;
       }
 
-      // optional string timestampType = 28;
+
       private java.lang.Object timestampType_ = "";
-      /**
-       * <code>optional string timestampType = 28;</code>
-       */
+      
       public boolean hasTimestampType() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
-      /**
-       * <code>optional string timestampType = 28;</code>
-       */
+      
       public java.lang.String getTimestampType() {
         java.lang.Object ref = timestampType_;
         if (!(ref instanceof java.lang.String)) {
@@ -7145,9 +6321,7 @@ public final class Message {
           return (java.lang.String) ref;
         }
       }
-      /**
-       * <code>optional string timestampType = 28;</code>
-       */
+      
       public com.google.protobuf.ByteString
           getTimestampTypeBytes() {
         java.lang.Object ref = timestampType_;
@@ -7161,9 +6335,7 @@ public final class Message {
           return (com.google.protobuf.ByteString) ref;
         }
       }
-      /**
-       * <code>optional string timestampType = 28;</code>
-       */
+      
       public Builder setTimestampType(
           java.lang.String value) {
         if (value == null) {
@@ -7174,18 +6346,14 @@ public final class Message {
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string timestampType = 28;</code>
-       */
+      
       public Builder clearTimestampType() {
         bitField0_ = (bitField0_ & ~0x00000010);
         timestampType_ = getDefaultInstance().getTimestampType();
         onChanged();
         return this;
       }
-      /**
-       * <code>optional string timestampType = 28;</code>
-       */
+      
       public Builder setTimestampTypeBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
@@ -7197,7 +6365,7 @@ public final class Message {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:Record)
+
     }
 
     static {
@@ -7205,7 +6373,7 @@ public final class Message {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:Record)
+
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
@@ -7343,5 +6511,5 @@ public final class Message {
         }, assigner);
   }
 
-  // @@protoc_insertion_point(outer_class_scope)
+
 }

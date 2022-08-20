@@ -71,7 +71,7 @@ public class DISSequenceNumberOutOfRangeException extends DISClientException
 
     private void resolveSequenceNumber(String message)
     {
-        // message example: {"errorCode":"DIS.4224","message":"Sequence_number out of range. [5280][ should be within ][0][ ][617]"}
+
         if (message != null && message.contains(Constants.ERROR_INFO_SEQUENCE_NUMBER_OUT_OF_RANGE))
         {
             Matcher matcher = pattern.matcher(message);

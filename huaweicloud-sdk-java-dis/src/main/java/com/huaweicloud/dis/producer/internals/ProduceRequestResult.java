@@ -36,8 +36,6 @@ public final class ProduceRequestResult {
 
     private volatile PutRecordsResult putRecordsResult;
     
-//    private volatile Long baseOffset = null;
-//    private volatile long logAppendTime = RecordBatch.NO_TIMESTAMP;
     private volatile RuntimeException error;
 
     /**
@@ -71,7 +69,7 @@ public final class ProduceRequestResult {
 
     /**
      * Await the completion of this request
-     * 
+     *
      * @throws InterruptedException InterruptedException when being interrupted.
      */
     public void await() throws InterruptedException {
@@ -91,7 +89,7 @@ public final class ProduceRequestResult {
 
     /**
      * The base offset for the request (the first offset in the record set)
-     * 
+     *
      * @return The base offset for the request.
      */
     public PutRecordsResult putRecordsResult() {
@@ -100,7 +98,7 @@ public final class ProduceRequestResult {
 
     /**
      * The error thrown (generally on the server) while processing this request
-     * 
+     *
      * @return The error thrown while processing this request.
      */
     public RuntimeException error() {
@@ -109,7 +107,7 @@ public final class ProduceRequestResult {
 
     /**
      * The topic and partition to which the record was appended
-     * 
+     *
      * @return The topic and partition to which the record was appended.
      */
     public StreamPartition topicPartition() {
@@ -118,7 +116,7 @@ public final class ProduceRequestResult {
 
 	/**
 	 * Has the request completed?
-	 * 
+	 *
 	 * @return {@code true} completed {@code false} otherwise
 	 */
     public boolean completed() {

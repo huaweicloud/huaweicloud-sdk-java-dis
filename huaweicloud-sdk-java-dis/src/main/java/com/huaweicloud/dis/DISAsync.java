@@ -164,50 +164,7 @@ public interface DISAsync extends DIS
     java.util.concurrent.Future<DescribeStreamResult> describeStreamAsync(DescribeStreamRequest describeStreamRequest,
         AsyncHandler<DescribeStreamResult> asyncHandler);
     
-    // 所有的异步接口，只在同步接口正式对外发布的时候才处理，同步接口发布为异步的过程，各个接口的实现方式是一样的
-    
-    // java.util.concurrent.Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest);
-    //
-    // java.util.concurrent.Future<ListStreamsResult> listStreamsAsync(ListStreamsRequest listStreamsRequest,
-    // AsyncHandler<ListStreamsResult> asyncHandler);
-    //
-    // java.util.concurrent.Future<SplitShardResult> splitShardAsync(SplitShardRequest splitShardsRequest);
-    //
-    // java.util.concurrent.Future<SplitShardResult> splitShardAsync(SplitShardRequest splitShardsRequest,
-    // AsyncHandler<SplitShardResult> asyncHandler);
-    //
-    // java.util.concurrent.Future<MergeShardsResult> mergeShardsAsync(MergeShardsRequest mergeShardsRequest);
-    //
-    // java.util.concurrent.Future<MergeShardsResult> mergeShardsAsync(MergeShardsRequest mergeShardsRequest,
-    // AsyncHandler<MergeShardsResult> asyncHandler);
-    //
-    // java.util.concurrent.Future<AggregateRecordsResult> aggregateRecordsAsync(AggregateRecordsRequest
-    // aggregateRecordsParam);
-    //
-    // java.util.concurrent.Future<AggregateRecordsResult> aggregateRecordsAsync(AggregateRecordsRequest
-    // aggregateRecordsParam, AsyncHandler<AggregateRecordsResult> asyncHandler);
-    
-//    /**
-//     * <p>
-//     * 上传小文件。
-//     * </p>
-//     *
-//     * @param putFilesRequest 上传小文件的请求参数
-//     * @return 包含上传小文件结果的 JAVA Future 对象
-//     */
-//    java.util.concurrent.Future<PutFilesResult> putFilesAsync(PutFilesRequest putFilesRequest);
-//    
-//    /**
-//     * <p>
-//     * 上传小文件。
-//     * </p>
-//     *
-//     * @param putFilesRequest 上传小文件的请求参数
-//     * @param asyncHandler 异步回调处理程序。 用户可以提供接口中回调方法的实现，以接收操作成功或失败的通知。
-//     * @return 包含上传小文件结果的 JAVA Future 对象
-//     */
-//    java.util.concurrent.Future<PutFilesResult> putFilesAsync(PutFilesRequest putFilesRequest,
-//        AsyncHandler<PutFilesResult> asyncHandler);
+
     
     /**
      * <p>

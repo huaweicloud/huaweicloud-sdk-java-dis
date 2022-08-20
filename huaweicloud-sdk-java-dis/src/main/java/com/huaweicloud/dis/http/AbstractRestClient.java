@@ -93,7 +93,7 @@ public abstract class AbstractRestClient
      * Set the message body converters to use.
      * <p>
      * These converters are used to convert from and to HTTP requests and responses.
-     * 
+     *
      * @param messageConverters List of message converters.
      */
     public void setMessageConverters(List<HttpMessageConverter<?>> messageConverters)
@@ -111,7 +111,7 @@ public abstract class AbstractRestClient
     
     /**
      * Return the message body converters.
-     * 
+     *
      * @return List of message converters.
      */
     public List<HttpMessageConverter<?>> getMessageConverters()
@@ -123,7 +123,7 @@ public abstract class AbstractRestClient
      * Set the error handler.
      * <p>
      * By default, RestTemplate uses a {@link DefaultResponseErrorHandler}.
-     * 
+     *
      * @param errorHandler response error handler.
      */
     public void setErrorHandler(ResponseErrorHandler errorHandler)
@@ -136,7 +136,7 @@ public abstract class AbstractRestClient
     
     /**
      * Return the error handler.
-     * 
+     *
      * @return response error handler.
      */
     public ResponseErrorHandler getErrorHandler()
@@ -149,7 +149,7 @@ public abstract class AbstractRestClient
      * necessary.
      * <p>
      * Can be overridden in subclasses.
-     * 
+     *
      * @param response the resulting {@link HttpResponse}
      * @throws IOException if propagated from {@link ResponseErrorHandler}
      * @since 1.3.0
@@ -169,7 +169,7 @@ public abstract class AbstractRestClient
     
     /**
      * 设置请求头域
-     * 
+     *
      * @param request 请求体
      * @param headers 需要添加到请求体重的头域
      * @param <T> Generic Type
@@ -262,17 +262,7 @@ public abstract class AbstractRestClient
         }
         finally
         {
-            // if (null != in)
-            // {
-            // try
-            // {
-            // in.close();
-            // }
-            // catch (IOException e)
-            // {
-            // log.error(e.getMessage());
-            // }
-            // }
+
         }
         RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(disConfig.getSocketTimeOut()).setConnectTimeout(disConfig.getConnectionTimeOut()).build();
         Registry<ConnectionSocketFactory> registry = registryBuilder.build();
@@ -280,8 +270,7 @@ public abstract class AbstractRestClient
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(registry);
         connManager.setDefaultMaxPerRoute(disConfig.getMaxPerRoute());
         connManager.setMaxTotal(disConfig.getMaxTotal());
-        // connManager.setDefaultConnectionConfig(connConfig);
-        // connManager.setDefaultSocketConfig(socketConfig);
+
         
         // 构建客户端
         return HttpClientBuilder.create()

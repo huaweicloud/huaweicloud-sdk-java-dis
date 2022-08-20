@@ -57,7 +57,7 @@ public class DISStreamNotExistsException extends DISClientException
 
     private void resolveStreamName(String message)
     {
-        // message example: {"errorCode":"DIS.4301","message":"Stream does not exist. [dis-lR5q111][3e83253eb4a24c65a8533eb3da85e070]"}
+
         if (message != null && message.contains(Constants.ERROR_INFO_STREAM_NOT_EXISTS))
         {
             Matcher matcher = pattern.matcher(message);

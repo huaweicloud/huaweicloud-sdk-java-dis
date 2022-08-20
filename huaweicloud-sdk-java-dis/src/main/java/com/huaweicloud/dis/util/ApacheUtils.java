@@ -33,7 +33,7 @@ public class ApacheUtils
     public static CredentialsProvider newProxyCredentialsProvider
     (DISConfig disConfig) {
         final CredentialsProvider provider = new BasicCredentialsProvider();
-//        provider.setCredentials(newAuthScope(disConfig), newNTCredentials(disConfig));
+
         provider.setCredentials(AuthScope.ANY, newNTCredentials(disConfig));
         return provider;
     }

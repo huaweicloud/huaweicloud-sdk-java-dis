@@ -25,20 +25,14 @@ import javax.crypto.spec.PBEKeySpec;
 
 /**
  * @author j00318840
- *         
+ *
  */
 public class PBKDF2Coder
 {
     
     private static final int iterations = 1000;
     
-    // public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    // String hexSalt = randomHex(8);
-    // System.out.println(hexSalt);
-    //
-    // System.out.println(genHash("passwd", hexSalt));
-    // }
-    
+
     public static String randomHex(int bytes)
         throws NoSuchAlgorithmException
     {
