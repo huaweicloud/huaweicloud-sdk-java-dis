@@ -25,8 +25,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class UpdatePartitionCountRequest
 {
     
-//    String scalingType;
-    
+
     @JsonProperty("stream_name")
     private String streamName;
     

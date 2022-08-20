@@ -222,7 +222,7 @@ public class DISProducer
 
         RecordAccumulator.RecordAppendResult result =
             accumulator.append(tp, timestamp, putRecordsRequest, callback, this.maxBlockMs);
-//        if (result.batchIsFull || result.newBatchCreated)
+
         if (result.batchIsFull || lingerMs == 0)
         {
             log.trace("Waking up the sender since topic partition {} is either full or getting a new batch", tp);

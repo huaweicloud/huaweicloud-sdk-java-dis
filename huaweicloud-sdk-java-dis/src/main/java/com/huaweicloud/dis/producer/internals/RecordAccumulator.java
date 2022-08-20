@@ -41,7 +41,7 @@ import com.huaweicloud.dis.util.CopyOnWriteMap;
 
 /**
  * 用来进行Record的缓冲
- * 
+ *
  */
 public final class RecordAccumulator {
 
@@ -66,7 +66,7 @@ public final class RecordAccumulator {
     
     private boolean orderByPartition;//分片串行发送，使数据按分片保序
     /**
-     * 
+     *
      * @param maxBatchSize 最大批量大小
      * @param maxBatchCount 最大批量计数
      * @param maxBufferSize 最大缓冲大小
@@ -107,7 +107,6 @@ public final class RecordAccumulator {
                                      AsyncHandler<PutRecordsResult> callback,
                                      long maxTimeToBlock) throws InterruptedException {
         // We keep track of the number of appending thread to make sure we do not miss batches in
-        // abortIncompleteBatches().
         appendsInProgress.incrementAndGet();
         try {
             // check if we have an in-progress batch
@@ -240,14 +239,7 @@ public final class RecordAccumulator {
 
         List<ProducerBatch> drainBatches = new ArrayList<>();
         
-//        Iterator<Map.Entry<StreamPartition, Future<PutRecordsResult>>> itor = onSendingPartitions.entrySet().iterator();
-//        while(itor.hasNext()){
-//            Map.Entry<StreamPartition, Future<PutRecordsResult>> entry = itor.next();
-//            if(entry.getValue() != null && entry.getValue().isDone()){
-//                itor.remove();
-//            }
-//        }
-        
+
         for(Map.Entry<StreamPartition, Deque<ProducerBatch>> entry : batches.entrySet()){
             StreamPartition sp = entry.getKey();
             Deque<ProducerBatch> deque = entry.getValue();
@@ -257,11 +249,6 @@ public final class RecordAccumulator {
                     continue;
                 }
             }
-            //如果当前分片还有没发送完成的，待发送完成后再取
-//            if(onSendingPartitions.containsKey(sp)){
-//                continue;
-//            }
-//            
             synchronized (deque)
             {
                 ProducerBatch first = deque.peekFirst();

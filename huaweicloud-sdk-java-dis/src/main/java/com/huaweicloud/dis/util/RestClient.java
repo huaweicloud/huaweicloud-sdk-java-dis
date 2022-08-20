@@ -117,7 +117,7 @@ public class RestClient
      * Set the message body converters to use.
      * <p>
      * These converters are used to convert from and to HTTP requests and responses.
-     * 
+     *
      * @param messageConverters List of message converters.
      */
     public void setMessageConverters(List<HttpMessageConverter<?>> messageConverters)
@@ -135,7 +135,7 @@ public class RestClient
     
     /**
      * Return the message body converters.
-     * 
+     *
      * @return List of message converters.
      */
     public List<HttpMessageConverter<?>> getMessageConverters()
@@ -147,7 +147,7 @@ public class RestClient
      * Set the error handler.
      * <p>
      * By default, RestTemplate uses a {@link DefaultResponseErrorHandler}.
-     * 
+     *
      * @param errorHandler response error handler.
      */
     public void setErrorHandler(ResponseErrorHandler errorHandler)
@@ -160,7 +160,7 @@ public class RestClient
     
     /**
      * Return the error handler.
-     * 
+     *
      * @return response error handler.
      */
     public ResponseErrorHandler getErrorHandler()
@@ -190,7 +190,7 @@ public class RestClient
     
     /*
      * HttpClient Get Request
-     * 
+     *
      */
     public <T> T get(String url, Class<T> responseClazz, Map<String, String> headers)
     {
@@ -253,7 +253,7 @@ public class RestClient
     
     /**
      * 发送请求并处理响应
-     * 
+     *
      * @param request 请求体
      * @param responseExtractor 响应解析器
      * @param <T> Generic type
@@ -341,7 +341,7 @@ public class RestClient
      * necessary.
      * <p>
      * Can be overridden in subclasses.
-     * 
+     *
      * @param response the resulting {@link HttpResponse}
      * @throws IOException if propagated from {@link ResponseErrorHandler}
      * @since 1.3.0
@@ -361,7 +361,7 @@ public class RestClient
     
     /**
      * 设置请求头域
-     * 
+     *
      * @param request 请求体
      * @param headers 需要添加到请求体重的头域
      * @return 修改后的请求体
@@ -463,37 +463,16 @@ public class RestClient
 			 
         finally
         {
-            // if (null != in)
-            // {
-            // try
-            // {
-            // in.close();
-            // }
-            // catch (IOException e)
-            // {
-            // log.error(e.getMessage());
-            // }
-            // }
+
         }
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
-//        if (disConfig.isProxyEnabled() && disConfig.isAuthenticatedProxy())
-//        {
-//            List<String> apacheAuthenticationSchemes = new ArrayList<>();
-//            apacheAuthenticationSchemes.add(AuthSchemes.NTLM);
-//            apacheAuthenticationSchemes.add(AuthSchemes.BASIC);
-//            apacheAuthenticationSchemes.add(AuthSchemes.DIGEST);
-//            
-//            requestConfigBuilder.setProxyPreferredAuthSchemes(apacheAuthenticationSchemes);
-//        }
         RequestConfig requestConfig = requestConfigBuilder.setSocketTimeout(disConfig.getSocketTimeOut()).setConnectTimeout(disConfig.getConnectionTimeOut()).build();
         Registry<ConnectionSocketFactory> registry = registryBuilder.build();
         // 设置连接管理器
         PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(registry);
         connManager.setDefaultMaxPerRoute(disConfig.getMaxPerRoute());
         connManager.setMaxTotal(disConfig.getMaxTotal());
-        // connManager.setDefaultConnectionConfig(connConfig);
-        // connManager.setDefaultSocketConfig(socketConfig);
-        
+
         // 构建客户端
         HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
         if (disConfig.isProxyEnabled())
@@ -510,16 +489,7 @@ public class RestClient
                 httpClientBuilder.setDefaultCredentialsProvider(ApacheUtils.newProxyCredentialsProvider(disConfig));
             }
         }
-//        Registry<AuthSchemeProvider> authSchemeRegistry =
-//            RegistryBuilder.<AuthSchemeProvider> create()
-//                .register(AuthSchemes.NTLM, new NTLMSchemeFactory())
-//                .register(AuthSchemes.BASIC, new BasicSchemeFactory())
-//                .register(AuthSchemes.DIGEST, new DigestSchemeFactory())
-//                .register(AuthSchemes.SPNEGO, new SPNegoSchemeFactory())
-//                .register(AuthSchemes.KERBEROS, new KerberosSchemeFactory())
-//                .build();
-//        httpClientBuilder.setDefaultAuthSchemeRegistry(authSchemeRegistry);
-        
+
         return httpClientBuilder.setConnectionManager(connManager)
             .setRetryHandler(new HttpRequestRetryHandler(3, true))
             .setDefaultRequestConfig(requestConfig)
@@ -528,7 +498,7 @@ public class RestClient
     
     /**
      * 读取Java默认的TrustStore
-     * 
+     *
      * @return Default Java TrustStore
      * @throws KeyStoreException KeyStoreException
      * @throws NoSuchAlgorithmException NoSuchAlgorithmException

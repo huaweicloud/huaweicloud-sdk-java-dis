@@ -114,28 +114,7 @@ public class Sender extends Thread
         exitRunLoop = true;
         log.debug("Beginning shutdown of DIS producer I/O thread, sending remaining records.");
         
-        // okay we stopped accepting requests but there may still be
-        // requests in the accumulator or waiting for acknowledgment,
-        // wait until these are completed.
-        // while (!forceClose && (this.accumulator.hasUndrained() || this.client.inFlightRequestCount() > 0)) {
-        // try {
-        // run(time.milliseconds());
-        // } catch (Exception e) {
-        // log.error("Uncaught error in kafka producer I/O thread: ", e);
-        // }
-        // }
-        // if (forceClose) {
-        // // We need to fail all the incomplete batches and wake up the threads waiting on
-        // // the futures.
-        // this.accumulator.abortIncompleteBatches();
-        // }
-        // try {
-        // this.client.close();
-        // } catch (Exception e) {
-        // log.error("Failed to close network client", e);
-        // }
-        //
-        // log.debug("Shutdown of Kafka producer I/O thread has completed.");
+
     }
     
     /**
@@ -261,7 +240,7 @@ public class Sender extends Thread
                 }
             });
 
-            //accumulator.setOnSendingPartitionFuture(tp, resultFuture);
+
         }
 
         return true;
@@ -273,8 +252,6 @@ public class Sender extends Thread
     public void wakeup()
     {
         LockSupport.unpark(this);
-//        this.wait(timeout);
-//        this.notify();
     }
 
     public void close(long timeout)

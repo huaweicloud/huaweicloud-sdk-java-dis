@@ -80,8 +80,7 @@ public class CacheResenderThread extends Thread
             
             try
             {
-                // 10分钟一次数据重发
-//                Thread.sleep(10 * 60 * 1000);
+
                 Thread.sleep(2 * 60 * 1000);
             }
             catch (InterruptedException e)
@@ -113,7 +112,7 @@ public class CacheResenderThread extends Thread
     
     /**
      * 重发缓存数据
-     * 
+     *
      * @param dataFile 缓存数据文件
      * @param indexFile 缓存索引文件
      * @throws IOException

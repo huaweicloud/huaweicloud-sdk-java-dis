@@ -18,9 +18,9 @@ package com.huaweicloud.dis.util.encrypt;
 
 /**
  * reference apache commons <a href="http://commons.apache.org/codec/">http://commons.apache.org/codec/</a>
- * 
+ *
  * @author Aub
- *         
+ *
  */
 public class Hex
 {
@@ -39,7 +39,7 @@ public class Hex
         
     /**
      * 将字节数组转换为十六进制字符数组
-     * 
+     *
      * @param data byte[]
      * @return 十六进制char[]
      */
@@ -51,7 +51,7 @@ public class Hex
     
     /**
      * 将字节数组转换为十六进制字符数组
-     * 
+     *
      * @param data byte[]
      * @param toLowerCase <code>true</code> 传换成小写格式 ， <code>false</code> 传换成大写格式
      * @return 十六进制char[]
@@ -63,7 +63,7 @@ public class Hex
     
     /**
      * 将字节数组转换为十六进制字符数组
-     * 
+     *
      * @param data byte[]
      * @param toDigits 用于控制输出的char[]
      * @return 十六进制char[]
@@ -83,7 +83,7 @@ public class Hex
     
     /**
      * 将字节数组转换为十六进制字符串
-     * 
+     *
      * @param data byte[]
      * @return 十六进制String
      */
@@ -95,7 +95,7 @@ public class Hex
     
     /**
      * 将字节数组转换为十六进制字符串
-     * 
+     *
      * @param data byte[]
      * @param toLowerCase <code>true</code> 传换成小写格式 ， <code>false</code> 传换成大写格式
      * @return 十六进制String
@@ -107,7 +107,7 @@ public class Hex
     
     /**
      * 将字节数组转换为十六进制字符串
-     * 
+     *
      * @param data byte[]
      * @param toDigits 用于控制输出的char[]
      * @return 十六进制String
@@ -119,7 +119,7 @@ public class Hex
     
     /**
      * 将十六进制字符数组转换为字节数组
-     * 
+     *
      * @param data 十六进制char[]
      * @return byte[]
      * @throws RuntimeException 如果源十六进制字符数组是一个奇怪的长度，将抛出运行时异常
@@ -151,7 +151,7 @@ public class Hex
     
     /**
      * 将十六进制字符转换成一个整数
-     * 
+     *
      * @param ch 十六进制char
      * @param index 十六进制字符在字符数组中的位置
      * @return 一个整数
@@ -166,14 +166,5 @@ public class Hex
         }
         return digit;
     }
-    
-    // public static void main(String[] args) {
-    // String srcStr = "待转换字符串";
-    // String encodeStr = encodeHexStr(srcStr.getBytes());
-    // String decodeStr = new String(decodeHex(encodeStr.toCharArray()));
-    // System.out.println("转换前：" + srcStr);
-    // System.out.println("转换后：" + encodeStr);
-    // System.out.println("还原后：" + decodeStr);
-    // }
     
 }

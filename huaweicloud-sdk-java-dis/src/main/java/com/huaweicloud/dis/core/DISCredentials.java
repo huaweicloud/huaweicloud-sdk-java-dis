@@ -62,14 +62,7 @@ public class DISCredentials implements Cloneable {
 
     public DISCredentials(String accessKeyId, String secretKey, String securityToken, String dataPassword, String authToken, String authType,
                           long timestamp) {
-        /*if (accessKeyId == null)
-        {
-            throw new IllegalArgumentException("Access key cannot be null.");
-        }
-        if (secretKey == null)
-        {
-            throw new IllegalArgumentException("Secret key cannot be null.");
-        }*/
+
         if (StringUtils.isNullOrEmpty(authType)) {
             this.authType = AuthType.AKSK.getAuthType();
             if (accessKeyId == null) {
@@ -91,7 +84,7 @@ public class DISCredentials implements Cloneable {
         this.dataPassword = dataPassword;
         this.timestamp = timestamp;
         this.authToken = authToken;
-        //this.authType = authType;
+
     }
 
     public String getAccessKeyId() {

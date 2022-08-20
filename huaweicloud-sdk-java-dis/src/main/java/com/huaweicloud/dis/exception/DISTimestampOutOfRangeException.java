@@ -58,7 +58,7 @@ public class DISTimestampOutOfRangeException extends DISClientException
 
     private void resolveTimestamp(String message)
     {
-        // {"errorCode":"DIS.4300","message":"Request error. [timestamp is expired, timestamp should be larger than 1545728813434]"}
+
         if (message != null && message.contains(Constants.ERROR_INFO_TIMESTAMP_IS_EXPIRED))
         {
             Matcher matcher = pattern.matcher(message);

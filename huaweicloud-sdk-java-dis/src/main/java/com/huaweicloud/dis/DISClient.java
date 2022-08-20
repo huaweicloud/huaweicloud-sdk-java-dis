@@ -636,7 +636,7 @@ public class DISClient extends AbstractDISClient implements DIS {
         super.innerUpdateCredentials(credentials);
     }
 
-    //@Override
+
     public void updateAuthToken(String authToken) {
         super.innerUpdateAuthToken(authToken);
     }
