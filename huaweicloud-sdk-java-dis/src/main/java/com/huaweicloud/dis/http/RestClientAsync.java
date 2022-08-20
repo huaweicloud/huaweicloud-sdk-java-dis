@@ -244,7 +244,7 @@ public class RestClientAsync extends AbstractRestClient{
     	
     	SSLContext sslContext=null;
     	try {
-    		sslContext = SSLContext.getInstance("TLS");
+    		sslContext = SSLContext.getInstance("TLSv1.2");
             sslContext.init(null, trustAllCerts, null);	
     	}catch(NoSuchAlgorithmException |KeyManagementException e) {
     		throw new RuntimeException(e);

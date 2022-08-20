@@ -245,7 +245,7 @@ public abstract class AbstractRestClient
             }
             
             LayeredConnectionSocketFactory sslSF = new SSLConnectionSocketFactory(sslContext,
-                new String[] {"TLSv1.2", "TLSv1.1"}, null, verifier);
+                new String[] {"TLSv1.2"}, null, verifier);
             registryBuilder.register("https", sslSF);
         }
         catch (KeyStoreException e)
