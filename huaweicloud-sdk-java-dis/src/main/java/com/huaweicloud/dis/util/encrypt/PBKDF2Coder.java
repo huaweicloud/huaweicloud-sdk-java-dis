@@ -23,10 +23,6 @@ import java.security.spec.InvalidKeySpecException;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
-/**
- * @author j00318840
- *
- */
 public class PBKDF2Coder
 {
     
