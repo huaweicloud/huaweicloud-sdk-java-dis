@@ -23,8 +23,7 @@ import java.util.Properties;
 
 /**
  * 签名需要提供校验方法，校验{@code Request}头部的签名信息是否合理.
- * 
- * @author l00307761
+ *
  * @version v1.0.0
  */
 public interface VerifySigner extends RegionSigner, ServiceSigner, Signer {

@@ -32,8 +32,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 加密工具类
- * 
- * @author j00318840
+ *
  */
 public class EncryptUtils
 {
