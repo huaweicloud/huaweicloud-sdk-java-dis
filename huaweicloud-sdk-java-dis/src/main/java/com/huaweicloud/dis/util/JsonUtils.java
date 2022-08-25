@@ -41,6 +41,7 @@ public class JsonUtils
     static
     {
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 遇到空Bean不报错
+        mapper.disableDefaultTyping();
     }
 
     /*
