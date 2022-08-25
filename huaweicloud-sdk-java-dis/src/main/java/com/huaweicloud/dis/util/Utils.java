@@ -51,7 +51,7 @@ public class Utils
     
     public static boolean isValidEndpoint(String endpoint)
     {
-        String endpointPattern = "^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+(:[1-9][0-9]{0,4})?([\\w-./?%&=]*)?$";
+        String endpointPattern = "(?=.{1,255}$)^http[s]?:\\/\\/([\\w-]+\\.)+[\\w-]+(:[1-9][0-9]{0,4})?([\\w-./?%&=]*)?$";
         
         Pattern pattern = Pattern.compile(endpointPattern);
         return pattern.matcher(endpoint).matches();
