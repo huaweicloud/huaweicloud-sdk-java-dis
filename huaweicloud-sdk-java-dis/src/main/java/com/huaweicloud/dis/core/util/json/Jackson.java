@@ -35,6 +35,7 @@ public enum Jackson {
     static {
         objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.disableDefaultTyping();
     }
 
     private static final ObjectWriter writer = objectMapper.writer();
