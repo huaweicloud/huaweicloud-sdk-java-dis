@@ -44,7 +44,7 @@ public class PBKDF2Coder
         char[] chars = data.toCharArray();
         byte[] salt = Hex.decodeHex(hexSalt.toCharArray());
         PBEKeySpec spec = new PBEKeySpec(chars, salt, iterations, length);
-        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+        SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
         byte[] hash = skf.generateSecret(spec).getEncoded();
         return toHex(hash);
     }
