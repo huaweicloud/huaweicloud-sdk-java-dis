@@ -511,8 +511,7 @@ public class RestClient
 				? System.getProperties().getProperty("java.home") + File.separator + "lib" + File.separator + "security"
 						+ File.separator + "cacerts"
 				: System.getProperty("javax.net.ssl.keyStore");
-		final String CACERTS_PASSWORD = System.getProperty("javax.net.ssl.trustStorePassword") == null ? "changeit"
-				: System.getProperty("javax.net.ssl.trustStorePassword");
+		final String CACERTS_PASSWORD = System.getProperty("javax.net.ssl.trustStorePassword");
             
         KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
         InputStream in = null;
