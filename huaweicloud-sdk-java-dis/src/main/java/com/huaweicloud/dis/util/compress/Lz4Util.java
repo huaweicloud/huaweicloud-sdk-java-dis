@@ -1,10 +1,13 @@
 package com.huaweicloud.dis.util.compress;
 
+import com.huaweicloud.dis.util.cache.CacheUtils;
 import net.jpountz.lz4.LZ4BlockInputStream;
 import net.jpountz.lz4.LZ4BlockOutputStream;
 import net.jpountz.lz4.LZ4Compressor;
 import net.jpountz.lz4.LZ4Factory;
 import net.jpountz.lz4.LZ4FastDecompressor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -17,7 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class Lz4Util {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(Lz4Util.class);
     /**
      * @param srcByte 原始数据
      * @return 压缩后的数据
@@ -107,7 +110,7 @@ public class Lz4Util {
             fileOutputStream.close();
             bufferedOutputStream.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error("Failed to create file", e);
         }
     }
 }
