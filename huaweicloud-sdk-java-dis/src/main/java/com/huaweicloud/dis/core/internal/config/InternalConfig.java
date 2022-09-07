@@ -17,6 +17,7 @@
 package com.huaweicloud.dis.core.internal.config;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huaweicloud.dis.core.util.ClassLoaderHelper;
 import com.huaweicloud.dis.core.util.json.Jackson;
 
@@ -142,7 +143,9 @@ public class InternalConfig {
         if (url == null) {
             throw new IllegalArgumentException();
         }
-        InternalConfigJsonHelper target = Jackson.getObjectMapper().readValue(url, InternalConfigJsonHelper.class);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.deactivateDefaultTyping();
+        InternalConfigJsonHelper target = objectMapper.readValue(url, InternalConfigJsonHelper.class);
         return target;
     }
 
