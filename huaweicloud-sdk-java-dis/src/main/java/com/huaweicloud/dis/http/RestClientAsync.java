@@ -2,6 +2,8 @@ package com.huaweicloud.dis.http;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.List;
@@ -245,11 +247,15 @@ public class RestClientAsync extends AbstractRestClient{
     	SSLContext sslContext=null;
     	try {
     		sslContext = SSLContext.getInstance("TLSv1.2");
-            sslContext.init(null, trustAllCerts, null);	
+            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
+            sr.setSeed(sr.generateSeed(64));
+            sslContext.init(null, trustAllCerts, sr);
     	}catch(NoSuchAlgorithmException |KeyManagementException e) {
     		throw new RuntimeException(e);
-    	}
-        
+    	} catch (NoSuchProviderException e) {
+            throw new RuntimeException(e);
+        }
+
         SSLIOSessionStrategy sslioSessionStrategy = new SSLIOSessionStrategy(sslContext, SSLIOSessionStrategy.ALLOW_ALL_HOSTNAME_VERIFIER);
         
         Registry<SchemeIOSessionStrategy> registry = RegistryBuilder.<SchemeIOSessionStrategy>create()
