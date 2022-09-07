@@ -111,17 +111,17 @@ public class StreamInfo
      * <ul>
      * <li>
      * <p>
-     * BLOB - 表示二进制数据，DIS支持将BLOB类型数据转储至OBS、MRS服务。
+     * BLOB - 表示二进制数据，DIS支持将BLOB类型数据转储至OBS服务。
      * </p>
      * </li>
      * <li>
      * <p>
-     * JSON - DIS支持将JSON格式的数据转储至OBS、MRS、CloudTable服务。
+     * JSON - DIS支持将JSON格式的数据转储至OBS服务。
      * </p>
      * </li>
      * <li>
      * <p>
-     * CSV - DIS支持将CSV格式数据转储至OBS、MRS、DLI服务。
+     * CSV - DIS支持将CSV格式数据转储至OBS服务。
      * </p>
      * </ul>
      */
