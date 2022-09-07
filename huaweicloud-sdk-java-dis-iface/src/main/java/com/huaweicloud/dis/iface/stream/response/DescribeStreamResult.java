@@ -132,7 +132,7 @@ public class DescribeStreamResult
      * </li>
      * <li>
      * <p>
-     * CSV - DIS支持将CSV格式数据转储至OBS、MRS、DWS、DLI服务。
+     * CSV - DIS支持将CSV格式数据转储至OBS、MRS、DLI服务。
      * </p>
      * </li>
      * <li>

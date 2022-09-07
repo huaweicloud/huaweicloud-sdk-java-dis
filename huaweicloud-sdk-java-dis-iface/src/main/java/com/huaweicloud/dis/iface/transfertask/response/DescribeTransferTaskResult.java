@@ -116,14 +116,6 @@ public class DescribeTransferTaskResult {
 
     /**
      * <p>
-     * description of a task that dump data from DIS to DWS.
-     * </p>
-     */
-    @JsonProperty("dws_destination_description")
-    private DwsDestinationDescription dwsDestinationDescription;
-
-    /**
-     * <p>
      * description of a task that dump data from DIS to CloudTable.
      * </p>
      */
@@ -208,14 +200,6 @@ public class DescribeTransferTaskResult {
 
     public void setDliDestinationDescription(DliDestinationDescription dliDestinationDescription) {
         this.dliDestinationDescription = dliDestinationDescription;
-    }
-
-    public DwsDestinationDescription getDwsDestinationDescription() {
-        return dwsDestinationDescription;
-    }
-
-    public void setDwsDestinationDescription(DwsDestinationDescription dwsDestinationDescription) {
-        this.dwsDestinationDescription = dwsDestinationDescription;
     }
 
     public CloudtableDestinationDescription getCloudtableDestinationDescription() {

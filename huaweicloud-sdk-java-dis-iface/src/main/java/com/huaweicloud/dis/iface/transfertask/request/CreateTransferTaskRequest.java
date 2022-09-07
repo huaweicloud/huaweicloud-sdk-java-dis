@@ -23,7 +23,6 @@ import com.huaweicloud.dis.iface.stream.request.OBSDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.StreamDestinationType;
 import com.huaweicloud.dis.iface.stream.request.UqueryDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.cloudtable.CloudtableDestinationDescriptorRequest;
-import com.huaweicloud.dis.iface.stream.request.dws.DwsDestinationDescriptorRequest;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -76,14 +75,6 @@ public class CreateTransferTaskRequest {
     @JsonProperty("cloudtable_destination_descriptor")
     private CloudtableDestinationDescriptorRequest cloudtableDestinationDescriptor;
 
-    /**
-     * <p>
-     * A list of parameters required for dumping to DWS.
-     * </p>
-     */
-    @JsonProperty("dws_destination_descriptor")
-    private DwsDestinationDescriptorRequest dwsDestinationDescriptor;
-
     public String getStreamName() {
         return streamName;
     }
@@ -131,14 +122,6 @@ public class CreateTransferTaskRequest {
     public void setCloudtableDestinationDescriptor(
             CloudtableDestinationDescriptorRequest cloudtableDestinationDescriptor) {
         this.cloudtableDestinationDescriptor = cloudtableDestinationDescriptor;
-    }
-
-    public DwsDestinationDescriptorRequest getDwsDestinationDescriptor() {
-        return dwsDestinationDescriptor;
-    }
-
-    public void setDwsDestinationDescriptor(DwsDestinationDescriptorRequest dwsDestinationDescriptor) {
-        this.dwsDestinationDescriptor = dwsDestinationDescriptor;
     }
 
     @Override
