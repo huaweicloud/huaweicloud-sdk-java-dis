@@ -533,7 +533,6 @@ public class AbstractDISClient {
 
         StringBuilder uri = new StringBuilder(request.getEndpoint().toString()).append(request.getResourcePath());
 
-        // Set<String> paramKeys = getParams.keySet();
         if (parameters != null && !parameters.isEmpty()) {
             uri.append("?");
             for (Map.Entry<String, String> temp : parameters.entrySet()) {
