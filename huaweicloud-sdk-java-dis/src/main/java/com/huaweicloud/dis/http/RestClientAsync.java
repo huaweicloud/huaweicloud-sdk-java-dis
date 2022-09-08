@@ -247,14 +247,12 @@ public class RestClientAsync extends AbstractRestClient{
     	SSLContext sslContext=null;
     	try {
     		sslContext = SSLContext.getInstance("TLSv1.2");
-            SecureRandom sr = SecureRandom.getInstance("SHA1PRNG", "SUN");
+            SecureRandom sr = SecureRandom.getInstanceStrong();
             sr.setSeed(sr.generateSeed(64));
             sslContext.init(null, trustAllCerts, sr);
-    	}catch(NoSuchAlgorithmException |KeyManagementException e) {
+    	} catch (NoSuchAlgorithmException | KeyManagementException e) {
     		throw new RuntimeException(e);
-    	} catch (NoSuchProviderException e) {
-            throw new RuntimeException(e);
-        }
+    	}
 
         SSLIOSessionStrategy sslioSessionStrategy = new SSLIOSessionStrategy(sslContext, SSLIOSessionStrategy.ALLOW_ALL_HOSTNAME_VERIFIER);
         
