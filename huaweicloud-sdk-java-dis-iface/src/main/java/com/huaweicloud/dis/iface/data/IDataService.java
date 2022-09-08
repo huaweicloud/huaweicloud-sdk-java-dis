@@ -58,34 +58,4 @@ public interface IDataService
      * @return 下载数据的响应结果
      */
     GetRecordsResult getRecords(GetRecordsRequest getRecordsParam);
-
-
-    /**
-     * <p>
-     * 提交Checkpoint
-     * </p>
-     * 
-     * @param commitCheckpointRequest 提交Checkpoint请求体
-     * @return Checkpoint提交结果
-     */
-    CommitCheckpointResult commitCheckpoint(CommitCheckpointRequest commitCheckpointRequest);
-    
-    /**
-     * <p>
-     * 获取Checkpoint
-     * </p>
-     *
-     * @param getCheckpointRequest 获取Checkpoint请求体
-     * @return Checkpoint获取结果
-     */
-    GetCheckpointResult getCheckpoint(GetCheckpointRequest getCheckpointRequest);
-
-    /**
-     * <p>
-     * 刪除Checkpoint
-     * </p>
-     *
-     * @param deleteCheckpointRequest 刪除Checkpoint请求体
-     */
-    DeleteCheckpointResult deleteCheckpoint(DeleteCheckpointRequest deleteCheckpointRequest);
 }

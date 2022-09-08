@@ -24,8 +24,6 @@ import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
-import com.huaweicloud.dis.core.restresource.AppsResource;
-import com.huaweicloud.dis.core.restresource.CheckPointResource;
 import com.huaweicloud.dis.core.restresource.CursorResource;
 import com.huaweicloud.dis.core.restresource.RecordResource;
 import com.huaweicloud.dis.core.restresource.ResourcePathBuilder;
@@ -35,22 +33,10 @@ import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.AbstractCallbackAdapter;
 import com.huaweicloud.dis.http.AbstractFutureAdapter;
 import com.huaweicloud.dis.iface.api.protobuf.ProtobufUtils;
-import com.huaweicloud.dis.iface.app.request.CreateAppRequest;
-import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
-import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
-import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
-import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
 import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
 import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
-import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
 import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
 import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
@@ -556,107 +542,6 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         
         return requestAsync(describeStreamRequest, request, DescribeStreamResult.class, asyncHandler);
     }
-    
-	@Override
-	public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest) {
-		return commitCheckpointAsync(commitCheckpointRequest, null);
-	}
-
-	@Override
-	public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest,
-			AsyncHandler<CommitCheckpointResult> asyncHandler) {
-    	Request<HttpRequest> request = buildRequest(HttpMethodName.POST, disConfig.getEndpoint(),
-    			ResourcePathBuilder.standard()
-                .withProjectId(disConfig.getProjectId())
-                .withResource(new CheckPointResource(null))
-                .build());
-		
-        return requestAsync(commitCheckpointRequest, request, CommitCheckpointResult.class, asyncHandler);
-	}
-
-	@Override
-	public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest) {
-		return getCheckpointAsync(getCheckpointRequest, null);
-	}
-
-	@Override
-	public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest,
-			AsyncHandler<GetCheckpointResult> asyncHandler) {
-    	Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getEndpoint(),
-    			ResourcePathBuilder.standard()
-                .withProjectId(disConfig.getProjectId())
-                .withResource(new CheckPointResource(null))
-                .build());
-		
-        return requestAsync(getCheckpointRequest, request, GetCheckpointResult.class, asyncHandler);
-	}
-
-	@Override
-	public Future<Void> createAppAsync(String appName) {
-		return createAppAsync(appName, null);
-	}
-
-	@Override
-	public Future<Void> createAppAsync(String appName, AsyncHandler<Void> asyncHandler) {
-    	Request<HttpRequest> request = buildRequest(HttpMethodName.POST, disConfig.getManagerEndpoint(),
-    			ResourcePathBuilder.standard()
-                .withProjectId(disConfig.getProjectId())
-                .withResource(new AppsResource(null))
-                .build());
-        
-        CreateAppRequest createAppIdRequest = new CreateAppRequest();
-        createAppIdRequest.setAppName(appName);
-        return requestAsync(createAppIdRequest, request, null, asyncHandler);
-	}
-
-	@Override
-	public Future<Void> deleteAppAsync(String appName) {
-		return deleteAppAsync(appName, null);
-	}
-
-	@Override
-	public Future<Void> deleteAppAsync(String appName, AsyncHandler<Void> asyncHandler) {
-		Request<HttpRequest> request = buildRequest(HttpMethodName.DELETE, disConfig.getManagerEndpoint(),
-    			ResourcePathBuilder.standard()
-                .withProjectId(disConfig.getProjectId())
-                .withResource(new AppsResource(appName))
-                .build());
-		
-		return requestAsync(null, request, null, asyncHandler);
-	}
-
-	@Override
-	public Future<DescribeAppResult> describeAppAsync(String appName) {
-		return describeAppAsync(appName, null);
-	}
-
-	@Override
-	public Future<DescribeAppResult> describeAppAsync(String appName, AsyncHandler<DescribeAppResult> asyncHandler) {
-		Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getManagerEndpoint(),
-    			ResourcePathBuilder.standard()
-                .withProjectId(disConfig.getProjectId())
-                .withResource(new AppsResource(appName))
-                .build());
-		
-        return requestAsync(null, request, DescribeAppResult.class, asyncHandler);
-	}
-
-	@Override
-	public Future<ListAppsResult> listAppsAsync(ListAppsRequest listAppsRequest) {
-		return listAppsAsync(listAppsRequest, null);
-	}
-
-	@Override
-	public Future<ListAppsResult> listAppsAsync(ListAppsRequest listAppsRequest,
-			AsyncHandler<ListAppsResult> asyncHandler) {
-		Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getManagerEndpoint(),
-    			ResourcePathBuilder.standard()
-                .withProjectId(disConfig.getProjectId())
-                .withResource(new AppsResource(null))
-                .build());
-        
-        return requestAsync(listAppsRequest, request, ListAppsResult.class, asyncHandler);
-	}
 
 	@Override
 	public Future<UpdatePartitionCountResult> updatePartitionCountAsync(
@@ -727,37 +612,6 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
         
         return requestAsync(listStreamsRequest, request, ListStreamsResult.class, asyncHandler);
 	}
-
-    @Override
-    public Future<DeleteCheckpointResult> deleteCheckpointAsync(DeleteCheckpointRequest deleteCheckpointRequest) {
-        return deleteCheckpointAsync(deleteCheckpointRequest,null);
-    }
-
-    @Override
-    public Future<DeleteCheckpointResult> deleteCheckpointAsync(DeleteCheckpointRequest deleteCheckpointRequest, AsyncHandler<DeleteCheckpointResult> asyncHandler) {
-        Request<HttpRequest> request = buildRequest(HttpMethodName.DELETE, disConfig.getEndpoint(),
-                ResourcePathBuilder.standard()
-                        .withProjectId(disConfig.getProjectId())
-                        .withResource(new CheckPointResource(null))
-                        .build());
-        return requestAsync(deleteCheckpointRequest, request, DeleteCheckpointResult.class, asyncHandler);
-    }
-
-    @Override
-    public Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(ListStreamConsumingStateRequest listStreamConsumingStateRequest) {
-        return listStreamConsumingStateAsync(listStreamConsumingStateRequest,null);
-    }
-
-    @Override
-    public Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(ListStreamConsumingStateRequest listStreamConsumingStateRequest, AsyncHandler<ListStreamConsumingStateResult> asyncHandler) {
-        Request<HttpRequest> request = buildRequest(HttpMethodName.GET, disConfig.getEndpoint(),
-                ResourcePathBuilder.standard()
-                        .withProjectId(disConfig.getProjectId())
-                        .withResource(new AppsResource(listStreamConsumingStateRequest.getAppName()))
-                        .withResource(new StreamResource(listStreamConsumingStateRequest.getStreamName()))
-                        .build());
-        return requestAsync(listStreamConsumingStateRequest, request, ListStreamConsumingStateResult.class, asyncHandler);
-    }
 
     @Override
     public UpdateStreamResult updateStream(UpdateStreamRequest updateStreamRequest)
