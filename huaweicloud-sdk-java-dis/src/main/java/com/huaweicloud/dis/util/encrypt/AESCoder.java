@@ -27,7 +27,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 /**
@@ -54,9 +54,11 @@ public class AESCoder
      * 密钥算法
      */
     private static final String KEY_ALGORITHM = "AES";
-    
-    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/CBC/PKCS5Padding";
-    
+
+    private static final String DEFAULT_CIPHER_ALGORITHM = "AES/GCM/NoPadding";
+
+    private static final int GCM_TAG_LENGTH = 128;
+
     /**
      * 初始化密钥
      *
@@ -131,8 +133,8 @@ public class AESCoder
         Key key = toKey(keybs);
         // 实例化
         Cipher cipher = Cipher.getInstance(cipherAlgorithm);
-        
-        IvParameterSpec iv = new IvParameterSpec(ivbs);
+
+        GCMParameterSpec iv = new GCMParameterSpec(GCM_TAG_LENGTH, ivbs);
         // 使用密钥初始化，设置为加密模式
         cipher.init(Cipher.ENCRYPT_MODE, key, iv);
         
@@ -184,7 +186,7 @@ public class AESCoder
         // 实例化
         Cipher cipher = Cipher.getInstance(cipherAlgorithm);
         // 使用密钥初始化，设置为解密模式
-        cipher.init(Cipher.DECRYPT_MODE, key, new IvParameterSpec(ivbs));
+        cipher.init(Cipher.DECRYPT_MODE, key, new GCMParameterSpec(GCM_TAG_LENGTH, ivbs));
         // 执行操作
         return cipher.doFinal(data);
     }
