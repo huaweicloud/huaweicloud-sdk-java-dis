@@ -18,12 +18,8 @@ package com.huaweicloud.dis.iface.transfertask.request;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.huaweicloud.dis.iface.stream.request.MRSDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.OBSDestinationDescriptorRequest;
 import com.huaweicloud.dis.iface.stream.request.StreamDestinationType;
-import com.huaweicloud.dis.iface.stream.request.UqueryDestinationDescriptorRequest;
-import com.huaweicloud.dis.iface.stream.request.cloudtable.CloudtableDestinationDescriptorRequest;
-import com.huaweicloud.dis.iface.stream.request.dws.DwsDestinationDescriptorRequest;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -52,38 +48,6 @@ public class CreateTransferTaskRequest {
     @JsonProperty("obs_destination_descriptor")
     private OBSDestinationDescriptorRequest obsDestinationDescriptor;
 
-    /**
-     * <p>
-     * Parameter list of the MRS to which data in the DIS stream will be dumped.
-     * </p>
-     */
-    @JsonProperty("mrs_destination_descriptor")
-    private MRSDestinationDescriptorRequest mrsDestinationDescriptor;
-
-    /**
-     * <p>
-     * Parameter list of the DLI to which data in the DIS stream will be dumped.
-     * </p>
-     */
-    @JsonProperty("dli_destination_descriptor")
-    private UqueryDestinationDescriptorRequest dliDestinationDescriptor;
-
-    /**
-     * <p>
-     * A list of parameters required for dumping data to CloudTable.
-     * </p>
-     */
-    @JsonProperty("cloudtable_destination_descriptor")
-    private CloudtableDestinationDescriptorRequest cloudtableDestinationDescriptor;
-
-    /**
-     * <p>
-     * A list of parameters required for dumping to DWS.
-     * </p>
-     */
-    @JsonProperty("dws_destination_descriptor")
-    private DwsDestinationDescriptorRequest dwsDestinationDescriptor;
-
     public String getStreamName() {
         return streamName;
     }
@@ -106,39 +70,6 @@ public class CreateTransferTaskRequest {
 
     public void setObsDestinationDescriptor(OBSDestinationDescriptorRequest obsDestinationDescriptor) {
         this.obsDestinationDescriptor = obsDestinationDescriptor;
-    }
-
-    public MRSDestinationDescriptorRequest getMrsDestinationDescriptor() {
-        return mrsDestinationDescriptor;
-    }
-
-    public void setMrsDestinationDescriptor(MRSDestinationDescriptorRequest mrsDestinationDescriptor) {
-        this.mrsDestinationDescriptor = mrsDestinationDescriptor;
-    }
-
-    public UqueryDestinationDescriptorRequest getDliDestinationDescriptor() {
-        return dliDestinationDescriptor;
-    }
-
-    public void setDliDestinationDescriptor(UqueryDestinationDescriptorRequest dliDestinationDescriptor) {
-        this.dliDestinationDescriptor = dliDestinationDescriptor;
-    }
-
-    public CloudtableDestinationDescriptorRequest getCloudtableDestinationDescriptor() {
-        return cloudtableDestinationDescriptor;
-    }
-
-    public void setCloudtableDestinationDescriptor(
-            CloudtableDestinationDescriptorRequest cloudtableDestinationDescriptor) {
-        this.cloudtableDestinationDescriptor = cloudtableDestinationDescriptor;
-    }
-
-    public DwsDestinationDescriptorRequest getDwsDestinationDescriptor() {
-        return dwsDestinationDescriptor;
-    }
-
-    public void setDwsDestinationDescriptor(DwsDestinationDescriptorRequest dwsDestinationDescriptor) {
-        this.dwsDestinationDescriptor = dwsDestinationDescriptor;
     }
 
     @Override

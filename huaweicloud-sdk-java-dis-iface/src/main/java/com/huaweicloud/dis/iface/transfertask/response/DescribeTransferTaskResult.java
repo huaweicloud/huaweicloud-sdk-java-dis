@@ -98,38 +98,6 @@ public class DescribeTransferTaskResult {
     @JsonProperty("obs_destination_description")
     private OBSDestinationDescription obsDestinationDescription;
 
-    /**
-     * <p>
-     * description of a task that dump data from DIS to MRS.
-     * </p>
-     */
-    @JsonProperty("mrs_destination_description")
-    private MRSDestinationDescription mrsDestinationDescription;
-
-    /**
-     * <p>
-     * description of a task that dump data from DIS to DLI.
-     * </p>
-     */
-    @JsonProperty("dli_destination_description")
-    private DliDestinationDescription dliDestinationDescription;
-
-    /**
-     * <p>
-     * description of a task that dump data from DIS to DWS.
-     * </p>
-     */
-    @JsonProperty("dws_destination_description")
-    private DwsDestinationDescription dwsDestinationDescription;
-
-    /**
-     * <p>
-     * description of a task that dump data from DIS to CloudTable.
-     * </p>
-     */
-    @JsonProperty("cloudtable_destination_description")
-    private CloudtableDestinationDescription cloudtableDestinationDescription;
-
     public String getStreamName() {
         return streamName;
     }
@@ -192,38 +160,6 @@ public class DescribeTransferTaskResult {
 
     public void setObsDestinationDescription(OBSDestinationDescription obsDestinationDescription) {
         this.obsDestinationDescription = obsDestinationDescription;
-    }
-
-    public MRSDestinationDescription getMrsDestinationDescription() {
-        return mrsDestinationDescription;
-    }
-
-    public void setMrsDestinationDescription(MRSDestinationDescription mrsDestinationDescription) {
-        this.mrsDestinationDescription = mrsDestinationDescription;
-    }
-
-    public DliDestinationDescription getDliDestinationDescription() {
-        return dliDestinationDescription;
-    }
-
-    public void setDliDestinationDescription(DliDestinationDescription dliDestinationDescription) {
-        this.dliDestinationDescription = dliDestinationDescription;
-    }
-
-    public DwsDestinationDescription getDwsDestinationDescription() {
-        return dwsDestinationDescription;
-    }
-
-    public void setDwsDestinationDescription(DwsDestinationDescription dwsDestinationDescription) {
-        this.dwsDestinationDescription = dwsDestinationDescription;
-    }
-
-    public CloudtableDestinationDescription getCloudtableDestinationDescription() {
-        return cloudtableDestinationDescription;
-    }
-
-    public void setCloudtableDestinationDescription(CloudtableDestinationDescription cloudtableDestinationDescription) {
-        this.cloudtableDestinationDescription = cloudtableDestinationDescription;
     }
 
     public StreamDestinationType getDestinationType() {
