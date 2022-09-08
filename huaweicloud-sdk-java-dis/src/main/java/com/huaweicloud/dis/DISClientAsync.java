@@ -24,20 +24,9 @@ import org.slf4j.LoggerFactory;
 
 import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
-import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
-import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
-import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
-import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
-import com.huaweicloud.dis.iface.data.request.CommitCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.DeleteCheckpointRequest;
-import com.huaweicloud.dis.iface.data.request.GetCheckpointRequest;
 import com.huaweicloud.dis.iface.data.request.GetPartitionCursorRequest;
 import com.huaweicloud.dis.iface.data.request.GetRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
-import com.huaweicloud.dis.iface.data.response.CommitCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.DeleteCheckpointResult;
-import com.huaweicloud.dis.iface.data.response.GetCheckpointResult;
 import com.huaweicloud.dis.iface.data.response.GetPartitionCursorResult;
 import com.huaweicloud.dis.iface.data.response.GetRecordsResult;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
@@ -149,109 +138,6 @@ public class DISClientAsync extends DISClient implements DISAsync
     {
         return submit(describeStreamRequest, asyncHandler, describeStreamRequest1 -> innerDescribeStream(describeStreamRequest1));
     }
-
-    @Override
-    public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest)
-    {
-        return commitCheckpointAsync(commitCheckpointRequest, null);
-    }
-    
-    @Override
-    public Future<CommitCheckpointResult> commitCheckpointAsync(CommitCheckpointRequest commitCheckpointRequest,
-        AsyncHandler<CommitCheckpointResult> asyncHandler)
-    {
-        return submit(commitCheckpointRequest, asyncHandler, commitCheckpointRequest1 -> innerCommitCheckpoint(commitCheckpointRequest1));
-    }
-    
-    @Override
-    public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest)
-    {
-        return getCheckpointAsync(getCheckpointRequest, null);
-    }
-    
-    @Override
-    public Future<GetCheckpointResult> getCheckpointAsync(GetCheckpointRequest getCheckpointRequest,
-        AsyncHandler<GetCheckpointResult> asyncHandler)
-    {
-        return submit(getCheckpointRequest, asyncHandler, getCheckpointRequest1 -> innerGetCheckpoint(getCheckpointRequest1));
-    }
-    
-    @Override
-    public Future<Void> createAppAsync(String appName)
-    {
-        return createAppAsync(appName, null);
-    }
-    
-    @Override
-    public Future<Void> createAppAsync(String appName, AsyncHandler<Void> asyncHandler)
-    {
-        return submit(appName, asyncHandler, new InnerExecutor<String, Void>()
-        {
-            public Void innerExecute(String appName)
-            {
-                innerCreateApp(appName);
-                return null;
-            }
-        });
-    }
-
-    @Override
-    public Future<Void> deleteAppAsync(String appName)
-    {
-        return deleteAppAsync(appName, null);
-    }
-    
-    @Override
-    public Future<Void> deleteAppAsync(String appName, AsyncHandler<Void> asyncHandler)
-    {
-        return submit(appName, asyncHandler, new InnerExecutor<String, Void>()
-        {
-            public Void innerExecute(String appName)
-            {
-                innerDeleteApp(appName);
-                return null;
-            }
-        });
-    }
-
-
-    @Override
-    public Future<DescribeAppResult> describeAppAsync(String appName)
-    {
-        return describeAppAsync(appName, null);
-    }
-
-    @Override
-    public Future<DescribeAppResult> describeAppAsync(String appName, AsyncHandler<DescribeAppResult> asyncHandler)
-    {
-        return submit(appName, asyncHandler, new InnerExecutor<String, DescribeAppResult>()
-        {
-            public DescribeAppResult innerExecute(String appName)
-            {
-                return innerDescribeApp(appName);
-            }
-        });
-    }
-
-
-    @Override
-    public Future<ListAppsResult> listAppsAsync(ListAppsRequest listAppsRequest)
-    {
-        return listAppsAsync(listAppsRequest,null);
-    }
-
-    @Override
-    public Future<ListAppsResult> listAppsAsync(ListAppsRequest listAppsRequest, AsyncHandler<ListAppsResult> asyncHandler)
-    {
-        return submit(listAppsRequest, asyncHandler, new InnerExecutor<ListAppsRequest, ListAppsResult>()
-        {
-            public ListAppsResult innerExecute(ListAppsRequest listAppsRequest)
-            {
-                return innerListApps(listAppsRequest);
-            }
-        });
-    }
-
 
     @Override
     public Future<UpdatePartitionCountResult> updatePartitionCountAsync(
@@ -373,40 +259,6 @@ public class DISClientAsync extends DISClient implements DISAsync
             public ListStreamsResult innerExecute(ListStreamsRequest listStreamsRequest) {
                 return innerListStreams(listStreamsRequest);
             };
-        });
-	}
-
-	@Override
-	public Future<DeleteCheckpointResult> deleteCheckpointAsync(DeleteCheckpointRequest deleteCheckpointRequest) {
-		return deleteCheckpointAsync(deleteCheckpointRequest, null);
-	}
-
-	@Override
-	public Future<DeleteCheckpointResult> deleteCheckpointAsync(DeleteCheckpointRequest deleteCheckpointRequest,
-			AsyncHandler<DeleteCheckpointResult> asyncHandler) {
-		return submit(deleteCheckpointRequest, asyncHandler, new InnerExecutor<DeleteCheckpointRequest, DeleteCheckpointResult>()
-        {
-            public DeleteCheckpointResult innerExecute(DeleteCheckpointRequest deleteCheckpointRequest) {
-                return innerDeleteCheckpoint(deleteCheckpointRequest);
-            }
-        });
-	}
-
-	@Override
-	public Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(
-			ListStreamConsumingStateRequest listStreamConsumingStateRequest) {
-		return listStreamConsumingStateAsync(listStreamConsumingStateRequest, null);
-	}
-
-	@Override
-	public Future<ListStreamConsumingStateResult> listStreamConsumingStateAsync(
-			ListStreamConsumingStateRequest listStreamConsumingStateRequest,
-			AsyncHandler<ListStreamConsumingStateResult> asyncHandler) {
-		return submit(listStreamConsumingStateRequest, asyncHandler, new InnerExecutor<ListStreamConsumingStateRequest, ListStreamConsumingStateResult>()
-        {
-            public ListStreamConsumingStateResult innerExecute(ListStreamConsumingStateRequest listStreamConsumingStateRequest) {
-                return innerListStreamConsumingState(listStreamConsumingStateRequest);
-            }
         });
 	}
 

@@ -5,11 +5,6 @@ import java.util.concurrent.Future;
 
 import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.AbstractDISClient;
-import com.huaweicloud.dis.iface.app.request.ListAppsRequest;
-import com.huaweicloud.dis.iface.app.request.ListStreamConsumingStateRequest;
-import com.huaweicloud.dis.iface.app.response.DescribeAppResult;
-import com.huaweicloud.dis.iface.app.response.ListAppsResult;
-import com.huaweicloud.dis.iface.app.response.ListStreamConsumingStateResult;
 import com.huaweicloud.dis.iface.data.request.*;
 import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.iface.stream.request.*;
@@ -49,28 +44,6 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	public GetRecordsResult getRecords(GetRecordsRequest getRecordsParam) {
 		try {
 			return getRecordsAsync(getRecordsParam).get();
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
-	public CommitCheckpointResult commitCheckpoint(CommitCheckpointRequest commitCheckpointRequest) {
-		try {
-			return commitCheckpointAsync(commitCheckpointRequest).get();
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
-	public GetCheckpointResult getCheckpoint(GetCheckpointRequest getCheckpointRequest) {
-		try {
-			return getCheckpointAsync(getCheckpointRequest).get();
 		} catch (ExecutionException e) {			
 			throw new DISClientException(e.getCause() == null ? e : e.getCause());
 		}catch(InterruptedException e) {
@@ -134,75 +107,9 @@ public abstract class AbstractDISClientAsync extends AbstractDISClient implement
 	}
 
 	@Override
-	public void createApp(String appName) {
-		try {
-			createAppAsync(appName).get();
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
-	public void deleteApp(String appName) {
-		try {
-			deleteAppAsync(appName).get();
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
-	public DescribeAppResult describeApp(String appName) {
-		try {
-			return describeAppAsync(appName).get();
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
-	public ListAppsResult listApps(ListAppsRequest listAppsRequest) {
-		try {
-			return listAppsAsync(listAppsRequest).get();
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
 	public PutRecordResult putRecord(PutRecordRequest putRecordParam) {
 		try {
 			return toPutRecordResult(putRecordsAsync(toPutRecordsRequest(putRecordParam)).get());
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
-	public DeleteCheckpointResult deleteCheckpoint(DeleteCheckpointRequest deleteCheckpointRequest) {
-		try {
-			return deleteCheckpointAsync(deleteCheckpointRequest).get();
-		} catch (ExecutionException e) {			
-			throw new DISClientException(e.getCause() == null ? e : e.getCause());
-		}catch(InterruptedException e) {
-			throw new DISClientException(e);
-		}
-	}
-
-	@Override
-	public ListStreamConsumingStateResult listStreamConsumingState(ListStreamConsumingStateRequest listStreamConsumingStateRequest) {
-		try {
-			return listStreamConsumingStateAsync(listStreamConsumingStateRequest).get();
 		} catch (ExecutionException e) {			
 			throw new DISClientException(e.getCause() == null ? e : e.getCause());
 		}catch(InterruptedException e) {
