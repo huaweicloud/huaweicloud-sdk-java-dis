@@ -13,7 +13,7 @@ public class PartitionKeyUtils
 {
     private static final Logger log = LoggerFactory.getLogger(PartitionKeyUtils.class);
     
-    private static String hashAlgorithm = "MD5";
+    private static String hashAlgorithm = "SHA-256";
     private static final long MinHashValue = 0;
     private static final long MaxHashValue = Long.MAX_VALUE;
     private static final int BYTE_MASK = 0xFF;
@@ -126,7 +126,7 @@ public class PartitionKeyUtils
         MessageDigest md = getMessageDigest();
         if (md == null)
         {
-            log.error("Unabled to get Md5 MessageDigest");
+            log.error("Unabled to get SHA-256 MessageDigest");
             return -1;
         }
 

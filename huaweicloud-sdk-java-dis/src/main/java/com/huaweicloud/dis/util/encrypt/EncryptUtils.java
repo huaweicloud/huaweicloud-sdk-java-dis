@@ -205,9 +205,9 @@ public class EncryptUtils
         {
             srcKey.append(tmp);
         }
-        
-        String hexSalt = EncryptUtils.randomHex(8);
-        String key = EncryptUtils.PBKDF2encode(srcKey.toString(), hexSalt, 128);
+
+        String hexSalt = EncryptUtils.randomHex(16);
+        String key = EncryptUtils.PBKDF2encode(srcKey.toString(), hexSalt, 256);
         String hexIv = EncryptUtils.randomHex(16);
         String sK = EncryptUtils.encryptAES128(pwd, key, hexIv);
         
@@ -281,7 +281,7 @@ public class EncryptUtils
         }
         
         String[] tmps = s.split(SPLIT_STR);
-        String key = EncryptUtils.PBKDF2encode(srcKey.toString(), tmps[0], 128);
+        String key = EncryptUtils.PBKDF2encode(srcKey.toString(), tmps[0], 256);
         String iv = tmps[1];
         String jkspwd = EncryptUtils.decryptAES128(tmps[2], key, iv);
         return jkspwd;

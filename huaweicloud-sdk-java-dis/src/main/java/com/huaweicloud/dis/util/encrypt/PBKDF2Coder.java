@@ -26,7 +26,7 @@ import javax.crypto.spec.PBEKeySpec;
 public class PBKDF2Coder
 {
     
-    private static final int iterations = 1000;
+    private static final int iterations = 10000;
     
 
     public static String randomHex(int bytes)
