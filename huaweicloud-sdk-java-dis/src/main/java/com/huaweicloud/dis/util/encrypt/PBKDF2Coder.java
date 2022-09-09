@@ -32,7 +32,7 @@ public class PBKDF2Coder
     public static String randomHex(int bytes)
         throws NoSuchAlgorithmException
     {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+        SecureRandom sr = SecureRandom.getInstanceStrong();
         byte[] salt = new byte[bytes];
         sr.nextBytes(salt);
         return toHex(salt);
