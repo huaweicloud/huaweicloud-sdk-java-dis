@@ -37,6 +37,15 @@ public class Lz4Util {
      * @return
      */
     public static byte[] decompressByte(byte[] compressorByte, int srcLength) {
+        if (srcLength < 0) {
+          throw new IndexOutOfBoundsException(
+              "CVE-2021-3520: There's a flaw in lz4. An attacker who submits a crafted file to "
+                  + "an application linked with lz4 may be able to trigger an integer overflow, " 
+                  + "leading to calling of memmove() on a negative size argument, causing an " 
+                  + "out-of-bounds write and/or a crash. The greatest impact of this flaw is to " 
+                  + "availability, with some potential impact to confidentiality and integrity " 
+                  + "as well.");
+        }
         LZ4Factory factory = LZ4Factory.fastestInstance();
         LZ4FastDecompressor decompressor = factory.fastDecompressor();
         return decompressor.decompress(compressorByte, srcLength);
