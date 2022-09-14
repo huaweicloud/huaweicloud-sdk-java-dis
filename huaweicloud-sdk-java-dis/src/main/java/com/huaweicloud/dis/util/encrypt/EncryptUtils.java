@@ -83,19 +83,6 @@ public class EncryptUtils
     }
     
     /**
-     * 生成AES 128位key,并做hex小写编码
-     * 
-     * @return key hex
-     * @throws NoSuchAlgorithmException no algorithm found
-     */
-    public static String initAES128Key()
-        throws NoSuchAlgorithmException
-    {
-        byte[] key = AESCoder.initSecretKey();
-        return Hex.encodeHexStr(key);
-    }
-    
-    /**
      * 对称加密文本，返回经hex小写编码的结果
      * 
      * @param data 待加密文本
