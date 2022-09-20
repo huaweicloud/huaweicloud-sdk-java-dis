@@ -20,13 +20,7 @@ package com.huaweicloud.dis.util.compress;
  * 上传数据到 DIS 时，选择的压缩算法。
  */
 public enum CompressionType {
-
-    /**
-     * LZ4 算法 - 综合来看效率最高的压缩算法,更加侧重压缩解压速度,压缩比并不是第一。
-     */
-    LZ4("lz4"),
-
-    /**
+    /**Ωƒ
      * SNAPPY 算法 - 其目标不是最大限度压缩或者兼容其他压缩格式，而是旨在提供高速压缩速度和合理的压缩率。
      */
     SNAPPY("snappy"),

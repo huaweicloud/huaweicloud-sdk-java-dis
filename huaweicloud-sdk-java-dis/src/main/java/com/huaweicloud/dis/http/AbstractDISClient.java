@@ -21,7 +21,6 @@ import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
 import com.huaweicloud.dis.iface.data.response.*;
 import com.huaweicloud.dis.util.*;
-import com.huaweicloud.dis.util.compress.Lz4Util;
 import com.huaweicloud.dis.util.compress.ZstdUtil;
 import com.huaweicloud.dis.util.config.ICredentialsProvider;
 import com.huaweicloud.dis.util.encrypt.EncryptUtils;
@@ -252,15 +251,10 @@ public class AbstractDISClient {
             return source;
         }
 
-        String compressType = disConfig.get(DISConfig.PROPERTY_BODY_COMPRESS_TYPE, Constants.COMPRESS_LZ4);
+        String compressType = disConfig.get(DISConfig.PROPERTY_BODY_COMPRESS_TYPE, Constants.COMPRESS_ZSTD);
 
         byte[] target = null;
-        if (Constants.COMPRESS_LZ4.equals(compressType)) {
-            request.addHeader("Content-Encoding", Constants.COMPRESS_LZ4);
-            request.addHeader("Accept-Encoding", Constants.COMPRESS_LZ4);
-            request.addHeader(Constants.COMPRESS_LZ4_CONTENT_LENGTH, String.valueOf(source.length));
-            target = Lz4Util.compressByte(source);
-        } else if (Constants.COMPRESS_SNAPPY.equals(compressType)) {
+        if (Constants.COMPRESS_SNAPPY.equals(compressType)) {
             request.addHeader("Content-Encoding", Constants.COMPRESS_SNAPPY);
             request.addHeader("Accept-Encoding", Constants.COMPRESS_SNAPPY);
             try {
