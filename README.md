@@ -1,6 +1,6 @@
-# Github Cloud DIS SDK for Java
+# Cloud DIS SDK for Java
 
-The Github Cloud DIS Sdk enables Java developers to easily work with [Github Cloud DIS]. You can get started in minutes using **Maven**.
+The Cloud DIS Sdk enables Java developers to easily work with [Cloud DIS]. You can get started in minutes using **Maven**.
 
 Quick Links:
 - [SDK Homepage]
@@ -16,8 +16,8 @@ The recommended way to use the DIS SDK for Java in your project is to consume it
 
 #### Specify the SDK Maven dependency
     <dependency>
-        <groupId>io.github.dis</groupId>
-        <artifactId>github-sdk-java-dis</artifactId>
+        <groupId>io.github.cloud-dis-sdk</groupId>
+        <artifactId>cloud-sdk-java-dis</artifactId>
         <version>1.3.15</version>
         <scope>compile</scope>
     </dependency>
