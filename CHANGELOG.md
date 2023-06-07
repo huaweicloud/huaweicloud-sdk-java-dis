@@ -48,3 +48,17 @@
 
 - Features
   * 修复通过非配置文件方式配置参数`records.retriable.error.code`和`exception.retriable.error.code`不生效的问题
+
+# 1.3.16
+
+- Features
+  * 服务端流控时增加重启（response status 429）
+
+- Bugfixs
+  * jackson版本升级到2.14.2
+  * slf4j升级到1.7.36
+  * log4j升级到2.20.0
+  * httpclient升级到4.5.14
+  * joda-time升级到2.12.2
+  * commons-io升级到2.12.0
+  * protobuf升级到3.21.9
