@@ -644,8 +644,8 @@ public class AbstractDISClient {
         return t instanceof ConnectTimeoutException || t instanceof NoHttpResponseException
                 || t instanceof HttpHostConnectException || t instanceof SocketException || t instanceof SSLException
                 || (t instanceof SocketTimeoutException && request.getHttpMethod() == HttpMethodName.GET)
-                || (t instanceof RestClientResponseException && (((RestClientResponseException) t).getRawStatusCode() / 100 == 5)
-                || ((RestClientResponseException) t).getRawStatusCode() == 429)
+                || (t instanceof RestClientResponseException && (((RestClientResponseException) t).getRawStatusCode() / 100 == 5
+                || ((RestClientResponseException) t).getRawStatusCode() == 429))
                 || isRetriableErrorCodeException(t)
                 || (t.getCause() != null && isRetriableSendException(t.getCause(), request));
     }
