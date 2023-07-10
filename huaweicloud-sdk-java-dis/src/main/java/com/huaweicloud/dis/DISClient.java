@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
+import com.huaweicloud.dis.util.JstackUtils;
 import org.apache.http.HttpRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +74,13 @@ public class DISClient extends AbstractDISClient implements DIS {
 
     @Override
     public PutRecordsResult putRecords(PutRecordsRequest putRecordsParam) {
-        return innerPutRecordsSupportingCache(putRecordsParam);
+        Thread thread = Thread.currentThread();
+        try {
+            JstackUtils.put(thread, disConfig.getConnectionTimeOut());
+            return innerPutRecordsSupportingCache(putRecordsParam);
+        } finally {
+            JstackUtils.remove(thread);
+        }
     }
 
     protected PutRecordsResult innerPutRecordsSupportingCache(PutRecordsRequest putRecordsParam) {
@@ -273,7 +280,13 @@ public class DISClient extends AbstractDISClient implements DIS {
 
     @Override
     public GetPartitionCursorResult getPartitionCursor(GetPartitionCursorRequest getPartitionCursorParam) {
-        return innerGetPartitionCursor(getPartitionCursorParam);
+        Thread thread = Thread.currentThread();
+        try {
+            JstackUtils.put(thread, disConfig.getConnectionTimeOut());
+            return innerGetPartitionCursor(getPartitionCursorParam);
+        } finally {
+            JstackUtils.remove(thread);
+        }
     }
 
     /*
@@ -296,7 +309,13 @@ public class DISClient extends AbstractDISClient implements DIS {
 
     @Override
     public GetRecordsResult getRecords(GetRecordsRequest getRecordsParam) {
-        return innerGetRecords(getRecordsParam);
+        Thread thread = Thread.currentThread();
+        try {
+            JstackUtils.put(thread, disConfig.getConnectionTimeOut());
+            return innerGetRecords(getRecordsParam);
+        } finally {
+            JstackUtils.remove(thread);
+        }
     }
 
     /*
