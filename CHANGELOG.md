@@ -52,7 +52,7 @@
 # 1.3.16
 
 - Features
-  * 服务端流控时增加重启（response status 429）
+  * 服务端流控时增加重试（response status 429）
 
 - Bugfixs
   * jackson版本升级到2.14.2
@@ -63,3 +63,5 @@
   * commons-io升级到2.12.0
   * protobuf升级到3.21.9
   * lz4-java升级到1.8.0
+  * 修复httpClient开源问题：设置超时时间不生效问题（https://stackoverflow.com/question/6764035/apache-httpclient-timeout）
+  * 添加生产消费主线程异常卡主堆栈信息打印
