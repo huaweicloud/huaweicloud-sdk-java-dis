@@ -16,6 +16,7 @@
 
 package com.huaweicloud.dis.util;
 
+import com.huaweicloud.dis.DISClient;
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.http.HttpMethodName;
 import com.huaweicloud.dis.exception.DISClientException;
@@ -26,6 +27,7 @@ import com.huaweicloud.dis.http.converter.StringHttpMessageConverter;
 import com.huaweicloud.dis.http.converter.json.JsonHttpMessageConverter;
 import com.huaweicloud.dis.http.converter.protobuf.ProtobufHttpMessageConverter;
 import com.huaweicloud.dis.http.exception.ResourceAccessException;
+import com.huaweicloud.dis.util.config.ConfigurationUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
@@ -66,6 +68,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Rest Client for RESTful API
@@ -199,7 +206,8 @@ public class RestClient
         
         HttpMessageConverterExtractor<T> responseExtractor =
             new HttpMessageConverterExtractor<T>(responseClazz, getMessageConverters());
-        return execute(request, responseExtractor);
+        long requestConnectionTimeOut = disConfig.getConnectionTimeOut();
+        return execute(request, responseExtractor, requestConnectionTimeOut);
     }
     
     public <T> T getForObject(String url, Class<T> responseClazz)
@@ -221,7 +229,8 @@ public class RestClient
         
         HttpMessageConverterExtractor<T> responseExtractor =
             new HttpMessageConverterExtractor<T>(responseClazz, getMessageConverters());
-        return execute(request, responseExtractor);
+        long requestConnectionTimeOut = disConfig.getConnectionTimeOut();
+        return execute(request, responseExtractor, requestConnectionTimeOut);
     }
     
     public <T> T put(String url, Class<T> responseClazz, Map<String, String> headers, Object requestBody)
@@ -238,7 +247,8 @@ public class RestClient
         
         HttpMessageConverterExtractor<T> responseExtractor =
             new HttpMessageConverterExtractor<T>(responseClazz, getMessageConverters());
-        return execute(request, responseExtractor);
+        long requestConnectionTimeOut = disConfig.getConnectionTimeOut();
+        return execute(request, responseExtractor, requestConnectionTimeOut);
         
     }
     
@@ -247,8 +257,8 @@ public class RestClient
         
         HttpDelete request = new HttpDelete(url);
         request = this.setHeaders(request, headers);
-        
-        execute(request, null);
+        long requestConnectionTimeOut = disConfig.getConnectionTimeOut();
+        execute(request, null, requestConnectionTimeOut);
     }
     
     /**
@@ -257,14 +267,17 @@ public class RestClient
      * @param request 请求体
      * @param responseExtractor 响应解析器
      * @param <T> Generic type
+     * @param requestConnectionTimeOut 请求过期时间
      * @return 响应体
      */
-    protected <T> T execute(final HttpUriRequest request, ResponseExtractor<T> responseExtractor)
+    protected <T> T execute(final HttpUriRequest request, ResponseExtractor<T> responseExtractor,
+                            long requestConnectionTimeOut)
     {
         HttpResponse response;
         long startTime = System.currentTimeMillis();
         try
         {
+            RequestCache.put(request, requestConnectionTimeOut);
             response = httpClient.execute(request);
 
             if (InterfaceLogUtils.IS_INTERFACE_LOGGER_ENABLED)
@@ -333,6 +346,8 @@ public class RestClient
             resource = (query != null ? resource.substring(0, resource.indexOf(query) - 1) : resource);
             throw new ResourceAccessException(
                 "I/O error on " + request.getMethod() + " request for \"" + resource + "\": " + ex.getMessage(), ex);
+        } finally {
+            RequestCache.remove(request);
         }
     }
     
@@ -561,6 +576,46 @@ public class RestClient
         }
         
         return trustStore;
+    }
+
+    private static class RequestCache {
+        private static final Map<HttpUriRequest, Long> cache = new ConcurrentHashMap<>();
+        private static final ScheduledExecutorService exe = Executors.newScheduledThreadPool(1);
+
+        static {
+            // run clean up every N minutes
+            exe.schedule(RequestCache::cleanup, 1, TimeUnit.MINUTES);
+        }
+
+        public static void put(HttpUriRequest request, long requestConnectionTimeOut) {
+            long requestExpireTimeout = 0L;
+            if (requestConnectionTimeOut < 30000) {
+                requestExpireTimeout = 30000 * 3;
+            } else {
+                requestExpireTimeout = requestConnectionTimeOut * 3;
+            }
+            cache.put(request, System.currentTimeMillis() + requestExpireTimeout);
+        }
+
+        public static void remove(HttpUriRequest request) {
+            cache.remove(request);
+        }
+
+        private static void cleanup() {
+            long now = System.currentTimeMillis();
+            // find expired requests
+            List<HttpUriRequest> expired = cache.entrySet().stream()
+                    .filter(e -> e.getValue() < now)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
+            // abort requests
+            expired.forEach(request -> {
+                if(!request.isAborted()) {
+                    request.abort();
+                }
+                remove(request);
+            });
+        }
     }
     
 }
