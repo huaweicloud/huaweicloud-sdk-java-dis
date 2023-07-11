@@ -62,7 +62,7 @@ public class JstackUtils {
         builder.append(thread.getThreadGroup()).append("     threadState: ")
                .append(thread.getState()).append("\n");
         for (StackTraceElement element : thread.getStackTrace()) {
-            builder.append(element.toString());
+            builder.append("    ").append(element.toString()).append("\n");
         }
         LOG.info(builder.toString());
     }
