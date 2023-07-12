@@ -308,7 +308,7 @@ public class DISConfig extends Properties implements ClientParams {
      * @return 接口异常重试次数
      */
     public int getExceptionRetries() {
-        int exceptionRetry = getInt(PROPERTY_PRODUCER_EXCEPTION_RETRIES, 20);
+        int exceptionRetry = getInt(PROPERTY_PRODUCER_EXCEPTION_RETRIES, 5);
         if (exceptionRetry < 0) {
             return Integer.MAX_VALUE;
         }
@@ -319,7 +319,7 @@ public class DISConfig extends Properties implements ClientParams {
      * @return 记录上传重试次数
      */
     public int getRecordsRetries() {
-        int recordsRetry = getInt(PROPERTY_PRODUCER_RECORDS_RETRIES, 20);
+        int recordsRetry = getInt(PROPERTY_PRODUCER_RECORDS_RETRIES, 10);
         if (recordsRetry < 0) {
             return Integer.MAX_VALUE;
         }
