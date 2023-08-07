@@ -25,12 +25,7 @@ public class JstackUtils {
     }
 
     public static void put(Thread thread, long requestConnectionTimeOut) {
-        long requestExpireTimeout = 0L;
-        if (requestConnectionTimeOut < 30000) {
-            requestExpireTimeout = 30000 * 5;
-        } else {
-            requestExpireTimeout = requestConnectionTimeOut * 5;
-        }
+        long requestExpireTimeout = requestConnectionTimeOut + 10000;
         cache.put(thread, System.currentTimeMillis() + requestExpireTimeout);
     }
 
@@ -45,11 +40,11 @@ public class JstackUtils {
 
             expired.forEach(t -> {
                 printStackTrace(t);
-                sleep(3000);
+                sleep(2000);
                 printStackTrace(t);
                 cache.remove(t);
             });
-            sleep(20000);
+            sleep(3000);
         }
     }
 
@@ -59,6 +54,7 @@ public class JstackUtils {
 
     private static void printStackTrace(Thread thread) {
         StringBuilder builder = new StringBuilder();
+        builder.append("DIS Request is exception, thread stack detail: \n");
         builder.append(thread.getThreadGroup()).append("     threadState: ")
                .append(thread.getState()).append("\n");
         for (StackTraceElement element : thread.getStackTrace()) {
