@@ -584,16 +584,11 @@ public class RestClient
 
         static {
             // run clean up every N minutes
-            exe.schedule(RequestCache::cleanup, 1, TimeUnit.MINUTES);
+            exe.schedule(RequestCache::cleanup, 5, TimeUnit.SECONDS);
         }
 
         public static void put(HttpUriRequest request, long requestConnectionTimeOut) {
-            long requestExpireTimeout = 0L;
-            if (requestConnectionTimeOut < 30000) {
-                requestExpireTimeout = 30000 * 3;
-            } else {
-                requestExpireTimeout = requestConnectionTimeOut * 3;
-            }
+            long requestExpireTimeout = requestConnectionTimeOut + 10000;
             cache.put(request, System.currentTimeMillis() + requestExpireTimeout);
         }
 
