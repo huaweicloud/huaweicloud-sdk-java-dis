@@ -49,6 +49,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.params.HttpParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +93,7 @@ public class RestClient
     
     private static CloseableHttpClient httpClient;
     
-    private DISConfig disConfig;
+    private final DISConfig disConfig;
     
     private RestClient(DISConfig disConfig)
     {
@@ -418,7 +419,7 @@ public class RestClient
     
     private CloseableHttpClient getHttpClient()
     {
-        RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.<ConnectionSocketFactory> create();
+        RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.create();
         registryBuilder.register("http", new PlainConnectionSocketFactory());
 
         X509HostnameVerifier verifier = null;
@@ -580,11 +581,10 @@ public class RestClient
 
     private static class RequestCache {
         private static final Map<HttpUriRequest, Long> cache = new ConcurrentHashMap<>();
-        private static final ScheduledExecutorService exe = Executors.newScheduledThreadPool(1);
-
         static {
-            // run clean up every N minutes
-            exe.schedule(RequestCache::cleanup, 5, TimeUnit.SECONDS);
+            Thread thread = new Thread(() -> cleanup(), "RequestCache-Thread");
+            thread.setDaemon(true);
+            thread.start();
         }
 
         public static void put(HttpUriRequest request, long requestConnectionTimeOut) {
@@ -597,19 +597,30 @@ public class RestClient
         }
 
         private static void cleanup() {
-            long now = System.currentTimeMillis();
-            // find expired requests
-            List<HttpUriRequest> expired = cache.entrySet().stream()
+            while (true) {
+                long now = System.currentTimeMillis();
+                // find expired requests
+                List<HttpUriRequest> expired = cache.entrySet().stream()
                     .filter(e -> e.getValue() < now)
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
-            // abort requests
-            expired.forEach(request -> {
-                if(!request.isAborted()) {
-                    request.abort();
-                }
-                remove(request);
-            });
+                // abort requests
+                expired.forEach(request -> {
+                    if(!request.isAborted()) {
+                        request.abort();
+                    }
+                    remove(request);
+                });
+                sleep(5000);
+            }
+        }
+
+        private static void sleep(long millis) {
+            try {
+                Thread.sleep(millis);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
     

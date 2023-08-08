@@ -25,7 +25,7 @@ public class JstackUtils {
     }
 
     public static void put(Thread thread, long requestConnectionTimeOut) {
-        long requestExpireTimeout = requestConnectionTimeOut + 10000;
+        long requestExpireTimeout = requestConnectionTimeOut + 5000;
         cache.put(thread, System.currentTimeMillis() + requestExpireTimeout);
     }
 
@@ -60,7 +60,7 @@ public class JstackUtils {
         for (StackTraceElement element : thread.getStackTrace()) {
             builder.append("    ").append(element.toString()).append("\n");
         }
-        LOG.info(builder.toString());
+        LOG.warn(builder.toString());
     }
 
     private static void sleep(long millis) {
