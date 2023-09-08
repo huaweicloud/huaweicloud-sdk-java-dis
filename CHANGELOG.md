@@ -65,3 +65,8 @@
   * lz4-java升级到1.8.0
   * 修复httpClient开源问题：设置超时时间不生效问题（https://stackoverflow.com/question/6764035/apache-httpclient-timeout）
   * 添加生产消费主线程异常卡主堆栈信息打印
+
+# 1.3.17
+
+- Bugfixs
+  * 单挑记录上传时，如果被限流，有异常时，抛出异常
