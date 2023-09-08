@@ -28,6 +28,8 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
 {
     
     protected Credentials credentials;
+
+    protected AkSkHolder akSkHolder;
     
     protected String ak;
     
@@ -82,6 +84,11 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
         setAuthType(authType);
         return getSubclass();
     }
+
+    public final Subclass withAKSkHolder(AkSkHolder akSkHolder) {
+        setAkSkHolder(akSkHolder);
+        return getSubclass();
+    }
     
     /*
      * Gets the AWSCredentialsProvider currently configured in the builder.
@@ -102,6 +109,13 @@ public abstract class ClientBuilder<Subclass extends ClientBuilder, TypeToBuild>
     public final void setAk(String ak)
     {
         this.ak = ak;
+    }
+
+    public void setAkSkHolder(AkSkHolder akSkHolder) {
+        this.akSkHolder=akSkHolder;
+    }
+    public AkSkHolder getAkSkHolder() {
+        return akSkHolder;
     }
 
     public void setAuthType(String authType) {

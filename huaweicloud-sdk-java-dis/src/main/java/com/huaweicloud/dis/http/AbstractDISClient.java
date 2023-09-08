@@ -8,8 +8,10 @@ import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.auth.AuthType;
 import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
+import com.huaweicloud.dis.core.builder.AkSkHolder;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
+import com.huaweicloud.dis.core.util.AkSkUtils;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.exception.*;
 import com.huaweicloud.dis.http.exception.HttpStatusCodeException;
@@ -78,6 +80,23 @@ public class AbstractDISClient {
     protected ICredentialsProvider credentialsProvider;
 
     public AbstractDISClient(DISConfig disConfig) {
+        String akskClasspath = disConfig.getAkskClasspath();
+        try {
+            if(!StringUtils.isNullOrEmpty(akskClasspath)) {
+                Class clazz = Class.forName(akskClasspath);
+                AkSkHolder akSkHolder = (AkSkHolder) clazz.newInstance();
+                if(akSkHolder!=null) {
+                    AkSkUtils akSkUtils = AkSkUtils.getInstance();
+                    akSkUtils.setAkSkHolder(akSkHolder);
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
         this.disConfig = DISConfig.buildConfig(disConfig);
         init();
     }

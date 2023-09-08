@@ -19,6 +19,8 @@ package com.huaweicloud.dis;
 import com.huaweicloud.dis.core.ClientParams;
 import com.huaweicloud.dis.core.auth.credentials.BasicCredentials;
 import com.huaweicloud.dis.core.auth.credentials.Credentials;
+import com.huaweicloud.dis.core.builder.AkSkHolder;
+import com.huaweicloud.dis.core.util.AkSkUtils;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.Protocol;
 import com.huaweicloud.dis.util.compress.CompressionType;
@@ -63,6 +65,7 @@ public class DISConfig extends Properties implements ClientParams {
 
     public static final String PROPERTY_REGION_ID = "region";
     public static final String PROPERTY_ENDPOINT = "endpoint";
+    public static final String AKSK_CLASSPATH="aksk_classpath";
     public static final String PROPERTY_MANAGER_ENDPOINT = "manager.endpoint";
     public static final String PROPERTY_PROJECT_ID = "projectId";
     public static final String GROUP_ID = "group.id";
@@ -210,10 +213,29 @@ public class DISConfig extends Properties implements ClientParams {
 
 
     public String getAK() {
+        AkSkUtils akSkUtils = AkSkUtils.getInstance();
+        AkSkHolder akSkHolder = null;
+        if(akSkUtils != null){
+            akSkHolder = akSkUtils.getAkSkHolder();
+        }
+        if(akSkHolder != null&&!StringUtils.isNullOrEmpty(akSkHolder.getAk())) {
+            return akSkHolder.getAk();
+        }
         return get(PROPERTY_AK, null);
     }
 
+    public String getAkskClasspath() {
+        return get(AKSK_CLASSPATH, null);
+    }
     public String getSK() {
+        AkSkUtils akSkUtils = AkSkUtils.getInstance();
+        AkSkHolder akSkHolder = null;
+        if(akSkUtils != null){
+            akSkHolder = akSkUtils.getAkSkHolder();
+        }
+        if(akSkHolder != null &&! StringUtils.isNullOrEmpty(akSkHolder.getSk())) {
+            return akSkHolder.getSk();
+        }
         return get(PROPERTY_SK, null);
     }
 

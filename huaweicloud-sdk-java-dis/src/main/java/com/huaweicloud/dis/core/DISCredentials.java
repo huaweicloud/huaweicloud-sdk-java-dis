@@ -18,6 +18,8 @@ package com.huaweicloud.dis.core;
 
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.auth.AuthType;
+import com.huaweicloud.dis.core.builder.AkSkHolder;
+import com.huaweicloud.dis.core.util.AkSkUtils;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.exception.DISClientException;
 
@@ -95,10 +97,26 @@ public class DISCredentials implements Cloneable {
     }
 
     public String getAccessKeyId() {
+        AkSkUtils akSkUtils = AkSkUtils.getInstance();
+        AkSkHolder akSkHolder = null;
+        if(akSkUtils != null){
+            akSkHolder = akSkUtils.getAkSkHolder();
+        }
+        if(akSkHolder != null &&! StringUtils.isNullOrEmpty(akSkHolder.getAk())) {
+            return akSkHolder.getAk();
+        }
         return accessKeyId;
     }
 
     public String getSecretKey() {
+        AkSkUtils akSkUtils = AkSkUtils.getInstance();
+        AkSkHolder akSkHolder = null;
+        if(akSkUtils != null){
+            akSkHolder = akSkUtils.getAkSkHolder();
+        }
+        if(akSkHolder != null&&!StringUtils.isNullOrEmpty(akSkHolder.getSk())) {
+            return akSkHolder.getSk();
+        }
         return secretKey;
     }
 

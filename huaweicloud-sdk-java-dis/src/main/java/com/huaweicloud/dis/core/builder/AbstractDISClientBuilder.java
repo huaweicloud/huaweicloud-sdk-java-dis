@@ -4,6 +4,7 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 import com.huaweicloud.dis.DISConfig;
+import com.huaweicloud.dis.core.util.AkSkUtils;
 import com.huaweicloud.dis.core.util.StringUtils;
 import com.huaweicloud.dis.http.Protocol;
 import com.huaweicloud.dis.util.compress.CompressionType;
@@ -51,8 +52,11 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
 		if(disConfig == null) {
 			disConfig = new DISConfig();
 		}
-        if (null != credentials)
-        {
+        if(akSkHolder!=null){
+            AkSkUtils akSkUtils = AkSkUtils.getInstance();
+            akSkUtils.setAkSkHolder(akSkHolder);
+        }
+        if (null != credentials) {
             disConfig.setCredentials(credentials);
         }
         if (!StringUtils.isNullOrEmpty(ak))
