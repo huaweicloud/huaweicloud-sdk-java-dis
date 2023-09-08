@@ -44,6 +44,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -193,7 +194,7 @@ public class AbstractDISClient {
     }
 
     protected ByteBuffer decrypt(ByteBuffer cipher) {
-        Charset utf8 = Charset.forName("UTF-8");
+        Charset utf8 = StandardCharsets.UTF_8;
         String src;
         try {
             src = EncryptUtils.dec(new String[]{disConfig.getDataPassword()}, new String(cipher.array(), utf8));
@@ -409,16 +410,16 @@ public class AbstractDISClient {
 
     private class ConnectRetryFuture<T> extends AbstractFutureAdapter<T, T> implements Future<T> {
         //为了避免future.get和callback的各种并发情况下的重复重试，使用该锁和计数进行控制
-        private AtomicInteger retryCount = new AtomicInteger();
-        private ReentrantLock retryLock = new ReentrantLock();
+        private final AtomicInteger retryCount = new AtomicInteger();
+        private final ReentrantLock retryLock = new ReentrantLock();
 
         private volatile Request<HttpRequest> request;
-        private String ak;
-        private String sk;
-        private Object requestContent;
-        private AsyncHandler<T> callback;
-        private String uri;
-        private Class<T> returnType;
+        private final String ak;
+        private final String sk;
+        private final Object requestContent;
+        private final AsyncHandler<T> callback;
+        private final String uri;
+        private final Class<T> returnType;
 
         public ConnectRetryFuture(Request<HttpRequest> request,
                                   String ak,
@@ -745,14 +746,15 @@ public class AbstractDISClient {
         if (null != putRecordsResult && null != putRecordsResult.getRecords() && putRecordsResult.getRecords().size() > 0) {
             List<PutRecordsResultEntry> records = putRecordsResult.getRecords();
             PutRecordsResultEntry record = records.get(0);
-
-            PutRecordResult result = new PutRecordResult();
-            result.setPartitionId(record.getPartitionId());
-            result.setSequenceNumber(record.getSequenceNumber());
-
-            return result;
+            if (record.getPartitionId() == null && !StringUtils.isNullOrEmpty(record.getErrorMessage())) {
+                handleError(record.getErrorMessage());
+            } else {
+                PutRecordResult result = new PutRecordResult();
+                result.setPartitionId(record.getPartitionId());
+                result.setSequenceNumber(record.getSequenceNumber());
+                return result;
+            }
         }
-
         return null;
     }
 
@@ -768,7 +770,7 @@ public class AbstractDISClient {
                 this.credentials = credentialsProvider.updateCredentials(this.credentials.clone());
             } catch (Exception e) {
                 throw new IllegalArgumentException("Failed to call ICredentialsProvider[" + credentialsProviderClass
-                        + "], error [" + e.toString() + "]", e);
+                        + "], error [" + e + "]", e);
             }
         }
     }
@@ -839,6 +841,32 @@ public class AbstractDISClient {
             throw new DISClientRetriableException(errorMsg, t);
         } else {
             throw new DISClientException(errorMsg, t);
+        }
+    }
+    
+    private void handleError(String errorMsg) {
+        if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE)) {
+            throw new DISSequenceNumberOutOfRangeException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_SEQUENCE_NUMBER_OUT_OF_RANGE_GETTING_RECORDS)) {
+            throw new DISSeqNumberOutOfRangeGettingRecordsException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_IS_EXPIRED)) {
+            throw new DISPartitionExpiredException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_PARTITION_NOT_EXISTS)) {
+            throw new DISPartitionNotExistsException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_STREAM_NOT_EXISTS)) {
+            throw new DISStreamNotExistsException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_TRAFFIC_CONTROL_LIMIT)) {
+            throw new DISTrafficControlException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_MEMBER_NOT_EXIST)) {
+            throw new DISConsumerMemberNotExistsException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_REBALANCE_IN_PROGRESS)) {
+            throw new DISConsumerGroupRebalanceInProgressException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_CODE_CONSUMER_GROUP_ILLEGAL_GENERATION)) {
+            throw new DISConsumerGroupIllegalGenerationException(errorMsg);
+        } else if (errorMsg.contains(Constants.ERROR_INFO_TIMESTAMP_IS_EXPIRED)) {
+            throw new DISTimestampOutOfRangeException(errorMsg);
+        } else {
+            throw new DISClientException(errorMsg);
         }
     }
 }
