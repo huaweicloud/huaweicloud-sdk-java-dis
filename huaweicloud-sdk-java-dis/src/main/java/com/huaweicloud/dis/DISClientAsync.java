@@ -133,7 +133,7 @@ public class DISClientAsync extends DISClient implements DISAsync
     public Future<GetRecordsResult> getRecordsAsync(GetRecordsRequest getRecordsParam,
         AsyncHandler<GetRecordsResult> asyncHandler)
     {
-        return submit(getRecordsParam, asyncHandler, getRecordsParam1 -> innerGetRecords(getRecordsParam1));
+        return submit(getRecordsParam, asyncHandler, getRecordsParam1 -> getRecords(getRecordsParam1));
     }
     
     
