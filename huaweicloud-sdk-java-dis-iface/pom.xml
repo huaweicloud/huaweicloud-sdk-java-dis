@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>com.huaweicloud.dis</groupId>
 		<artifactId>huaweicloud-sdk-java-dis-pom</artifactId>
-		<version>1.3.16</version>
+		<version>1.3.18-SNAPSHOT</version>
 	</parent>
 	<groupId>com.huaweicloud.dis</groupId>
 	<artifactId>huaweicloud-sdk-java-dis-iface</artifactId>
