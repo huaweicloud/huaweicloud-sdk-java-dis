@@ -73,7 +73,7 @@ public abstract class AbstractDISClientBuilder<Subclass extends ClientBuilder, T
             disConfig.setAuthToken(authToken);
         if(!StringUtils.isNullOrEmpty(authType))
             disConfig.setAuthType(authType);
-        if (dataCacheEnabled) {
+        if (dataEncryptEnabled) {
         	disConfig.setDataEncryptEnabled(dataEncryptEnabled);
 		}
         if (defaultClientCertAuthEnabled) {
