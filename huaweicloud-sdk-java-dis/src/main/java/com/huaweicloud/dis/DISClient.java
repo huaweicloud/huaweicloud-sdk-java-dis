@@ -50,7 +50,7 @@ import com.huaweicloud.dis.util.cache.CacheUtils;
 public class DISClient extends AbstractDISClient implements DIS {
     private static final Logger LOG = LoggerFactory.getLogger(DISClient.class);
 
-    protected ReentrantLock recordsRetryLock = new ReentrantLock();
+    protected final ReentrantLock recordsRetryLock = new ReentrantLock();
 
     private CacheResenderThread cacheResenderThread;
 
