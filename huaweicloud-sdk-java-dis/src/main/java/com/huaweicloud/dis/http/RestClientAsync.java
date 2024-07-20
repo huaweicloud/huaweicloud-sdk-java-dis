@@ -1,18 +1,11 @@
 package com.huaweicloud.dis.http;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+import java.security.KeyStore;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
@@ -23,6 +16,8 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.conn.ssl.SSLContexts;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.impl.nio.conn.PoolingNHttpClientConnectionManager;
@@ -41,6 +36,7 @@ import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
 import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.converter.HttpMessageConverter;
+import com.huaweicloud.dis.util.Utils;
 
 public class RestClientAsync extends AbstractRestClient{
 	private static final Logger logger = LoggerFactory.getLogger(RestClientAsync.class);
@@ -221,36 +217,25 @@ public class RestClientAsync extends AbstractRestClient{
     
     private CloseableHttpAsyncClient getHttpAsyncClient()
     {
-    	TrustManager[] trustAllCerts = new TrustManager[]{
-                new X509TrustManager() {
-					
-					@Override
-					public X509Certificate[] getAcceptedIssuers() {
-						// TODO Auto-generated method stub
-						return null;
-					}
-					
-					@Override
-					public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-						// TODO Auto-generated method stub
-						
-					}
-					
-					@Override
-					public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-						// TODO Auto-generated method stub
-						
-					}
-				
-        }};
     	
-    	SSLContext sslContext=null;
+    	SSLContext sslContext = null;
     	try {
-    		sslContext = SSLContext.getInstance("TLSv1.2");
-            SecureRandom sr = SecureRandom.getInstanceStrong();
-            sr.setSeed(sr.generateSeed(64));
-            sslContext.init(null, trustAllCerts, sr);
-    	} catch (NoSuchAlgorithmException | KeyManagementException e) {
+            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+            boolean isDefaultTrustedJKSEnabled = disConfig.getIsDefaultTrustedJksEnabled();
+
+            // 启用客户端证书校验
+            if (isDefaultTrustedJKSEnabled)
+            {
+                trustStore = Utils.getDefaultTrustStore();
+                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, null).build();
+            }
+            else
+            {
+                // 信任任何链接
+                TrustStrategy anyTrustStrategy = (x509Certificates, s) -> true;
+                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy).build();
+            }
+    	} catch (Exception e) {
     		throw new RuntimeException(e);
     	}
 

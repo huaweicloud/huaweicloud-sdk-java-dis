@@ -238,8 +238,7 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
             
             return putRecordsFuture;
         }else{
-            Future<PutRecordsResult> putRecordsFuture = requestAsync(putRecordsParam, request, PutRecordsResult.class, trafficLimitRetryCallback);
-            return putRecordsFuture;
+			return requestAsync(putRecordsParam, request, PutRecordsResult.class, trafficLimitRetryCallback);
         }
     	
 	}
@@ -289,18 +288,18 @@ public class DISClientAsync2 extends AbstractDISClientAsync implements DISAsync{
 		protected volatile Future<PutRecordsResult> innerFuture;
 		
 		//为了避免future.get和callback的各种并发情况下的重复重试，使用该锁和计数进行控制
-		private AtomicInteger retryCount = new AtomicInteger();
-		private ReentrantLock retryLock = new ReentrantLock();
+		private final AtomicInteger retryCount = new AtomicInteger();
+		private final ReentrantLock retryLock = new ReentrantLock();
 		
-		private AtomicBoolean finished = new AtomicBoolean();
+		private final AtomicBoolean finished = new AtomicBoolean();
 		
-		private AtomicInteger retryMergeIndex = new AtomicInteger(-1);
+		private final AtomicInteger retryMergeIndex = new AtomicInteger(-1);
 		
 		private final AsyncHandler<PutRecordsResult> asyncHandler;
 		private final Request<HttpRequest> request;
 		private final PutRecordsRequest putRecordsParam;
 		
-		private AtomicReference<PutRecordsResult> putRecordsResultRef = new AtomicReference<>();
+		private final AtomicReference<PutRecordsResult> putRecordsResultRef = new AtomicReference<>();
 		
 		private volatile Integer[] retryRecordIndex = null;
 		

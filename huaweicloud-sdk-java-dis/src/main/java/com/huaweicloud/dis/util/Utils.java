@@ -21,7 +21,15 @@ import com.huaweicloud.dis.core.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.regex.Pattern;
 
 public class Utils
@@ -96,5 +104,44 @@ public class Utils
         catch (InterruptedException ignored)
         {
         }
+    }
+
+    /**
+     * 读取Java默认的TrustStore
+     *
+     * @return Default Java TrustStore
+     * @throws KeyStoreException KeyStoreException
+     * @throws NoSuchAlgorithmException NoSuchAlgorithmException
+     * @throws CertificateException CertificateException
+     * @throws IOException
+     */
+    public static KeyStore getDefaultTrustStore() throws KeyStoreException, NoSuchAlgorithmException, CertificateException, IOException
+    {
+        String property = System.getProperty("javax.net.ssl.trustStore");
+        final String CACERTS_PATH = property == null ? System.getProperties().getProperty("java.home") + File.separator + "lib" + File.separator + "security"
+            + File.separator + "cacerts"
+            : property;
+        final String CACERTS_PASSWORD = System.getProperty("javax.net.ssl.trustStorePassword");
+
+        KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        InputStream in = null;
+
+        try
+        {
+            if (!StringUtils.isNullOrEmpty(CACERTS_PATH) && !StringUtils.isNullOrEmpty(CACERTS_PASSWORD))
+            {
+                in = new FileInputStream(CACERTS_PATH);
+                trustStore.load(in, CACERTS_PASSWORD.toCharArray());
+            }
+        }
+        finally
+        {
+            if (null != in)
+            {
+                in.close();
+            }
+        }
+
+        return trustStore;
     }
 }
