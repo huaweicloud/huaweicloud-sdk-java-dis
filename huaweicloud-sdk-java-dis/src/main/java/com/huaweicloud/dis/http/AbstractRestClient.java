@@ -16,40 +16,17 @@
 
 package com.huaweicloud.dis.http;
 
-import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.net.ssl.SSLContext;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.config.Registry;
-import org.apache.http.config.RegistryBuilder;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.conn.socket.LayeredConnectionSocketFactory;
-import org.apache.http.conn.socket.PlainConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.SSLContexts;
-import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +36,6 @@ import com.huaweicloud.dis.http.converter.HttpMessageConverter;
 import com.huaweicloud.dis.http.converter.StringHttpMessageConverter;
 import com.huaweicloud.dis.http.converter.json.JsonHttpMessageConverter;
 import com.huaweicloud.dis.http.converter.protobuf.ProtobufHttpMessageConverter;
-import com.huaweicloud.dis.util.HttpRequestRetryHandler;
 import com.huaweicloud.dis.util.JsonUtils;
 
 /**
@@ -72,9 +48,8 @@ public abstract class AbstractRestClient
     
     private static final Logger logger = LoggerFactory.getLogger(AbstractRestClient.class);
     
-    protected final List<HttpMessageConverter<?>> messageConverters = new ArrayList<HttpMessageConverter<?>>();
-    
-    protected ResponseErrorHandler errorHandler = new DefaultResponseErrorHandler();
+    protected final List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
+
     
     protected DISConfig disConfig;
     
@@ -87,27 +62,7 @@ public abstract class AbstractRestClient
         this.messageConverters.add(new StringHttpMessageConverter());
         this.messageConverters.add(new ByteArrayHttpMessageConverter());
     }
-    
-    
-    /**
-     * Set the message body converters to use.
-     * <p>
-     * These converters are used to convert from and to HTTP requests and responses.
-     *
-     * @param messageConverters List of message converters.
-     */
-    public void setMessageConverters(List<HttpMessageConverter<?>> messageConverters)
-    {
-        if (messageConverters != null && messageConverters.size() > 0)
-        {
-            // Take getMessageConverters() List as-is when passed in here
-            if (this.messageConverters != messageConverters)
-            {
-                this.messageConverters.clear();
-                this.messageConverters.addAll(messageConverters);
-            }
-        }
-    }
+
     
     /**
      * Return the message body converters.
@@ -118,54 +73,8 @@ public abstract class AbstractRestClient
     {
         return this.messageConverters;
     }
-    
-    /**
-     * Set the error handler.
-     * <p>
-     * By default, RestTemplate uses a {@link DefaultResponseErrorHandler}.
-     *
-     * @param errorHandler response error handler.
-     */
-    public void setErrorHandler(ResponseErrorHandler errorHandler)
-    {
-        if (errorHandler != null)
-        {
-            this.errorHandler = errorHandler;
-        }
-    }
-    
-    /**
-     * Return the error handler.
-     *
-     * @return response error handler.
-     */
-    public ResponseErrorHandler getErrorHandler()
-    {
-        return this.errorHandler;
-    }
-    
-    /**
-     * Handle the given response, performing appropriate logging and invoking the {@link ResponseErrorHandler} if
-     * necessary.
-     * <p>
-     * Can be overridden in subclasses.
-     *
-     * @param response the resulting {@link HttpResponse}
-     * @throws IOException if propagated from {@link ResponseErrorHandler}
-     * @since 1.3.0
-     * @see #setErrorHandler
-     */
-    protected void handleResponse(HttpResponse response)
-        throws IOException
-    {
-        ResponseErrorHandler errorHandler = getErrorHandler();
-        boolean hasError = errorHandler.hasError(response);
-        
-        if (hasError)
-        {
-            errorHandler.handleError(response);
-        }
-    }
+
+
     
     /**
      * 设置请求头域
@@ -209,75 +118,4 @@ public abstract class AbstractRestClient
             return new StringEntity(JsonUtils.objToJson(data), "UTF-8");
         }
     }
-    
-    private CloseableHttpClient getHttpClient()
-    {
-        RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.<ConnectionSocketFactory> create();
-        registryBuilder.register("http", new PlainConnectionSocketFactory());
-
-        X509HostnameVerifier verifier = null;
-        // 指定信任密钥存储对象和连接套接字工厂
-        try
-        {
-            KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
-            boolean isDefaultTrustedJKSEnabled = disConfig.getIsDefaultTrustedJksEnabled();
-            SSLContext sslContext = null;
-            
-            // 启用客户端证书校验
-            if (isDefaultTrustedJKSEnabled)
-            {
-                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, null).build();
-            }
-            else
-            {
-                // 信任任何链接
-                TrustStrategy anyTrustStrategy = new TrustStrategy()
-                {
-                    @Override
-                    public boolean isTrusted(X509Certificate[] x509Certificates, String s)
-                        throws CertificateException
-                    {
-                        return true;
-                    }
-                };
-                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy).build();
-                verifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
-            }
-            
-            LayeredConnectionSocketFactory sslSF = new SSLConnectionSocketFactory(sslContext,
-                new String[] {"TLSv1.2"}, null, verifier);
-            registryBuilder.register("https", sslSF);
-        }
-        catch (KeyStoreException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (KeyManagementException e)
-        {
-            throw new RuntimeException(e);
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            throw new RuntimeException(e);
-        }
-        finally
-        {
-
-        }
-        RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(disConfig.getSocketTimeOut()).setConnectTimeout(disConfig.getConnectionTimeOut()).build();
-        Registry<ConnectionSocketFactory> registry = registryBuilder.build();
-        // 设置连接管理器
-        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager(registry);
-        connManager.setDefaultMaxPerRoute(disConfig.getMaxPerRoute());
-        connManager.setMaxTotal(disConfig.getMaxTotal());
-
-        
-        // 构建客户端
-        return HttpClientBuilder.create()
-            .setConnectionManager(connManager)
-            .setRetryHandler(new HttpRequestRetryHandler(3, true))
-            .setDefaultRequestConfig(requestConfig)
-            .build();
-    }
-    
 }
