@@ -133,7 +133,7 @@ public class IOUtils
         catch (IOException exception)
         {
             LOG.error(exception.getMessage(), exception);
-            throw new RuntimeException(exception);
+            throw new DISClientException(exception);
         }
         finally
         {
@@ -155,16 +155,16 @@ public class IOUtils
     {
         if (!file.exists())
         {
-            throw new RuntimeException("File not found.");
+            throw new DISClientException("File not found.");
         }
         if (file.length() > MAX_FILE_LENGTH)
         {
-            throw new RuntimeException("Files bigger than 128M is not allowed now.");
+            throw new DISClientException("Files bigger than 128M is not allowed now.");
         }
         
         if (file.length() == 0)
         {
-            throw new RuntimeException("Empty file.");
+            throw new DISClientException("Empty file.");
         }
     }
     

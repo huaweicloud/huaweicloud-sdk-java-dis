@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.huaweicloud.dis.core.util.ClassLoaderHelper;
 import com.huaweicloud.dis.core.util.json.Jackson;
+import com.huaweicloud.dis.exception.DISClientException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -191,7 +192,7 @@ public class InternalConfig {
             try {
                 config = InternalConfig.load();
             } catch (RuntimeException ex) {
-                throw ex;
+                throw new DISClientException(ex);
             } catch (Exception ex) {
                 throw new IllegalStateException("Fatal: Failed to load the internal config for Java SDK", ex);
             }

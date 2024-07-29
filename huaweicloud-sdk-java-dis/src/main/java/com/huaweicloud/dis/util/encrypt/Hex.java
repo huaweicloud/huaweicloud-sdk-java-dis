@@ -16,6 +16,8 @@
 
 package com.huaweicloud.dis.util.encrypt;
 
+import com.huaweicloud.dis.exception.DISClientException;
+
 /**
  * reference apache commons <a href="http://commons.apache.org/codec/">http://commons.apache.org/codec/</a>
  *
@@ -131,7 +133,7 @@ public class Hex
         
         if ((len & 0x01) != 0)
         {
-            throw new RuntimeException("Odd number of characters.");
+            throw new DISClientException("Odd number of characters.");
         }
         
         byte[] out = new byte[len >> 1];
@@ -162,7 +164,7 @@ public class Hex
         int digit = Character.digit(ch, 16);
         if (digit == -1)
         {
-            throw new RuntimeException("Illegal hexadecimal character " + ch + " at index " + index);
+            throw new DISClientException("Illegal hexadecimal character " + ch + " at index " + index);
         }
         return digit;
     }

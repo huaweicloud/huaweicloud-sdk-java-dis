@@ -236,7 +236,7 @@ public class RestClientAsync extends AbstractRestClient{
                 sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy).build();
             }
     	} catch (Exception e) {
-    		throw new RuntimeException(e);
+    		throw new DISClientException(e);
     	}
 
         SSLIOSessionStrategy sslioSessionStrategy = new SSLIOSessionStrategy(sslContext, SSLIOSessionStrategy.ALLOW_ALL_HOSTNAME_VERIFIER);
@@ -256,7 +256,7 @@ public class RestClientAsync extends AbstractRestClient{
     	try {
 			ioReactor = new DefaultConnectingIOReactor(ioReactorConfig);
 		} catch (IOReactorException e) {
-			throw new RuntimeException(e);
+			throw new DISClientException(e);
 		}
     	
     	PoolingNHttpClientConnectionManager connManager = new PoolingNHttpClientConnectionManager(ioReactor, registry);

@@ -34,6 +34,7 @@ import org.apache.http.message.BasicNameValuePair;
 
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.http.HttpMethodName;
+import com.huaweicloud.dis.exception.DISClientException;
 
 public class HttpUtils {
 
@@ -101,7 +102,7 @@ public class HttpUtils {
             return buffer.toString();
 
         } catch (UnsupportedEncodingException ex) {
-            throw new RuntimeException(ex);
+            throw new DISClientException(ex);
         }
     }
 

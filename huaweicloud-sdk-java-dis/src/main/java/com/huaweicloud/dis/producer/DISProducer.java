@@ -35,6 +35,7 @@ import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.builder.DefaultExecutorFactory;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequest;
 import com.huaweicloud.dis.iface.data.request.PutRecordsRequestEntry;
 import com.huaweicloud.dis.iface.data.response.PutRecordsResult;
@@ -207,7 +208,7 @@ public class DISProducer
             for(PutRecordsRequestEntry entry : putRecordsRequest.getRecords()){
                 int tmpPartition = calPartitionId(streamInfo, entry);
                 if(caledPartitionId != -1 && caledPartitionId != tmpPartition){
-                    throw new RuntimeException("one batch should in one partition when orderByPartition on.");
+                    throw new DISClientException("one batch should in one partition when orderByPartition on.");
                 }
                 caledPartitionId = tmpPartition;
             }
