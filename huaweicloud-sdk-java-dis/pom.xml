@@ -57,7 +57,7 @@
         <dependency>
             <groupId>com.github.luben</groupId>
             <artifactId>zstd-jni</artifactId>
-            <version>1.5.2-2</version>
+            <version>1.5.4-2</version>
         </dependency>
 
         <!-- sdk-core的sign方法依赖 -->
