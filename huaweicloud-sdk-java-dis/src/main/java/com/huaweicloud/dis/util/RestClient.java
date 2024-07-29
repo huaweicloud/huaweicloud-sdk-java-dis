@@ -437,30 +437,9 @@ public class RestClient
                 new String[] {"TLSv1.2"}, null, verifier);
             registryBuilder.register("https", sslSF);
         }
-        catch (KeyStoreException e)
+        catch (Exception e)
         {
-            throw new RuntimeException(e);
-        }
-        catch (KeyManagementException e)
-        {
-            throw new RuntimeException(e);
-        }
-		catch (NoSuchAlgorithmException e) 
-        {
-			throw new RuntimeException(e);
-		}
-		catch (CertificateException e) 
-        {
-			throw new RuntimeException(e);
-		} catch (IOException e) 
-        {
-			throw new RuntimeException(e);
-		}
-		 
-			 
-        finally
-        {
-
+            throw new DISClientException(e);
         }
         RequestConfig.Builder requestConfigBuilder = RequestConfig.custom();
         RequestConfig requestConfig = requestConfigBuilder.setSocketTimeout(disConfig.getSocketTimeOut()).setConnectTimeout(disConfig.getConnectionTimeOut()).build();

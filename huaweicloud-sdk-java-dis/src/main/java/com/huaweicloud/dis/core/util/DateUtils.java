@@ -17,6 +17,7 @@
 package com.huaweicloud.dis.core.util;
 
 import com.huaweicloud.dis.core.ClientException;
+import com.huaweicloud.dis.exception.DISClientException;
 
 import org.apache.http.annotation.Contract;
 import org.apache.http.annotation.ThreadingBehavior;
@@ -143,9 +144,9 @@ public class DateUtils {
      * @throws IllegalStateException if the joda-time being used at runtime
      * doens't appear to be of the right version.
      */
-    private static <E extends RuntimeException> E handleException(E ex) {
+    private static RuntimeException handleException(Throwable ex) {
         if (JodaTime.hasExpectedBehavior())
-            return ex;
+            return new DISClientException(ex);
         throw new IllegalStateException("Joda-time 2.2 or later version is required, but found version: " + JodaTime.getVersion(), ex);
     }
 

@@ -26,6 +26,7 @@ import org.apache.http.entity.ContentType;
 
 import com.google.protobuf.ExtensionRegistry;
 import com.google.protobuf.Message;
+import com.huaweicloud.dis.exception.DISClientException;
 import com.huaweicloud.dis.http.converter.AbstractHttpMessageConverter;
 
 /**
@@ -89,7 +90,7 @@ public class ProtobufHttpMessageConverter extends AbstractHttpMessageConverter<M
 			return builder.build();
 		}
 		catch (Exception ex) {
-			throw new RuntimeException("Could not read Protobuf message: " + ex.getMessage(), ex);
+			throw new DISClientException("Could not read Protobuf message: " + ex.getMessage(), ex);
 		}
 	}
 

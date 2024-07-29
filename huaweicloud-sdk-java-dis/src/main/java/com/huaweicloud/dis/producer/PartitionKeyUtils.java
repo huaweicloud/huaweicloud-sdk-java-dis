@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.huaweicloud.dis.core.util.StringUtils;
+import com.huaweicloud.dis.exception.DISClientException;
 
 
 public class PartitionKeyUtils
@@ -63,7 +64,7 @@ public class PartitionKeyUtils
             String errorMessage =
                     String.format("Unable to parse partitionId from input shardId [%s] - %s", shardId, ne.getMessage());
             log.error(errorMessage);
-            throw new RuntimeException("invalid shardId");
+            throw new DISClientException("invalid shardId");
         }
 
         if (partitionNumber < 0)
@@ -71,7 +72,7 @@ public class PartitionKeyUtils
             String errorMessage =
                     String.format("Unable to parse partitionId from input shardId [%s] - negative value", shardId);
             log.error(errorMessage);
-            throw new RuntimeException("invalid shardId");
+            throw new DISClientException("invalid shardId");
         }
 
         return partitionNumber;

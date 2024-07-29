@@ -122,7 +122,7 @@ public class AbstractDISClient {
                         record.setData(ByteBuffer.wrap(compressedInput));
                     } catch (IOException e) {
                         LOG.error(e.getMessage(), e);
-                        throw new RuntimeException(e);
+                        throw new DISClientException(e);
                     }
                 }
             }
@@ -166,7 +166,7 @@ public class AbstractDISClient {
                         record.setData(ByteBuffer.wrap(uncompressedInput));
                     } catch (IOException e) {
                         LOG.error(e.getMessage(), e);
-                        throw new RuntimeException(e);
+                        throw new DISClientException(e);
                     }
                 }
             }
@@ -186,7 +186,7 @@ public class AbstractDISClient {
         } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
                 | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             LOG.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new DISClientException(e);
         }
         return ByteBuffer.wrap(cipher.getBytes());
     }
@@ -199,7 +199,7 @@ public class AbstractDISClient {
         } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
                 | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             LOG.error(e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new DISClientException(e);
         }
 
         return ByteBuffer.wrap(src.getBytes(utf8));
@@ -693,7 +693,7 @@ public class AbstractDISClient {
         }
 
         if (StringUtils.isNullOrEmpty(disConfig.getProjectId())) {
-            throw new RuntimeException("project id can not be null.");
+            throw new DISClientException("project id can not be null.");
         }
 
         String endpoint = disConfig.getEndpoint();
@@ -710,7 +710,7 @@ public class AbstractDISClient {
         try {
             endpoint = new URI(endpointStr);
         } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
+            throw new DISClientException(e);
         }
 
         request.setEndpoint(endpoint);
