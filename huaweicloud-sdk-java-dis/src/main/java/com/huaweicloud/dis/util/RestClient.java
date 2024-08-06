@@ -16,6 +16,8 @@
 
 package com.huaweicloud.dis.util;
 
+import static com.huaweicloud.dis.Constants.SUPPORTED_CIPHERSUITES;
+
 import com.huaweicloud.dis.DISConfig;
 import com.huaweicloud.dis.core.http.HttpMethodName;
 import com.huaweicloud.dis.exception.DISClientException;
@@ -432,7 +434,7 @@ public class RestClient
             }
             @Deprecated
             LayeredConnectionSocketFactory sslSF = new SSLConnectionSocketFactory(sslContext,
-                new String[] {"TLSv1.2"}, null, (hostname, sslSession) -> hostname.equals(sslSession.getPeerHost()));
+                new String[] {"TLSv1.2"}, SUPPORTED_CIPHERSUITES, (hostname, sslSession) -> hostname.equals(sslSession.getPeerHost()));
             registryBuilder.register("https", sslSF);
         }
         catch (Exception e)
