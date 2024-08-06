@@ -40,7 +40,6 @@ import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLContexts;
 import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.conn.ssl.X509HostnameVerifier;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -53,12 +52,9 @@ import org.slf4j.LoggerFactory;
 import javax.net.ssl.SSLContext;
 
 import java.io.IOException;
-import java.security.KeyManagementException;
 import java.security.KeyStore;
-import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +77,17 @@ public class RestClient
     private static RestClient restClient;
     
     private static CloseableHttpClient httpClient;
-    
+
+    private static SecureRandom random;
+
+    static {
+        try {
+            random = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            throw new DISClientException(e);
+        }
+    }
+
     private DISConfig disConfig;
     
     private RestClient(DISConfig disConfig)
@@ -403,38 +409,30 @@ public class RestClient
         RegistryBuilder<ConnectionSocketFactory> registryBuilder = RegistryBuilder.<ConnectionSocketFactory> create();
         registryBuilder.register("http", new PlainConnectionSocketFactory());
 
-        X509HostnameVerifier verifier = null;
         // 指定信任密钥存储对象和连接套接字工厂
         try
         {
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             boolean isDefaultTrustedJKSEnabled = disConfig.getIsDefaultTrustedJksEnabled();
             SSLContext sslContext = null;
-            
+
             // 启用客户端证书校验
             if (isDefaultTrustedJKSEnabled)
             {
             	trustStore = Utils.getDefaultTrustStore();
-                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, null).build();
+                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, null)
+                    .setSecureRandom(random).build();
             }
             else
             {
                 // 信任任何链接
-                TrustStrategy anyTrustStrategy = new TrustStrategy()
-                {
-                    @Override
-                    public boolean isTrusted(X509Certificate[] x509Certificates, String s)
-                        throws CertificateException
-                    {
-                        return true;
-                    }
-                };
-                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy).build();
-                verifier = SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+                TrustStrategy anyTrustStrategy = (x509Certificates, s) -> true;
+                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy)
+                    .setSecureRandom(random).build();
             }
-            
+            @Deprecated
             LayeredConnectionSocketFactory sslSF = new SSLConnectionSocketFactory(sslContext,
-                new String[] {"TLSv1.2"}, null, verifier);
+                new String[] {"TLSv1.2"}, null, (hostname, sslSession) -> hostname.equals(sslSession.getPeerHost()));
             registryBuilder.register("https", sslSF);
         }
         catch (Exception e)
