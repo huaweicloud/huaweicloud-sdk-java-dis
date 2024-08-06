@@ -1,6 +1,8 @@
 package com.huaweicloud.dis.http;
 
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
@@ -46,8 +48,17 @@ public class RestClientAsync extends AbstractRestClient{
     private static RestClientAsync restAsyncClient;
     
     private CloseableHttpAsyncClient httpAsyncClient;
-    
-    
+
+    private static SecureRandom random;
+
+    static {
+        try {
+            random = SecureRandom.getInstanceStrong();
+        } catch (NoSuchAlgorithmException e) {
+            throw new DISClientException(e);
+        }
+    }
+
     private RestClientAsync(DISConfig disConfig)
     {
     	super(disConfig);
@@ -227,19 +238,22 @@ public class RestClientAsync extends AbstractRestClient{
             if (isDefaultTrustedJKSEnabled)
             {
                 trustStore = Utils.getDefaultTrustStore();
-                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, null).build();
+                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, null)
+                    .setSecureRandom(random).build();
             }
             else
             {
                 // 信任任何链接
                 TrustStrategy anyTrustStrategy = (x509Certificates, s) -> true;
-                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy).build();
+                sslContext = SSLContexts.custom().useTLS().loadTrustMaterial(trustStore, anyTrustStrategy)
+                    .setSecureRandom(random).build();
             }
     	} catch (Exception e) {
     		throw new DISClientException(e);
     	}
 
-        SSLIOSessionStrategy sslioSessionStrategy = new SSLIOSessionStrategy(sslContext, SSLIOSessionStrategy.ALLOW_ALL_HOSTNAME_VERIFIER);
+        SSLIOSessionStrategy sslioSessionStrategy = new SSLIOSessionStrategy(sslContext,
+            (hostname, sslSession) -> hostname.equals(sslSession.getPeerHost()));
         
         Registry<SchemeIOSessionStrategy> registry = RegistryBuilder.<SchemeIOSessionStrategy>create()
                 .register("http", NoopIOSessionStrategy.INSTANCE)
