@@ -39,6 +39,9 @@ public class GetCheckpointRequest
     @JsonProperty("timestamp")
     private Long timeStamp;
 
+    @JsonProperty("stream_id")
+    private String streamId;
+
     public String getStreamName()
     {
         return streamName;
@@ -89,10 +92,23 @@ public class GetCheckpointRequest
         this.timeStamp = timeStamp;
     }
 
+    public String getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
+    }
+
     @Override
-    public String toString()
-    {
-        return "GetCheckpointParam [streamName=" + streamName + ", shardId=" + partitionId + ", checkpointType="
-                + checkpointType + ", appName=" + appName  + ", timeStamp=" + timeStamp +  "]";
+    public String toString() {
+        return "GetCheckpointRequest{" +
+            "streamName='" + streamName + '\'' +
+            ", partitionId='" + partitionId + '\'' +
+            ", checkpointType='" + checkpointType + '\'' +
+            ", appName='" + appName + '\'' +
+            ", timeStamp=" + timeStamp +
+            ", streamId='" + streamId + '\'' +
+            '}';
     }
 }

@@ -20,6 +20,9 @@ public class DeleteCheckpointRequest {
     @JsonProperty("app_name")
     private String appName;
 
+    @JsonProperty("stream_id")
+    private String streamId;
+
     public String getStreamName()
     {
         return streamName;
@@ -60,11 +63,22 @@ public class DeleteCheckpointRequest {
         this.appName = appName;
     }
 
+    public String getStreamId() {
+        return streamId;
+    }
+
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
+    }
 
     @Override
-    public String toString()
-    {
-        return "DeleteCheckpointParam [streamName=" + streamName + ", shardId=" + partitionId + ", checkpointType="
-                + checkpointType + ", appName=" + appName  +  "]";
+    public String toString() {
+        return "DeleteCheckpointRequest{" +
+            "streamName='" + streamName + '\'' +
+            ", partitionId='" + partitionId + '\'' +
+            ", checkpointType='" + checkpointType + '\'' +
+            ", appName='" + appName + '\'' +
+            ", streamId='" + streamId + '\'' +
+            '}';
     }
 }

@@ -79,3 +79,14 @@
 # 1.3.19
 - Bugfixs
   * jackson版本升级到2.15.2
+  
+# 1.3.20
+- Bugfixs
+  * jackson版本升级到2.15.4
+  * log4j升级到2.21.1
+  * httpclient升级到4.5.14
+  * commons-io升级到2.16.0
+  * protobuf升级到3.25.5
+  * snappy-java升级到1.1.10.4
+- Features
+  * 支持adapter sdk跨账号授权
