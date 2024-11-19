@@ -16,8 +16,6 @@
 
 package com.huaweicloud.dis.iface.data.request;
 
-import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -75,11 +73,19 @@ public class CommitCheckpointRequest
 
     /**
      * <p>
-     *     当前 Consumer Group 的版本号。
+     *     版本号。
      * </p>
      */
     @JsonProperty("generation_id")
     private Long generationId;
+
+    /**
+     * <p>
+     *    流ID。
+     * </p>
+     */
+    @JsonProperty("stream_id")
+    private String streamId;
 
     public String getAppName()
     {
@@ -157,12 +163,26 @@ public class CommitCheckpointRequest
         this.generationId = generationId;
     }
 
-    @Override
-    public String toString()
-    {
-        return "CommitCheckpointRequest [appName=" + appName + ", checkpointType=" + checkpointType + ", streamName="
-            + streamName + ", partitionId=" + partitionId + ", sequenceNumber=" + sequenceNumber + ", metadata="
-            + metadata + ", clientId=" + clientId + ", generationId=" + generationId + "]";
+    public String getStreamId() {
+        return streamId;
     }
 
+    public void setStreamId(String streamId) {
+        this.streamId = streamId;
+    }
+
+    @Override
+    public String toString() {
+        return "CommitCheckpointRequest{" +
+            "appName='" + appName + '\'' +
+            ", checkpointType='" + checkpointType + '\'' +
+            ", streamName='" + streamName + '\'' +
+            ", partitionId='" + partitionId + '\'' +
+            ", sequenceNumber='" + sequenceNumber + '\'' +
+            ", metadata='" + metadata + '\'' +
+            ", clientId='" + clientId + '\'' +
+            ", generationId=" + generationId +
+            ", streamId='" + streamId + '\'' +
+            '}';
+    }
 }

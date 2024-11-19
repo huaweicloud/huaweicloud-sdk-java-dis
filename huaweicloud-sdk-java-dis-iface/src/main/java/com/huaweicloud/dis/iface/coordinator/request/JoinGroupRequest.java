@@ -17,6 +17,8 @@ public class JoinGroupRequest {
 
     private List<String> interestedStream;
 
+    private List<String> interestedStreamIdList;
+
     private String streamPattern;
 
     /**
@@ -83,5 +85,13 @@ public class JoinGroupRequest {
 
     public void setRebalanceTimeoutMs(Long rebalanceTimeoutMs) {
         this.rebalanceTimeoutMs = rebalanceTimeoutMs;
+    }
+
+    public List<String> getInterestedStreamIdList() {
+        return interestedStreamIdList;
+    }
+
+    public void setInterestedStreamIdList(List<String> interestedStreamIdList) {
+        this.interestedStreamIdList = interestedStreamIdList;
     }
 }
