@@ -78,10 +78,6 @@
 
 # 1.3.19
 - Bugfixs
-  * jackson版本升级到2.15.2
-  
-# 1.3.20
-- Bugfixs
   * jackson版本升级到2.15.4
   * log4j升级到2.21.1
   * httpclient升级到4.5.14
