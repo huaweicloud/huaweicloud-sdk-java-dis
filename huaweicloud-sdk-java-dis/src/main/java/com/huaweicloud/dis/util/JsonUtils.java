@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy.PropertyNamingStrategyBase;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -43,36 +44,6 @@ public class JsonUtils
         mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false); // 遇到空Bean不报错
     }
 
-    /*
-     * 自定义属性命名策略：首字母转小写
-     */
-    public static final PropertyNamingStrategy CASE_FIRST_WORD_TO_LOWER_CASE = new MyPropertyNameingStrategy();
-
-    /**
-     * json转换为java对象
-     *
-     * @param <T>
-     *            转换为的java对象
-     * @param json
-     *            json字符串
-     * @param typeReference
-     *            jackjson自定义的类型
-     * @return 返回Java对象
-     */
-    public static <T> T jsonToObj(String json, TypeReference<T> typeReference)
-    {
-        mapper.setPropertyNamingStrategy(new DefaultPropertyNameingStrategy());
-        try
-        {
-            return mapper.readValue(json, typeReference);
-        }
-        catch (IOException e)
-        {
-            logger.error("Fail to read value of JSON. " + e);
-        }
-
-        return null;
-    }
 
     /**
      * json转换为java对象
@@ -181,7 +152,7 @@ public class JsonUtils
     }
 
     private static class MyPropertyNameingStrategy extends
-            PropertyNamingStrategyBase
+        PropertyNamingStrategies.NamingBase
     {
         private static final long serialVersionUID = 1L;
 
