@@ -86,3 +86,6 @@
   * snappy-java升级到1.1.10.4
 - Features
   * 支持adapter sdk跨账号授权
+# 1.3.20
+- Bugfixs
+  * jackson-databind 类加载死锁问题处理：https://github.com/FasterXML/jackson-databind/issues/2715
