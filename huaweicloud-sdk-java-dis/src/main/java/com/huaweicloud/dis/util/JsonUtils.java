@@ -176,7 +176,7 @@ public class JsonUtils
     }
 
     private static class DefaultPropertyNameingStrategy extends
-            PropertyNamingStrategyBase
+        PropertyNamingStrategies.NamingBase
     {
         private static final long serialVersionUID = 1L;
 

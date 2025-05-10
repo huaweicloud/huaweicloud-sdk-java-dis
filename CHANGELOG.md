@@ -89,3 +89,6 @@
 # 1.3.20
 - Bugfixs
   * jackson-databind 类加载死锁问题处理：https://github.com/FasterXML/jackson-databind/issues/2715
+# 1.3.21
+- Bugfixs
+  * jackson-databind 类加载死锁问题处理：https://github.com/FasterXML/jackson-databind/issues/2715
