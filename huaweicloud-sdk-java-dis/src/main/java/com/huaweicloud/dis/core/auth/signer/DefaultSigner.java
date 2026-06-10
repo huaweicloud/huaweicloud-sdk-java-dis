@@ -441,8 +441,7 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
         //获取签名信息(HTTP规范头部为小写)
         String authorization = request.getHeaders().remove(SignerConstants.AUTHORIZATION.toLowerCase());
         //计算签名对象
-        final SignerRequestParams signerParams = new SignerRequestParams(request, regionName, serviceName,
-            getAlgorithm(isDerivationKey), singerDate);
+        final SignerRequestParams signerParams = new SignerRequestParams(request, regionName, serviceName, getAlgorithm(isDerivationKey), singerDate);
             
         //计算内容256
         String contentSha256 = calculateContentHash(request);

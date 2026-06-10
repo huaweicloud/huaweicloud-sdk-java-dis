@@ -56,7 +56,7 @@ public class SignUtil
             singerDate = SignerUtils.formatTimestamp(SignUtil.getSigningDate(request));
         }
 
-        String info = singerDate.substring(0,8) + "/" + "region" + "/" + Constants.SERVICENAME;
+        String info = singerDate.substring(0,8) + "/" + region + "/" + Constants.SERVICENAME;
         String derivationKey = HKDF.getDerKey(ak, sk, info, DERIVATION_KEY_SIGNING_ALGORITHM);
 
         return sign(request, ak, derivationKey, region, prop);
