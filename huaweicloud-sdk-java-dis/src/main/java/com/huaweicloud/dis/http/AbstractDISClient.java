@@ -8,6 +8,7 @@ import com.huaweicloud.dis.core.DefaultRequest;
 import com.huaweicloud.dis.core.Request;
 import com.huaweicloud.dis.core.auth.AuthType;
 import com.huaweicloud.dis.core.auth.signer.internal.SignerConstants;
+import com.huaweicloud.dis.core.auth.signer.internal.SignerUtils;
 import com.huaweicloud.dis.core.builder.AkSkHolder;
 import com.huaweicloud.dis.core.handler.AsyncHandler;
 import com.huaweicloud.dis.core.http.HttpMethodName;
@@ -205,7 +206,7 @@ public class AbstractDISClient {
         try {
             cipher = EncryptUtils.gen(new String[]{disConfig.getDataPassword()}, src.array());
         } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
-                | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
+                 | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             LOG.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -218,7 +219,7 @@ public class AbstractDISClient {
         try {
             src = EncryptUtils.dec(new String[]{disConfig.getDataPassword()}, new String(cipher.array(), utf8));
         } catch (InvalidKeyException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchPaddingException
-                | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
+                 | IllegalBlockSizeException | BadPaddingException | InvalidAlgorithmParameterException e) {
             LOG.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
@@ -236,6 +237,7 @@ public class AbstractDISClient {
         // set request header
         setContentType(request);
         setSdkVersion(request);
+        setSDKDate(request);
 
         // set request parameters
         setParameters(request, requestContent);
@@ -307,6 +309,10 @@ public class AbstractDISClient {
         if (!request.getHeaders().containsKey("accept")) {
             request.addHeader("accept", "*/*; charset=utf-8");
         }
+    }
+
+    private void setSDKDate(Request<HttpRequest> request) {
+        request.addHeader(SignerConstants.X_SDK_DATE,SignerUtils.formatTimestamp(SignUtil.getSigningDate(request)));
     }
 
     private void setSdkVersion(Request<HttpRequest> request) {
@@ -381,11 +387,16 @@ public class AbstractDISClient {
     }
 
     private <T> Future<T> doRequestAsync(Request<HttpRequest> request, Object requestContent, String ak, String sk,
-                                         String region, Class<T> returnType, AsyncHandler<T> callback) {
+        String region, Class<T> returnType, AsyncHandler<T> callback) {
         String uri = buildURI(request);
 
         request.getHeaders().remove(SignerConstants.AUTHORIZATION);
-        request = SignUtil.sign(request, ak, sk, region, disConfig);
+        if (disConfig.getDerivationKeySwitch()) {
+            //衍生sk
+            request = SignUtil.signWithDerivationKey(request, ak, sk, region, disConfig);
+        } else {
+            request = SignUtil.sign(request, ak, sk, region, disConfig);
+        }
 
         ConnectRetryFuture<T> connectRetryFuture = new ConnectRetryFuture<T>(request, ak, sk, requestContent, callback, uri, returnType);
 
@@ -395,7 +406,7 @@ public class AbstractDISClient {
         }
 
         Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri,
-                request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
+             request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
 
         connectRetryFuture.setInnerFuture(restFuture);
 
@@ -441,12 +452,12 @@ public class AbstractDISClient {
         private final Class<T> returnType;
 
         public ConnectRetryFuture(Request<HttpRequest> request,
-                                  String ak,
-                                  String sk,
-                                  Object requestContent,
-                                  AsyncHandler<T> callback,
-                                  String uri,
-                                  Class<T> returnType) {
+            String ak,
+            String sk,
+            Object requestContent,
+            AsyncHandler<T> callback,
+            String uri,
+            Class<T> returnType) {
             super();
             this.request = request;
             this.ak = ak;
@@ -460,8 +471,7 @@ public class AbstractDISClient {
         public void retryHandle(Throwable t, boolean tryLock, int retryIndex) throws ExecutionException, InterruptedException {
             String errorMsg = t.getMessage();
             if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException) {
-                errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : "
-                        + ((RestClientResponseException) t).getResponseBodyAsString();
+                errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : " + ((RestClientResponseException) t).getResponseBodyAsString();
             }
 
             // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
@@ -487,7 +497,12 @@ public class AbstractDISClient {
                 int tmpRetryIndex = retryCount.incrementAndGet();
 
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
-                request = SignUtil.sign(request, ak, sk, region, disConfig);
+                if (disConfig.getDerivationKeySwitch()) {
+                    //衍生sk
+                    request = SignUtil.signWithDerivationKey(request, ak, sk, region, disConfig);
+                } else {
+                    request = SignUtil.sign(request, ak, sk, region, disConfig);
+                }
 
                 ConnectRetryCallback<T> connectRetryCallback = null;
                 if (callback != null) {
@@ -496,7 +511,7 @@ public class AbstractDISClient {
 
                 LOG.warn("connect or system error retry [{}] [{}] [{}]", this.hashCode(), retryIndex, errorMsg);
                 Future<T> restFuture = RestClientAsync.getInstance(disConfig).exchangeAsync(uri,
-                        request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
+                    request.getHttpMethod(), request.getHeaders(), requestContent, returnType, connectRetryCallback);
 
                 this.setInnerFuture(restFuture);
             } finally {
@@ -569,7 +584,7 @@ public class AbstractDISClient {
 
     // 将Request转为restTemplate的请求参数.由于请求需要签名，故请求的body直接传byte[]，响应的反序列化，可以直接利用spring的messageConvert机制
     private <T> T doRequest(Request<HttpRequest> request, Object requestContent, String ak, String sk, String region,
-                            Class<T> returnType) {
+        Class<T> returnType) {
         String uri = buildURI(request);
         int retryCount = -1;
         ExponentialBackOff backOff = null;
@@ -586,15 +601,28 @@ public class AbstractDISClient {
 
             try {
                 request.getHeaders().remove(SignerConstants.AUTHORIZATION);
+
                 // 每次重传需要重新签名
-                request = SignUtil.sign(request, ak, sk, region, disConfig);
+                if (disConfig.getDerivationKeySwitch()) {
+                    //衍生sk
+                    request = SignUtil.signWithDerivationKey(request, ak, sk, region, disConfig);
+                } else {
+                    request = SignUtil.sign(request, ak, sk, region, disConfig);
+                }
+
+                Map<String, String> map = request.getHeaders();
+                String authorization = map.get(SignerConstants.AUTHORIZATION);
+
+                //todo 提交代码时删除
+                LOG.warn("DerivationKey authorization: " + authorization);
+
                 return RestClient.getInstance(disConfig).exchange(uri,
-                        request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
+                    request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
             } catch (Throwable t) {
                 String errorMsg = t.getMessage();
                 if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException) {
                     errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : "
-                            + ((RestClientResponseException) t).getResponseBodyAsString();
+                        + ((RestClientResponseException) t).getResponseBodyAsString();
                 }
 
                 // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
@@ -604,10 +632,10 @@ public class AbstractDISClient {
                 }
 
                 LOG.warn("Find Retriable Exception [{}], url [{} {}], currRetryCount is {}",
-                        errorMsg.replaceAll("[\\r\\n]", ""),
-                        request.getHttpMethod(),
-                        uri,
-                        retryCount);
+                    errorMsg.replaceAll("[\\r\\n]", ""),
+                    request.getHttpMethod(),
+                    uri,
+                    retryCount);
             }
         } while (retryCount < disConfig.getExceptionRetries());
 
@@ -616,7 +644,7 @@ public class AbstractDISClient {
 
     //通过X-Auth-Token请求数据
     private <T> T doRequest(Request<HttpRequest> request, Object requestContent, String authToken, String region,
-                            Class<T> returnType) {
+        Class<T> returnType) {
         String uri = buildURI(request);
         int retryCount = -1;
         ExponentialBackOff backOff = null;
@@ -626,7 +654,7 @@ public class AbstractDISClient {
                 // 等待一段时间再发起重试
                 if (backOff == null) {
                     backOff = new ExponentialBackOff(250, 2.0, disConfig.getBackOffMaxIntervalMs(),
-                            ExponentialBackOff.DEFAULT_MAX_ELAPSED_TIME);
+                        ExponentialBackOff.DEFAULT_MAX_ELAPSED_TIME);
                 }
                 backOff.backOff(backOff.getNextBackOff());
             }
@@ -634,12 +662,12 @@ public class AbstractDISClient {
             try {
                 request.addHeader("X-Auth-Token", authToken);
                 return RestClient.getInstance(disConfig).exchange(uri,
-                        request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
+                    request.getHttpMethod(), request.getHeaders(), requestContent, returnType);
             } catch (Throwable t) {
                 String errorMsg = t.getMessage();
                 if (t instanceof UnknownHttpStatusCodeException || t instanceof HttpStatusCodeException) {
                     errorMsg = ((RestClientResponseException) t).getRawStatusCode() + " : "
-                            + ((RestClientResponseException) t).getResponseBodyAsString();
+                        + ((RestClientResponseException) t).getResponseBodyAsString();
                 }
 
                 // 如果不是可以重试的异常 或者 已达到重试次数，则直接抛出异常
@@ -649,10 +677,10 @@ public class AbstractDISClient {
                 }
 
                 LOG.warn("Find Retriable Exception [{}], url [{} {}], currRetryCount is {}",
-                        errorMsg.replaceAll("[\\r\\n]", ""),
-                        request.getHttpMethod(),
-                        uri,
-                        retryCount);
+                    errorMsg.replaceAll("[\\r\\n]", ""),
+                     request.getHttpMethod(),
+                     uri,
+                     retryCount);
             }
         } while (retryCount < disConfig.getExceptionRetries());
 
@@ -669,12 +697,12 @@ public class AbstractDISClient {
     protected boolean isRetriableSendException(Throwable t, Request<HttpRequest> request) {
         // 对于连接超时/网络闪断/Socket异常/服务端5xx错误进行重试
         return t instanceof ConnectTimeoutException || t instanceof NoHttpResponseException
-                || t instanceof HttpHostConnectException || t instanceof SocketException || t instanceof SSLException
-                || (t instanceof SocketTimeoutException && request.getHttpMethod() == HttpMethodName.GET)
-                || (t instanceof RestClientResponseException && (((RestClientResponseException) t).getRawStatusCode() / 100 == 5
-                || ((RestClientResponseException) t).getRawStatusCode() == 429))
-                || isRetriableErrorCodeException(t)
-                || (t.getCause() != null && isRetriableSendException(t.getCause(), request));
+            || t instanceof HttpHostConnectException || t instanceof SocketException || t instanceof SSLException
+            || (t instanceof SocketTimeoutException && request.getHttpMethod() == HttpMethodName.GET)
+            || (t instanceof RestClientResponseException && (((RestClientResponseException) t).getRawStatusCode() / 100 == 5
+            || ((RestClientResponseException) t).getRawStatusCode() == 429))
+            || isRetriableErrorCodeException(t)
+            || (t.getCause() != null && isRetriableSendException(t.getCause(), request));
     }
 
     /**
@@ -685,7 +713,7 @@ public class AbstractDISClient {
      */
     protected boolean isRetriableErrorCodeException(Throwable t) {
         if (disConfig.getExceptionRetriesErrorCode().length > 0 && t instanceof RestClientResponseException
-                && ((RestClientResponseException) t).getRawStatusCode() / 100 == 4) {
+            && ((RestClientResponseException) t).getRawStatusCode() / 100 == 4) {
             String responseBody = ((RestClientResponseException) t).getResponseBodyAsString();
             ErrorMessage errorMessage = JsonUtils.jsonToObj(responseBody, ErrorMessage.class);
             for (String item : disConfig.getExceptionRetriesErrorCode()) {
@@ -789,7 +817,7 @@ public class AbstractDISClient {
                 this.credentials = credentialsProvider.updateCredentials(this.credentials.clone());
             } catch (Exception e) {
                 throw new IllegalArgumentException("Failed to call ICredentialsProvider[" + credentialsProviderClass
-                        + "], error [" + e + "]", e);
+                    + "], error [" + e + "]", e);
             }
         }
     }

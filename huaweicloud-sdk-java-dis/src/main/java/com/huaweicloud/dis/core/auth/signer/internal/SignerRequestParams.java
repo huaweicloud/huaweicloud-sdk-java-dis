@@ -17,6 +17,7 @@
 package com.huaweicloud.dis.core.auth.signer.internal;
 
 import com.huaweicloud.dis.core.Request;
+import com.huaweicloud.dis.util.SignUtil;
 
 /**
  * Parameters that are used for computing a signature for a request.
@@ -92,7 +93,8 @@ public final class SignerRequestParams {
         }
         
         if(null == signDate) {
-            this.signingDateTimeMilli = getSigningDate(request);
+            this.signingDateTimeMilli = SignUtil.getSigningDate(request);
+            request.addHeader(SignerConstants.X_SDK_DATE, SignerUtils.formatTimestamp(this.signingDateTimeMilli));
         } else {
             this.signingDateTimeMilli = getSigningDate(signDate);
         }
@@ -104,13 +106,6 @@ public final class SignerRequestParams {
         this.scope = generateScope(formattedSigningDate, serviceName, regionName);
         this.formattedSigningDateTime = SignerUtils.formatTimestamp(signingDateTimeMilli);
         this.signingAlgorithm = signingAlgorithm;
-    }
-
-    /**
-     * Returns the signing date from the request.
-     */
-    private final long getSigningDate(Request<?> request) {
-        return System.currentTimeMillis() - request.getTimeOffset() * 1000;
     }
     
     /**
@@ -130,8 +125,8 @@ public final class SignerRequestParams {
     private String generateScope(String dateStamp, String serviceName, String regionName) {
         final StringBuilder scopeBuilder = new StringBuilder();
         return scopeBuilder.append(dateStamp).append("/").append(regionName)
-                .append("/").append(serviceName).append("/")
-                .append(SignerConstants.SDK_TERMINATOR).toString();
+            .append("/").append(serviceName).append("/")
+            .append(SignerConstants.SDK_TERMINATOR).toString();
     }
 
     /**

@@ -112,6 +112,8 @@ public class DISConfig extends Properties implements ClientParams {
 
     public static final String PROPERTY_PRODUCER_EXCEPTION_RETRIES = "exception.retries";
 
+    public static final String DERIVATION_KEY_SWITCH = "derivation.key.switch";
+
     public static final String PROPERTY_PRODUCER_RECORDS_RETRIES = "records.retries";
 
     public static final String PROPERTY_PRODUCER_LINGER_MS = "linger.ms";
@@ -324,6 +326,10 @@ public class DISConfig extends Properties implements ClientParams {
 
     public String getSecurityToken() {
         return get(PROPERTY_SECURITY_TOKEN, null);
+    }
+
+    public boolean getDerivationKeySwitch() {
+        return getBoolean(DERIVATION_KEY_SWITCH,true);
     }
 
     /**

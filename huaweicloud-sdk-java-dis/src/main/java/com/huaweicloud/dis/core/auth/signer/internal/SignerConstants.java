@@ -26,6 +26,10 @@ public final class SignerConstants {
 
     public static final String SDK_SIGNING_ALGORITHM = "SDK-HMAC-SHA256";
 
+    public static final String DERIVATION_KEY_SIGNING_ALGORITHM = "hmacsha256";
+
+    public static final String SDK_SIGNING_DERIVATION_KEY_ALGORITHM = "V11-HMAC-SHA256";
+
     /** Seconds in a week, which is the max expiration time Sig-v4 accepts */
     public static final long PRESIGN_URL_MAX_EXPIRATION_SECONDS = 60 * 60 * 24 * 7;
 
@@ -50,4 +54,6 @@ public final class SignerConstants {
     public static final String HOST = "Host";
 
     public static final String SIGN_PROVIDER = "sign.provider";
+
+    public static final String DERIVATION_KEY_SWITCH = "derivation.key.switch";
 }

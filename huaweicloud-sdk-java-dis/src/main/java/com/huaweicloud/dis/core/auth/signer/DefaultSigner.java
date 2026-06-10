@@ -16,6 +16,7 @@
 
 package com.huaweicloud.dis.core.auth.signer;
 
+import com.huaweicloud.dis.util.SignUtil;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -34,6 +35,8 @@ import com.huaweicloud.dis.core.util.BinaryUtils;
 import com.huaweicloud.dis.core.util.DateUtils;
 import com.huaweicloud.dis.core.util.HttpUtils;
 import com.huaweicloud.dis.core.util.StringUtils;
+import static com.huaweicloud.dis.core.auth.signer.internal.SignerConstants.SDK_SIGNING_ALGORITHM;
+import static com.huaweicloud.dis.core.auth.signer.internal.SignerConstants.SDK_SIGNING_DERIVATION_KEY_ALGORITHM;
 
 /**
  * Signer implementation that signs requests with the signing protocol.
@@ -129,13 +132,16 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
     
     @Override
     public void sign(Request< ? > request, Credentials credentials) {
+        sign(request, credentials, true);
+    }
+
+    public void sign(Request<?> request, Credentials credentials, boolean isDerivationKey) {
         Credentials sanitizedCredentials = sanitizeCredentials(credentials);
         
         final SignerRequestParams signerParams =
-            new SignerRequestParams(request, regionName, serviceName, SignerConstants.SDK_SIGNING_ALGORITHM);
+            new SignerRequestParams(request, regionName, serviceName, getAlgorithm(isDerivationKey), request.getHeaders().get(SignerConstants.X_SDK_DATE));
         addHostHeader(request);
-        request.addHeader(SignerConstants.X_SDK_DATE, signerParams.getFormattedSigningDateTime());
-        
+
         String contentSha256 = calculateContentHash(request);
         if ("required".equals(request.getHeaders().get(SignerConstants.X_SDK_CONTENT_SHA256))) {
             request.addHeader(SignerConstants.X_SDK_CONTENT_SHA256, contentSha256);
@@ -148,15 +154,25 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
         final byte[] signingKey = deriveSigningKey(sanitizedCredentials, signerParams);
         
         final byte[] signature = computeSignature(stringToSign, signingKey, signerParams);
-        
+
+        final String signingCredentials = credentials.getAccessKeyId() + "/" + signerParams.getScope();
         request.addHeader(SignerConstants.AUTHORIZATION,
-            buildAuthorizationHeader(request, signature, sanitizedCredentials, signerParams));
+            buildAuthorizationHeader(request, signature, getAlgorithm(isDerivationKey), signingCredentials));
+    }
+
+    public String getAlgorithm(boolean isDerivationKey){
+        if (isDerivationKey) {
+            return SDK_SIGNING_DERIVATION_KEY_ALGORITHM;
+        }
+
+        return SDK_SIGNING_ALGORITHM;
     }
 
     @Override
     public void sign(Request<?> request, Credentials credentials, Properties prop) {
         setProvider(prop.getProperty(SignerConstants.SIGN_PROVIDER));
-        sign(request,credentials);
+
+        sign(request,credentials,SignUtil.getDerivationKeySwitch(prop));
     }
 
     @Override
@@ -166,13 +182,9 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
         Credentials sanitizedCredentials = sanitizeCredentials(credentials);
         
         final SignerRequestParams signerRequestParams =
-            new SignerRequestParams(request, regionName, serviceName, SignerConstants.SDK_SIGNING_ALGORITHM);
-            
-        // Add the important parameters for v4 signing
-        final String timeStamp = SignerUtils.formatTimestamp(System.currentTimeMillis());
+            new SignerRequestParams(request, regionName, serviceName, SignerConstants.SDK_SIGNING_ALGORITHM,request.getHeaders().get(SignerConstants.X_SDK_DATE));
         
-        addPreSignInformationToRequest(request, sanitizedCredentials, signerRequestParams, timeStamp,
-            expirationInSeconds);
+        addPreSignInformationToRequest(request, sanitizedCredentials, signerRequestParams, expirationInSeconds);
             
         final String contentSha256 = calculateContentHashPresign(request);
         
@@ -276,17 +288,15 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
     /**
      * Creates the authorization header to be included in the request.
      */
-    private String buildAuthorizationHeader(Request< ? > request, byte[] signature, Credentials credentials,
-        SignerRequestParams signerParams) {
-        final String signingCredentials = credentials.getAccessKeyId() + "/" + signerParams.getScope();
-        
+    private String buildAuthorizationHeader(Request< ? > request, byte[] signature, String algorithm,String signingCredentials) {
+
         final String credential = "Credential=" + signingCredentials;
         final String signerHeaders = "SignedHeaders=" + getSignedHeadersString(request);
         final String signatureHeader = "Signature=" + BinaryUtils.toHex(signature);
         
         final StringBuilder authHeaderBuilder = new StringBuilder();
         
-        authHeaderBuilder.append(SignerConstants.SDK_SIGNING_ALGORITHM).append(" ").append(credential).append(", ")
+        authHeaderBuilder.append(algorithm).append(" ").append(credential).append(", ")
             .append(signerHeaders).append(", ").append(signatureHeader);
             
         return authHeaderBuilder.toString();
@@ -296,12 +306,11 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
      * Includes all the signing headers as request parameters for pre-signing.
      */
     private void addPreSignInformationToRequest(Request< ? > request, Credentials credentials,
-        SignerRequestParams signerParams, String timeStamp, long expirationInSeconds) {
+        SignerRequestParams signerParams, long expirationInSeconds) {
         
         String signingCredentials = credentials.getAccessKeyId() + "/" + signerParams.getScope();
         
         request.addParameter(SignerConstants.X_SDK_ALGORITHM, SignerConstants.SDK_SIGNING_ALGORITHM);
-        request.addParameter(SignerConstants.X_SDK_DATE, timeStamp);
         request.addParameter(SignerConstants.X_SDK_SIGNED_HEADER, getSignedHeadersString(request));
         request.addParameter(SignerConstants.X_SDK_EXPIRES, Long.toString(expirationInSeconds));
         request.addParameter(SignerConstants.X_SDK_CREDENTIAL, signingCredentials);
@@ -416,11 +425,15 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
     @Override
     public boolean verify(Request<?> request, Credentials credentials, Properties prop) {
         setProvider(prop.getProperty(SignerConstants.SIGN_PROVIDER));
-        return verify(request,credentials);
+        return verify(request,credentials,SignUtil.getDerivationKeySwitch(prop));
     }
 
     @Override
     public boolean verify(Request< ? > request, Credentials credentials) {
+        return verify(request, credentials, false);
+    }
+
+    public boolean verify(Request<?> request,Credentials credentials,boolean isDerivationKey) {
         //AK、SK
         Credentials sanitizedCredentials = sanitizeCredentials(credentials);
         //获取日期(HTTP规范头部为小写)
@@ -429,7 +442,7 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
         String authorization = request.getHeaders().remove(SignerConstants.AUTHORIZATION.toLowerCase());
         //计算签名对象
         final SignerRequestParams signerParams = new SignerRequestParams(request, regionName, serviceName,
-            SignerConstants.SDK_SIGNING_ALGORITHM, singerDate);
+            getAlgorithm(isDerivationKey), singerDate);
             
         //计算内容256
         String contentSha256 = calculateContentHash(request);
@@ -444,8 +457,10 @@ public class DefaultSigner extends AbstractSigner implements ServiceSigner, Regi
         final byte[] signingKey = deriveSigningKey(sanitizedCredentials, signerParams);
         
         final byte[] signature = computeSignature(stringToSign, signingKey, signerParams);
+
+        final String signingCredentials =credentials.getAccessKeyId() + "/" + signerParams.getScope();
         //添加变量，方便调试和查看
-        String signatureResult = buildAuthorizationHeader(request, signature, sanitizedCredentials, signerParams);
+        String signatureResult = buildAuthorizationHeader(request, signature, getAlgorithm(isDerivationKey), signingCredentials);
         return signatureResult.equals(authorization);
     }
 }
